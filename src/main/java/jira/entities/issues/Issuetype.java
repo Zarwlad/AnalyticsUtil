@@ -1,13 +1,12 @@
-package jira.entities;
+package jira.entities.issues;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import java.net.URL;
 
 @JsonAutoDetect
-public class Project {
+class Issuetype{
     private URL self;
     private String id;
-    private String key;
     private String name;
 }
