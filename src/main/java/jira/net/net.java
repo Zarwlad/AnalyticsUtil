@@ -15,7 +15,7 @@ public class net {
     public static void main(String[] args) throws URISyntaxException, IOException {
         String apiToken = Base64
                 .getEncoder()
-                .encodeToString("vzaremba@navicons.ru:Fkrlo365XDbB3D78q2Vn9ABF".getBytes());
+                .encodeToString(args[0].getBytes());
 
         String authValue = "Basic " + apiToken;
 
