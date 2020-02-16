@@ -1,4 +1,4 @@
-package jira.net;
+package jira.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,11 +9,10 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
 
-public class net {
+public class Main {
     public static void main(String[] args) throws URISyntaxException, IOException {
         String apiToken = Base64
                 .getEncoder()
