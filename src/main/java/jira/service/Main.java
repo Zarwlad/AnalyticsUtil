@@ -2,7 +2,7 @@ package jira.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jira.entities.issues.Issue;
+import jira.dto.issues.Issue;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

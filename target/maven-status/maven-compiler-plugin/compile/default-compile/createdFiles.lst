@@ -1,0 +1,17 @@
+mdlp\entities\messages\Documents.class
+jira\dto\issues\Priority.class
+jira\dto\issues\Fields.class
+jira\dto\issues\JiraComponent.class
+jira\service\Main.class
+mdlp\entities\messages\Content.class
+jira\dto\issues\Issuetype.class
+jira\dto\issues\IssueStatus.class
+jira\service\JiraIssuesUpdater.class
+mdlp\entities\messages\Detail.class
+jira\dto\JiraUser.class
+aggregations\MultiPackAnalyzer.class
+mdlp\entities\messages\MultiPack.class
+jira\dto\issues\Watch.class
+jira\dto\Project.class
+mdlp\entities\messages\BySgtin.class
+jira\dto\issues\Issue.class
