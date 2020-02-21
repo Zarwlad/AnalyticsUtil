@@ -21,7 +21,7 @@ public class MultiPackAnalyzer {
     public static void main(String[] args) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-
+        //TODO: переделать логику с DTO на сущности
 
         System.out.println("Введи путь к файлу, отправленному в МДЛП");
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
@@ -29,9 +29,6 @@ public class MultiPackAnalyzer {
         String mdlpRequest = consoleReader.readLine();
         Path mdlpReqPath = Paths.get(mdlpRequest);
         Documents mdlpRequestDoc = xmlMapper.readValue(Files.readAllBytes(mdlpReqPath), Documents.class);
-
-        //String mdlpReq = new String(Files.readAllBytes(mdlpReqPath));
-
 
         System.out.println("Введи путь к ответу, полученному из МДЛП");
         String mdlpResponse = consoleReader.readLine();
@@ -83,6 +80,7 @@ public class MultiPackAnalyzer {
     }
 
     static void Report (HashMap<String, HashMap<String, Boolean>> problemSscc) throws IOException {
+        //TODO: Метод Report должен только выводить на печать, все данные должны быть переведены в классы
         String filename = "operationResult" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss"));
         Path newReport = Paths.get("C:\\Users\\Vladimir\\Desktop\\" + filename + ".txt");
         if (!Files.notExists(newReport))
