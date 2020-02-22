@@ -1,9 +1,10 @@
 package mdlp.dto.messages;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import mdlp.dto.messages.multiPackDto.MultiPackDTO;
 import mdlp.dto.messages.ticketDto.ResultDTO;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+//import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 @JsonAutoDetect
 public class Documents {

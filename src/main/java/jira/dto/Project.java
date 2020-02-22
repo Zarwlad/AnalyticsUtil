@@ -1,6 +1,8 @@
 package jira.dto;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+//import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import java.net.URL;
 
