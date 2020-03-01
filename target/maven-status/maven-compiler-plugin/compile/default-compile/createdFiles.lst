@@ -1,7 +1,9 @@
 jira\dto\issues\Issuetype.class
 jira\entities\JiraWatcher.class
+jira\dao\JiraUserDAOImpl.class
 jira\dto\issues\IssueStatus.class
 mdlp\dto\messages\multiPackDto\MultiPackDTO.class
+jira\entities\JiraUser.class
 jira\dto\issues\Watch.class
 jira\dto\issues\Priority.class
 mdlp\dto\messages\Documents.class
@@ -10,6 +12,7 @@ jira\entities\JiraIssue.class
 mdlp\service\MultiPackAnalyzer.class
 jira\service\JiraIssuesUpdater.class
 jira\dto\issues\JiraComponent.class
+jira\dao\DAO.class
 jira\dto\JiraUser.class
 jira\service\Main.class
 mdlp\dto\messages\ticketDto\ErrorDTO.class
@@ -17,3 +20,4 @@ jira\dto\Project.class
 mdlp\dto\messages\ticketDto\ResultDTO.class
 jira\dto\issues\Issue.class
 mdlp\dto\messages\multiPackDto\DetailDTO.class
+jira\utils\HibernateSessionFactoryUtil.class
