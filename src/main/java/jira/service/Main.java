@@ -2,14 +2,13 @@ package jira.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jira.dto.issues.Issue;
+import jira.incomingJiraDto.issues.Issue;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Base64;
 
 public class Main {
