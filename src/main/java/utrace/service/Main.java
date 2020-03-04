@@ -53,7 +53,8 @@ public class Main {
 
                 Set<EventStatus> eventStatuses = new HashSet<>();
                 for (AuditRecordDto auditRecordDto : pageDtoOfAuditRecordDto.getData()) {
-                    eventStatuses.add((EventStatus) auditRecordDto.fromDtoToEntity());
+                    if (auditRecordDto.getChangedProperties().contains("status"))
+                        eventStatuses.add((EventStatus) auditRecordDto.fromDtoToEntity());
                 }
 
                 event.setEventStatuses(eventStatuses);

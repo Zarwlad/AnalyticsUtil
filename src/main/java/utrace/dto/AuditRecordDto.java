@@ -21,6 +21,61 @@ public class AuditRecordDto implements Dto {
     @JsonProperty(value = "snapshot")
     Snapshot snapshot;
 
+    public AuditRecordDto() {
+    }
+
+    public AuditRecordDto(String author,
+                          String changeType,
+                          List<String> changedProperties,
+                          String operationDateTime,
+                          Snapshot snapshot) {
+        this.author = author;
+        this.changeType = changeType;
+        this.changedProperties = changedProperties;
+        this.operationDateTime = operationDateTime;
+        this.snapshot = snapshot;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getChangeType() {
+        return changeType;
+    }
+
+    public void setChangeType(String changeType) {
+        this.changeType = changeType;
+    }
+
+    public List<String> getChangedProperties() {
+        return changedProperties;
+    }
+
+    public void setChangedProperties(List<String> changedProperties) {
+        this.changedProperties = changedProperties;
+    }
+
+    public String getOperationDateTime() {
+        return operationDateTime;
+    }
+
+    public void setOperationDateTime(String operationDateTime) {
+        this.operationDateTime = operationDateTime;
+    }
+
+    public Snapshot getSnapshot() {
+        return snapshot;
+    }
+
+    public void setSnapshot(Snapshot snapshot) {
+        this.snapshot = snapshot;
+    }
+
     @Override
     public Object fromDtoToEntity() {
         if (this instanceof AuditRecordDto) {
