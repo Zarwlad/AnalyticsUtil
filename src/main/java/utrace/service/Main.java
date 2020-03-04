@@ -99,8 +99,6 @@ public class Main {
                         && !event.getRegulatorStatus().equals("NOT_REQUIRED")){
                     PageDtoOfBusinessEventMessageDto pageDtoOfBusinessEventMessageDto = getPagedEventMessages(event);
 
-
-
                     System.out.println("Число отправленных в МДЛП сообщений по событию с id=" + event.getId()
                     + " равно: " + pageDtoOfBusinessEventMessageDto.getEventMessageDtos().size());
                 }
