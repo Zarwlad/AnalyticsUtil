@@ -7,10 +7,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-import utrace.dto.AuditRecordDto;
-import utrace.dto.EventDto;
-import utrace.dto.PageDtoOfAuditRecordDto;
-import utrace.dto.PageDtoOfBriefedBusinessEventDto;
+import utrace.dto.*;
 import utrace.entities.Event;
 import utrace.entities.EventStatus;
 import utrace.util.MappingType;
@@ -22,12 +19,16 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-    public static void main(String[] args) throws IOException, InterruptedException {
+
+    static ObjectMapper objectMapper = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    public static void main(String[] args) throws IOException {
         Set<Event> events = new HashSet<>();
 
         Integer pageNum = 0;
-        Integer totalPages = -1;
-        Integer totalElements = -1;
+        Integer totalPages;
+        Integer totalElements;
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(50_000, TimeUnit.MILLISECONDS)
@@ -38,10 +39,9 @@ public class Main {
 
         PageDtoOfBriefedBusinessEventDto pagedEvents = getPagedEvents(okHttpClient, properties, pageNum);
 
-        if (pagedEvents.getPage().getTotalPages() != 1){
-            totalPages = pagedEvents.getPage().getTotalPages();
-            totalElements = pagedEvents.getPage().getTotalElements();
-        }
+        totalPages = pagedEvents.getPage().getTotalPages();
+        totalElements = pagedEvents.getPage().getTotalElements();
+        System.out.println("Страниц: " + totalPages + " , элементов: " + totalElements);
 
         for (; pageNum < totalPages; pageNum++) {
             pagedEvents = getPagedEvents(okHttpClient, properties, pageNum);
@@ -74,26 +74,11 @@ public class Main {
         String urlPath = properties.getProperty("host")
                 + "events?&size=" + properties.getProperty("eventSizeReq")
                 + "&page=" + pageNum;
-        Request getEvent = new Request.Builder()
-                .get()
-                .url(urlPath)
-                .addHeader("authorization", properties.getProperty("authorization"))
-                .build();
 
-        Response getEventResp = okHttpClient.newCall(getEvent).execute();
+        String str = getResponseBody(okHttpClient, urlPath, properties, objectMapper);
 
-        ResponseBody getEventRespBody = getEventResp.body();
-
-        ObjectMapper objectMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        String str = getEventRespBody.string();
-
-        PageDtoOfBriefedBusinessEventDto pageDtoOfBriefedBusinessEventDto = objectMapper
+        return objectMapper
                 .readValue(str, PageDtoOfBriefedBusinessEventDto.class);
-
-        getEventRespBody.close();
-        return pageDtoOfBriefedBusinessEventDto;
     }
 
     static PageDtoOfAuditRecordDto getPagedAuditRecords(OkHttpClient okHttpClient, Properties properties, Event event) throws IOException {
@@ -104,24 +89,48 @@ public class Main {
                 + "audit/" + mappedEventType
                 + "/" + event.getId();
 
-        Request getStatuses = new Request.Builder()
+        String str = getResponseBody(okHttpClient, urlPath, properties, objectMapper);
+
+        return objectMapper
+                .readValue(str, PageDtoOfAuditRecordDto.class);
+    }
+
+    static PageDtoOfBusinessEventMessageDto getPagedEventMessages (OkHttpClient okHttpClient, Properties properties, Event event) throws IOException {
+
+        String urlPath = properties.getProperty("host")
+                + "/2.0/event-messages?"
+                + "&businessEvent.id=" + event.getId()
+                + "&direction=OUTCOME"
+                + "&externalSystemId=8154639c-ab67-11e8-98d0-529269fb2178";
+
+        String str = getResponseBody(okHttpClient, urlPath, properties, objectMapper);
+
+        return objectMapper
+                .readValue(str, PageDtoOfBusinessEventMessageDto.class);
+    }
+
+    static Request getRequestWithAuthGetType(String urlPath, Properties properties){
+        return new Request.Builder()
                 .get()
                 .url(urlPath)
                 .addHeader("authorization", properties.getProperty("authorization"))
                 .build();
+    }
 
-        Response getStatusesResp = okHttpClient.newCall(getStatuses).execute();
+    static String getResponseBody(OkHttpClient okHttpClient,
+                                  String urlPath,
+                                  Properties properties,
+                                  ObjectMapper objectMapper) throws IOException {
+        Request getRequest = getRequestWithAuthGetType(urlPath, properties);
 
-        ResponseBody getStatusesRespBody = getStatusesResp.body();
+        Response getResponseReq = okHttpClient.newCall(getRequest).execute();
 
-        ObjectMapper objectMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ResponseBody getRespBody = getResponseReq.body();
 
-        String str = getStatusesRespBody.string();
+        assert getRespBody != null;
+        String str = getRespBody.string();
 
-        PageDtoOfAuditRecordDto pageDtoOfAuditRecordDto = objectMapper
-                .readValue(str, PageDtoOfAuditRecordDto.class);
-        getStatusesRespBody.close();
-        return pageDtoOfAuditRecordDto;
+        getRespBody.close();
+        return str;
     }
 }
