@@ -66,17 +66,13 @@ public class EventDto implements Dto{
 
     @Override
     public Object fromDtoToEntity() {
-        if (this instanceof EventDto){
-            EventDto eventDto = (EventDto) this;
-            Event event = new Event(eventDto.getId(),
-                    eventDto.getType(),
-                    eventDto.getOperationDate(),
-                    eventDto.getStatus(),
-                    eventDto.getRegulatorStatus(),
-                    null,
-                    null);
-            return event;
-        }
-        return null;
+        EventDto eventDto = (EventDto) this;
+        return new Event(eventDto.getId(),
+                eventDto.getType(),
+                eventDto.getOperationDate(),
+                eventDto.getStatus(),
+                eventDto.getRegulatorStatus(),
+                null,
+                null);
     }
 }
