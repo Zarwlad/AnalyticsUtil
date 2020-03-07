@@ -1,7 +1,6 @@
 package utrace.entities;
 
 import utrace.dto.Dto;
-import utrace.dto.MessageDto;
 
 import java.util.Objects;
 

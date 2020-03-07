@@ -1,5 +1,6 @@
 package utrace.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
@@ -7,9 +8,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import utrace.data.EventData;
 import utrace.dto.*;
 import utrace.entities.Event;
 import utrace.entities.EventStatus;
+import utrace.entities.Message;
+import utrace.entities.MessageHistory;
 import utrace.util.MappingType;
 
 import java.io.File;
@@ -18,7 +22,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class Main {
+public class DownloadEventsService {
 
     static ObjectMapper objectMapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -42,8 +46,8 @@ public class Main {
         Integer pageNum = 0;
         Integer totalPages;
         Integer totalElements;
-        Integer totalNotifications = 0;
-        Integer baseEvents = 0;
+        int totalNotifications = 0;
+        int baseEvents = 0;
 
         PageDtoOfBriefedBusinessEventDto pagedEvents = getPagedEvents(pageNum);
 
@@ -52,11 +56,22 @@ public class Main {
         System.out.println("Страниц: " + totalPages + " , элементов: " + totalElements);
 
         for (; pageNum < totalPages; pageNum++) {
+
+            /*
+             * Получаем список событий на странице
+             */
+
             pagedEvents = getPagedEvents(pageNum);
+
+            /*
+             * Обрабатываем каждое событие со страницы
+             */
 
             for (EventDto eventDto : pagedEvents.getData()) {
                 Event event = (Event) eventDto.fromDtoToEntity();
-                System.out.println("\n\nОбрабатываю событие с id=" + event.getId() + " с типом " + event.getType());
+                System.out.println(
+                        "\nОбрабатываю событие с id="
+                        + event.getId() + " с типом " + event.getType());
 
                 if (event.getType().contains("NOTIFICATION")){
                     totalNotifications++;
@@ -66,7 +81,7 @@ public class Main {
 
                 if (event.getType().equals("OUTCOME_ACCEPT")
                 || event.getType().equals("FOREIGN_IMPORT")){
-                    System.out.println("Событие с id=" + event.getId() + " событием без аудитлога");
+                    System.out.println("Событие с id=" + event.getId() + " не имеет аудитлога");
                     continue;
                 }
 
@@ -78,14 +93,12 @@ public class Main {
 
                 System.out.println("Получаю статусы по событию с id=" + event.getId());
 
-                PageDtoOfAuditRecordDto pageDtoOfAuditRecordDto = null;
-                try {
-                    pageDtoOfAuditRecordDto = getPagedAuditRecords(event);
-                }
-                catch (NullPointerException e){
-                    System.out.println("Что-то пошло не так, аудитлог не обнаружен");
-                    e.printStackTrace();
-                }
+                /*
+                * Получаем статусы события, проходясь по аудитлогу
+                 */
+
+                PageDtoOfAuditRecordDto pageDtoOfAuditRecordDto = getPagedAuditRecords(event);
+
                 Set<EventStatus> eventStatuses = new HashSet<>(); //набор статусов и времени перехода по событию
                 for (AuditRecordDto auditRecordDto : pageDtoOfAuditRecordDto.getData()) {
                     if (auditRecordDto.getChangedProperties().contains("status"))
@@ -94,15 +107,51 @@ public class Main {
 
                 event.setEventStatuses(eventStatuses);
 
-                if (event.getStatus().equals("POSTED")
-                        && !event.getRegulatorStatus().equals("QUEUE")
+                if (!event.getRegulatorStatus().equals("QUEUE")
                         && !event.getRegulatorStatus().equals("NOT_REQUIRED")){
                     PageDtoOfBusinessEventMessageDto pageDtoOfBusinessEventMessageDto = getPagedEventMessages(event);
 
                     System.out.println("Число отправленных в МДЛП сообщений по событию с id=" + event.getId()
                     + " равно: " + pageDtoOfBusinessEventMessageDto.getEventMessageDtos().size());
-                }
 
+                    /*
+                     * Получаем сообщение по id из eventMessage.messageId
+                     */
+
+                    Set<Message> messages = new HashSet<>();
+                    for (EventMessageDto eventMessageDto : pageDtoOfBusinessEventMessageDto.getEventMessageDtos()) {
+
+                        System.out.println("Получаю сообщение с id=" + eventMessageDto.getMessageId());
+
+                        PageMessageDto pageMessageDto = getPagedSingleMessageById(eventMessageDto.getMessageId());
+                        Message message = null;
+                                try {
+                                    message = pageMessageDto.getMessageDtos().get(0).fromDtoToEntity();
+                                }
+                                catch (IndexOutOfBoundsException e){
+                                    System.out.println("По событию " + event.getId()
+                                            + "есть запись в evenMessage, но нет сообщения!");
+                                }
+
+                        /*
+                        * Получаем историю по обработке сообщения и записываем в Message
+                         */
+
+                        System.out.println("Получаю историю обработки сообщения с id=" + eventMessageDto.getMessageId());
+
+                        if (message != null) {
+                            List<MessageHistoryDto> messageHistoryDtos = getMessageHistoriesByMsg(message);
+                            Set<MessageHistory> messageHistories = new HashSet<>();
+                            for (MessageHistoryDto messageHistoryDto : messageHistoryDtos) {
+                                messageHistories.add((MessageHistory) messageHistoryDto.fromDtoToEntity());
+                            }
+
+                            message.setMessageHistories(messageHistories);
+                            messages.add(message);
+                        }
+                    }
+                    event.setMessages(messages);
+                }
                 events.add(event);
 
                 System.out.println(event.getType());
@@ -116,10 +165,13 @@ public class Main {
                             + " Также присутствует " + totalNotifications + " уведомлений из МДЛП."
                             + " Базовых событий: " + baseEvents);
         }
+        EventData eventData = EventData.getInstance();
+        eventData.setEvents(events);
     }
 
     static PageDtoOfBriefedBusinessEventDto getPagedEvents(Integer pageNum) throws IOException {
         String urlPath = properties.getProperty("host")
+                + properties.getProperty("coreApi")
                 + "events?&size=" + properties.getProperty("eventSizeReq")
                 + "&page=" + pageNum;
 
@@ -134,6 +186,7 @@ public class Main {
         String mappedEventType = MappingType.getAuditRecordTypeFromEventType(event.getType());
 
         String urlPath = properties.getProperty("host")
+                + properties.getProperty("coreApi")
                 + "audit/" + mappedEventType
                 + "/" + event.getId();
 
@@ -146,6 +199,7 @@ public class Main {
     static PageDtoOfBusinessEventMessageDto getPagedEventMessages (Event event) throws IOException {
 
         String urlPath = properties.getProperty("host")
+                + properties.getProperty("coreApi")
                 + "event-messages?"
                 + "&businessEvent.id=" + event.getId()
                 + "&direction=OUTCOME"
@@ -155,6 +209,29 @@ public class Main {
 
         return objectMapper
                 .readValue(str, PageDtoOfBusinessEventMessageDto.class);
+    }
+
+    static List<MessageHistoryDto> getMessageHistoriesByMsg(Message message) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + properties.getProperty("journalApi1")
+                + "message/" + message.getId() + "/message-histories";
+
+        String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, new TypeReference<List<MessageHistoryDto>>(){});
+    }
+
+    static PageMessageDto getPagedSingleMessageById (String id) throws IOException {
+
+        String urlPath = properties.getProperty("host")
+                + properties.getProperty("journalApi2")
+                + "message/paged?id=" + id;
+
+        String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, PageMessageDto.class);
     }
 
     static Request getRequestWithAuthGetType(String urlPath){

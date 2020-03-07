@@ -12,4 +12,28 @@ public class PageMessageDto {
 
     @JsonProperty(value = "page")
     Page page;
+
+    public PageMessageDto() {
+    }
+
+    public PageMessageDto(List<MessageDto> messageDtos, Page page) {
+        this.messageDtos = messageDtos;
+        this.page = page;
+    }
+
+    public List<MessageDto> getMessageDtos() {
+        return messageDtos;
+    }
+
+    public void setMessageDtos(List<MessageDto> messageDtos) {
+        this.messageDtos = messageDtos;
+    }
+
+    public Page getPage() {
+        return page;
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
+    }
 }
