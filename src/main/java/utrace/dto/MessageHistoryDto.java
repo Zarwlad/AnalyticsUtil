@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import utrace.entities.MessageHistory;
 
+import java.time.ZonedDateTime;
+
 @JsonAutoDetect
 public class MessageHistoryDto implements Dto {
 
@@ -78,7 +80,7 @@ public class MessageHistoryDto implements Dto {
         MessageHistoryDto messageHistoryDto = (MessageHistoryDto) this;
         return new MessageHistory(messageHistoryDto.getId(),
                 messageHistoryDto.getAuthoredBy(),
-                messageHistoryDto.getCreated(),
+                ZonedDateTime.parse(messageHistoryDto.getCreated()),
                 messageHistoryDto.getStatus());
     }
 }

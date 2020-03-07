@@ -130,7 +130,7 @@ public class DownloadEventsService {
                                 }
                                 catch (IndexOutOfBoundsException e){
                                     System.out.println("По событию " + event.getId()
-                                            + "есть запись в evenMessage, но нет сообщения!");
+                                            + "есть запись в eventMessage, но нет сообщения!");
                                 }
 
                         /*

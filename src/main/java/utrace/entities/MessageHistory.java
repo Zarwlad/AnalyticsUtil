@@ -2,18 +2,19 @@ package utrace.entities;
 
 import utrace.dto.Dto;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class MessageHistory implements Entity {
     String id;
     String authoredBy;
-    String created;
+    ZonedDateTime created;
     String status;
 
     public MessageHistory() {
     }
 
-    public MessageHistory(String id, String authoredBy, String created, String status) {
+    public MessageHistory(String id, String authoredBy, ZonedDateTime created, String status) {
         this.id = id;
         this.authoredBy = authoredBy;
         this.created = created;
@@ -41,11 +42,11 @@ public class MessageHistory implements Entity {
         this.authoredBy = authoredBy;
     }
 
-    public String getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(ZonedDateTime created) {
         this.created = created;
     }
 

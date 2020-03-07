@@ -2,11 +2,12 @@ package utrace.entities;
 
 import utrace.dto.Dto;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class EventStatus implements Entity {
     private String status;
-    private String changeOperationDate;
+    private ZonedDateTime changeOperationDate;
 
     @Override
     public boolean equals(Object o) {
@@ -22,7 +23,7 @@ public class EventStatus implements Entity {
         return Objects.hash(getStatus(), getChangeOperationDate());
     }
 
-    public EventStatus(String status, String changeOperationDate) {
+    public EventStatus(String status, ZonedDateTime changeOperationDate) {
         this.status = status;
         this.changeOperationDate = changeOperationDate;
     }
@@ -38,11 +39,11 @@ public class EventStatus implements Entity {
         this.status = status;
     }
 
-    public String getChangeOperationDate() {
+    public ZonedDateTime getChangeOperationDate() {
         return changeOperationDate;
     }
 
-    public void setChangeOperationDate(String changeOperationDate) {
+    public void setChangeOperationDate(ZonedDateTime changeOperationDate) {
         this.changeOperationDate = changeOperationDate;
     }
 

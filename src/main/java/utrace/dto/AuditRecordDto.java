@@ -2,8 +2,8 @@ package utrace.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import utrace.entities.Event;
 import utrace.entities.EventStatus;
+import utrace.util.DateTimeUtil;
 
 import java.util.List;
 
@@ -78,12 +78,8 @@ public class AuditRecordDto implements Dto {
 
     @Override
     public Object fromDtoToEntity() {
-        if (this instanceof AuditRecordDto) {
-            AuditRecordDto auditRecordDto = this;
-            EventStatus eventStatus = new EventStatus(snapshot.getStatus(), operationDateTime);
-            return eventStatus;
-        }
-        return null;
+        AuditRecordDto auditRecordDto = this;
+        return new EventStatus(snapshot.getStatus(), DateTimeUtil.toZonedDateTime(operationDateTime));
     }
 
     @JsonAutoDetect

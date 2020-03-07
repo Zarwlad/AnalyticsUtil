@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import utrace.entities.Event;
 
+import java.time.ZonedDateTime;
+
 @JsonAutoDetect
 public class EventDto implements Dto{
     @JsonProperty(value = "id")
@@ -69,7 +71,7 @@ public class EventDto implements Dto{
         EventDto eventDto = (EventDto) this;
         return new Event(eventDto.getId(),
                 eventDto.getType(),
-                eventDto.getOperationDate(),
+                ZonedDateTime.parse(eventDto.getOperationDate()),
                 eventDto.getStatus(),
                 eventDto.getRegulatorStatus(),
                 null,

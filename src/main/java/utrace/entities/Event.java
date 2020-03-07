@@ -3,13 +3,14 @@ package utrace.entities;
 import utrace.dto.Dto;
 import utrace.dto.EventDto;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Set;
 
 public class Event implements Entity{
     private String id;
     private String type;
-    private String operationDate;
+    private ZonedDateTime operationDate;
     private String status;
     private String regulatorStatus;
     private Set<EventStatus> eventStatuses;
@@ -18,7 +19,7 @@ public class Event implements Entity{
     public Event() {
     }
 
-    public Event(String id, String type, String operationDate, String status, String regulatorStatus, Set<EventStatus> eventStatuses, Set<Message> messages) {
+    public Event(String id, String type, ZonedDateTime operationDate, String status, String regulatorStatus, Set<EventStatus> eventStatuses, Set<Message> messages) {
         this.id = id;
         this.type = type;
         this.operationDate = operationDate;
@@ -44,11 +45,11 @@ public class Event implements Entity{
         this.type = type;
     }
 
-    public String getOperationDate() {
+    public ZonedDateTime getOperationDate() {
         return operationDate;
     }
 
-    public void setOperationDate(String operationDate) {
+    public void setOperationDate(ZonedDateTime operationDate) {
         this.operationDate = operationDate;
     }
 

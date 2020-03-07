@@ -1,5 +1,6 @@
 package utrace.entities;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -7,8 +8,8 @@ public class Message {
     String id;
     String status;
     String documentTypeId;
-    String createdDate;
-    String operationDate;
+    ZonedDateTime createdDate;
+    ZonedDateTime operationDate;
 
     Set<MessageHistory> messageHistories;
 
@@ -18,8 +19,8 @@ public class Message {
     public Message(String id,
                    String status,
                    String documentTypeId,
-                   String createdDate,
-                   String operationDate,
+                   ZonedDateTime createdDate,
+                   ZonedDateTime operationDate,
                    Set<MessageHistory> messageHistories) {
         this.id = id;
         this.status = status;
@@ -66,19 +67,19 @@ public class Message {
         this.documentTypeId = documentTypeId;
     }
 
-    public String getCreatedDate() {
+    public ZonedDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(String createdDate) {
+    public void setCreatedDate(ZonedDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public String getOperationDate() {
+    public ZonedDateTime getOperationDate() {
         return operationDate;
     }
 
-    public void setOperationDate(String operationDate) {
+    public void setOperationDate(ZonedDateTime operationDate) {
         this.operationDate = operationDate;
     }
 
