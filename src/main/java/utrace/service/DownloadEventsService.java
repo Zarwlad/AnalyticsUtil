@@ -40,7 +40,7 @@ public class DownloadEventsService {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void startDownload() throws IOException {
         Set<Event> events = new HashSet<>();
 
         Integer pageNum = 0;
