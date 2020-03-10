@@ -9,5 +9,9 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nShow all events started\n\n\n\n\n\n\n\n\n");
+        EventTimeCounterService.showAllEvents();
     }
+
 }
