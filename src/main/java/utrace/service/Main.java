@@ -19,6 +19,14 @@ public class Main {
         catch (Exception e){
             e.printStackTrace();
         }
+
+        System.out.println("Печатаю статистику!");
+        try {
+            ReportBuilderService.buildReport();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 }
