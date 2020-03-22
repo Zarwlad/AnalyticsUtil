@@ -132,8 +132,10 @@ public class Event implements Entity{
         Boolean isMessageCreated;
         Month eventMonth;
 
-        if (this.getStatus().equals("POSTED"))
+        if (this.getStatus().equals("POSTED")) {
             isEventPosted = true;
+            isErrorEvent = false;
+        }
         else {
             isEventPosted = false;
 
