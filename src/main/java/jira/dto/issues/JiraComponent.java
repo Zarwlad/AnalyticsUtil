@@ -1,6 +1,7 @@
 package jira.dto.issues;
 
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+//import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 @JsonAutoDetect
 class JiraComponent {

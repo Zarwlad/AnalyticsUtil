@@ -1,8 +1,9 @@
 package jira.dto.issues;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import jira.dto.JiraUser;
 import jira.dto.Project;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
+//import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 import java.util.ArrayList;
 
