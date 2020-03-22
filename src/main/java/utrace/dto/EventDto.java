@@ -23,6 +23,9 @@ public class EventDto implements Dto{
     @JsonProperty(value = "regulatorStatus")
     String regulatorStatus;
 
+    @JsonProperty(value = "created")
+    String created;
+
     public EventDto() {
     }
 
@@ -66,6 +69,14 @@ public class EventDto implements Dto{
         this.regulatorStatus = regulatorStatus;
     }
 
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
     @Override
     public Object fromDtoToEntity() {
         EventDto eventDto = (EventDto) this;
@@ -75,6 +86,7 @@ public class EventDto implements Dto{
                 eventDto.getStatus(),
                 eventDto.getRegulatorStatus(),
                 null,
-                null);
+                null,
+                ZonedDateTime.parse(eventDto.getCreated()));
     }
 }

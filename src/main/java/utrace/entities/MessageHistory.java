@@ -6,10 +6,10 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class MessageHistory implements Entity {
-    String id;
-    String authoredBy;
-    ZonedDateTime created;
-    String status;
+    private String id;
+    private String authoredBy;
+    private ZonedDateTime created;
+    private String status;
 
     public MessageHistory() {
     }
