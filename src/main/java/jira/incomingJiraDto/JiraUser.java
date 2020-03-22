@@ -1,4 +1,4 @@
-package jira.dto;
+package jira.incomingJiraDto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 //import org.codehaus.jackson.annotate.JsonAutoDetect;
