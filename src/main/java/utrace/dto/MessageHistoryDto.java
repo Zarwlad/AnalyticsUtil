@@ -3,6 +3,7 @@ package utrace.dto;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import utrace.entities.MessageHistory;
+import utrace.util.DateTimeUtil;
 
 import java.time.ZonedDateTime;
 
@@ -80,7 +81,7 @@ public class MessageHistoryDto implements Dto {
         MessageHistoryDto messageHistoryDto = (MessageHistoryDto) this;
         return new MessageHistory(messageHistoryDto.getId(),
                 messageHistoryDto.getAuthoredBy(),
-                ZonedDateTime.parse(messageHistoryDto.getCreated()),
+                DateTimeUtil.toZonedDateTime(messageHistoryDto.getCreated()),
                 messageHistoryDto.getStatus());
     }
 }

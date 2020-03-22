@@ -143,15 +143,19 @@ public class Event implements Entity{
                 isErrorEvent = false;
         }
 
-
-        if (!this.getMessages().isEmpty()) {
-            isMessageCreated = true;
-            if (this.getRegulatorStatus().equals("ERROR"))
-                isErrorMessage = MessageErrorEnum.YES;
-            else
-                isErrorMessage = MessageErrorEnum.NO;
+        try {
+            if (!this.getMessages().isEmpty()) {
+                isMessageCreated = true;
+                if (this.getRegulatorStatus().equals("ERROR"))
+                    isErrorMessage = MessageErrorEnum.YES;
+                else
+                    isErrorMessage = MessageErrorEnum.NO;
+            } else {
+                isMessageCreated = false;
+                isErrorMessage = MessageErrorEnum.NOT_SEND;
+            }
         }
-        else {
+        catch (NullPointerException e){
             isMessageCreated = false;
             isErrorMessage = MessageErrorEnum.NOT_SEND;
         }

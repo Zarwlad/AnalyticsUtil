@@ -12,8 +12,9 @@ public class DateTimeUtil {
             zonedDateTime = ZonedDateTime.parse(dateTime);
         }
         catch (DateTimeParseException e){
+            String replacedEmptySpace = dateTime.replace(" ", "T");
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(dateTime);
+            stringBuilder.append(replacedEmptySpace);
             stringBuilder.append("Z");
             zonedDateTime = ZonedDateTime.parse(stringBuilder);
         }

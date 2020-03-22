@@ -124,6 +124,15 @@ public class DownloadEventsService {
                         System.out.println("Получаю сообщение с id=" + eventMessageDto.getMessageId());
 
                         PageMessageDto pageMessageDto = getPagedSingleMessageById(eventMessageDto.getMessageId());
+                        try {
+                            pageMessageDto.getMessageDtos().isEmpty();
+                        }
+                        catch (NullPointerException e){
+                            pageMessageDto = getOldPagedMessageDtoById(eventMessageDto.getMessageId());
+                        }
+
+
+
                         Message message = null;
                                 try {
                                     message = pageMessageDto.getMessageDtos().get(0).fromDtoToEntity();
@@ -227,6 +236,17 @@ public class DownloadEventsService {
         String urlPath = properties.getProperty("host")
                 + properties.getProperty("journalApi2")
                 + "message/paged?id=" + id;
+
+        String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, PageMessageDto.class);
+    }
+
+    static PageMessageDto getOldPagedMessageDtoById (String id) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + properties.getProperty("journalApi1")
+                + "message/paged?Message.id=" + id;
 
         String str = getResponseBody(urlPath);
 

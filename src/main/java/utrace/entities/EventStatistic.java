@@ -107,4 +107,5 @@ public class EventStatistic implements Entity {
     public Dto fromEntityToDto(Object object) {
         return null;
     }
+
 }

@@ -16,6 +16,7 @@ public class EventStatisticCounterService {
         Set<EventStatistic> eventStatistics = new HashSet<>();
 
         for (Event event : eventData.getEvents()) {
+            System.out.println("Рассчитываю статистику по событию id = " + event.getId());
             eventStatistics.add(event.fromEventToEventStat());
         }
 
