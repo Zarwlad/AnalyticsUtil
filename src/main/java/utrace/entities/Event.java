@@ -4,9 +4,12 @@ import utrace.dto.Dto;
 import utrace.dto.EventDto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.Month;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -125,12 +128,13 @@ public class Event implements Entity{
 
     public EventStatistic fromEventToEventStat(){
         BigDecimal eventPostingSeconds = null;
-        BigDecimal messagesSendSeconds = null;
+        BigDecimal messagesSendSecondsAvg = null;
         Boolean isErrorEvent = null;
         MessageErrorEnum isErrorMessage;
         Boolean isEventPosted;
         Boolean isMessageCreated;
         Month eventMonth;
+        BigDecimal totalSendingSeconds = null;
 
         if (this.getStatus().equals("POSTED")) {
             isEventPosted = true;
@@ -204,50 +208,97 @@ public class Event implements Entity{
                 3. Одно событие - несколько сообщений, созданных в нескольких итераций (переотправка ошибочных
                 сообщений).
 
-                В случае второго и третьего кейсов будет рассчитана разница между датой создания первого сообщения и
-                датой отправки последнего сообщения в последнюю итерацию.
+                Для каждого сообщения будет рассчитан период отправки
              */
 
             //TODO: покрыть случай, когда сообщение создано, но не отпправлено
 
             if (isMessageCreated){
-                ZonedDateTime tempCreatedDate = null;
-                ZonedDateTime tempSendDate = null;
+                List<Duration> messagesSendDur = new ArrayList<>();
 
                 for (Message message : this.getMessages()) {
+                    ZonedDateTime createdDate = null;
+                    ZonedDateTime sendDate = null;
+
                     for (MessageHistory messageHistory : message.getMessageHistories()) {
-                        if (messageHistory.getStatus().equals("CREATED")){
-                            if (tempCreatedDate == null ||
-                                    tempCreatedDate.isAfter(messageHistory.getCreated())){
-                                tempCreatedDate = messageHistory.getCreated();
+                        if (messageHistory.getStatus().equals("CREATED")) {
+                            if (createdDate == null) {
+                                createdDate = messageHistory.getCreated();
+                            }
+                            else if (createdDate.isAfter(messageHistory.getCreated())){
+                                createdDate = messageHistory.getCreated();
                             }
                         }
 
-                        if (messageHistory.getStatus().equals("SENT")){
-                            if (tempSendDate == null ||
-                                    tempSendDate.isBefore(messageHistory.getCreated())){
-                                tempSendDate = messageHistory.getCreated();
+                        if (messageHistory.getStatus().equals("SENT")) {
+                            if (sendDate == null) {
+                                sendDate = messageHistory.getCreated();
+                            }
+                            else if (sendDate.isAfter(messageHistory.getCreated())){
+                                sendDate = messageHistory.getCreated();
                             }
                         }
                     }
+                    if (createdDate != null && sendDate != null) {
+                        Duration messagesSendingDur = Duration.between(createdDate, sendDate);
+                        messagesSendDur.add(messagesSendingDur);
+                    }
                 }
 
-                if (tempCreatedDate != null && tempSendDate != null) {
-                    Duration messagesSendingDur = Duration.between(tempCreatedDate, tempSendDate);
-                    messagesSendSeconds = BigDecimal.valueOf(messagesSendingDur.getSeconds());
+                if (!messagesSendDur.isEmpty()){
+                    BigDecimal totalTimeSending = null;
+
+                    for (Duration duration : messagesSendDur) {
+                        if (totalTimeSending == null){
+                            totalTimeSending = BigDecimal.valueOf(duration.getSeconds());
+                        }
+                        else {
+                            try {
+                                totalTimeSending = totalTimeSending.add(BigDecimal.valueOf(duration.getSeconds()));
+                            }
+                            catch (NullPointerException e){
+                                System.out.println("Ошибка расчета суммарного времени отправки по событию: " + this.getId()
+                                + "\ntotalTimeSpending: " + totalTimeSending);
+                                for (Message message : messages) {
+                                    System.out.println("messageId: " + message.getId());
+                                }
+                                for (Duration duration1 : messagesSendDur) {
+                                    System.out.println("duration: " + duration1.getSeconds());
+                                }
+                            }
+                        }
+                    }
+                    if (totalTimeSending != null) {
+                        System.out.println("totalTimeSending: " + totalTimeSending);
+                        messagesSendSecondsAvg = totalTimeSending.divide(
+                                BigDecimal.valueOf(messagesSendDur.size()),
+                                2,
+                                RoundingMode.HALF_EVEN);
+                    }
                 }
             }
         }
         eventMonth = Month.from(this.getCreatedDate());
 
+        if (eventPostingSeconds != null && messagesSendSecondsAvg != null){
+            totalSendingSeconds = eventPostingSeconds.add(messagesSendSecondsAvg);
+        }
+        else if (eventPostingSeconds != null){
+            totalSendingSeconds = eventPostingSeconds;
+        }
+        else if (messagesSendSecondsAvg != null){
+            totalSendingSeconds = messagesSendSecondsAvg;
+        }
+
         return  new EventStatistic(this,
                 eventPostingSeconds,
-                messagesSendSeconds,
+                messagesSendSecondsAvg,
                 isErrorEvent,
                 isErrorMessage,
                 isEventPosted,
                 isMessageCreated,
-                eventMonth);
+                eventMonth,
+                totalSendingSeconds);
     }
 
 }

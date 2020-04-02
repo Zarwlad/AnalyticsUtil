@@ -1,7 +1,7 @@
 package utrace.service;
 
-import com.ctc.wstx.shaded.msv_core.reader.ChoiceState;
 import utrace.data.EventStatsData;
+import utrace.entities.AverageCount;
 import utrace.entities.EventStatistic;
 
 import java.io.File;
@@ -19,17 +19,17 @@ public class ReportBuilderService {
     static Properties properties = new Properties();
     static {
         try {
-            properties.load(new FileReader(new File("C:\\Users\\Vladimir\\IdeaProjects\\AnalyticsUtil\\src\\main\\java\\utrace\\service\\app.properties")));
+            properties.load(new FileReader(new File("src\\main\\java\\utrace\\service\\app.properties")));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
 
-    public static void buildReport() throws IOException {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
 
-        Path path = Files.createFile(Paths.get("C:\\Users\\Vladimir\\Desktop\\reports\\"
+    public static void buildMainReport() throws IOException {
+        Path path = Files.createFile(Paths.get("C:\\Users\\vzaremba\\Desktop\\reports\\"
                 + properties.getProperty("client") + "____"
                 + LocalDateTime.now().format(dateTimeFormatter) + ".csv"));
 
@@ -37,7 +37,8 @@ public class ReportBuilderService {
                 "event_id;"
                 + "event_type;"
                 + "event_posting_seconds;"
-                + "messages_send_seconds;"
+                + "messages_send_seconds_avg;"
+                + "total_sending_seconds;"
                 + "is_error_event;"
                 + "is_error_message;"
                 + "is_event_posted;"
@@ -51,7 +52,8 @@ public class ReportBuilderService {
                     eventStatistic.getEvent().getId() + ";"
                             + eventStatistic.getEvent().getType() + ";"
                             + eventStatistic.getEventPostingSeconds() + ";"
-                            + eventStatistic.getMessagesSendSeconds() + ";"
+                            + eventStatistic.getMessagesSendSecondsAvg() + ";"
+                            + eventStatistic.getTotalSendingSeconds() + ";"
                             + eventStatistic.getErrorEvent() + ";"
                             + eventStatistic.getErrorMessage() + ";"
                             + eventStatistic.getEventPosted() + ";"
@@ -59,5 +61,34 @@ public class ReportBuilderService {
                             + eventStatistic.getEventMonth() + ";" + "\n",
                     StandardOpenOption.APPEND);
         }
+    }
+
+    public static void buildTotalReport() throws IOException {
+        Path path = Files.createFile(Paths.get("C:\\Users\\vzaremba\\Desktop\\reports\\"
+                + properties.getProperty("client") + "__total__"
+                + LocalDateTime.now().format(dateTimeFormatter) + ".csv"));
+
+        AverageCount averageCount = EventStatisticCounterService.calculateAverageForMonth();
+
+        Files.writeString(path,
+                    "month;"
+                        + "total_events_was_sended;"
+                        + "total_seconds;"
+                        + "average_count_sec;"
+                        + "average_count_hours;"
+                        + "\n");
+
+        long hour = averageCount.getAverageTime().intValue() / 3600;
+        long min = averageCount.getAverageTime().intValue() / 60 % 60;
+        long sec = averageCount.getAverageTime().intValue() % 60;
+
+        Files.writeString(path,
+                properties.getProperty("targetMonth") + ";"
+                + averageCount.getTotalEvents() + ";"
+                + averageCount.getTotalSeconds() + ";"
+                + averageCount.getAverageTime() + ";"
+                + String.format("%02d:%02d:%02d", hour, min, sec) + ";"
+                + "\n",
+                StandardOpenOption.APPEND);
     }
 }

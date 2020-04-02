@@ -3,40 +3,57 @@ package utrace.entities;
 import utrace.dto.Dto;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.time.Month;
-import java.time.ZonedDateTime;
 
 
 public class EventStatistic implements Entity {
     private Event event;
     private BigDecimal eventPostingSeconds;
-    private BigDecimal messagesSendSeconds;
+    private BigDecimal messagesSendSecondsAvg;
     private Boolean isErrorEvent;
     private MessageErrorEnum isErrorMessage;
     private Boolean isEventPosted;
     private Boolean isMessageCreated;
     private Month eventMonth;
+    private BigDecimal totalSendingSeconds;
 
     public EventStatistic() {
     }
 
     public EventStatistic(Event event,
                           BigDecimal eventPostingSeconds,
-                          BigDecimal messagesSendSeconds,
+                          BigDecimal messagesSendSecondsAvg,
                           Boolean isErrorEvent,
                           MessageErrorEnum isErrorMessage,
                           Boolean isEventPosted,
                           Boolean isMessageCreated,
-                          Month eventMonth) {
+                          Month eventMonth,
+                          BigDecimal totalSendingSeconds) {
         this.event = event;
         this.eventPostingSeconds = eventPostingSeconds;
-        this.messagesSendSeconds = messagesSendSeconds;
+        this.messagesSendSecondsAvg = messagesSendSecondsAvg;
         this.isErrorEvent = isErrorEvent;
         this.isErrorMessage = isErrorMessage;
         this.isEventPosted = isEventPosted;
         this.isMessageCreated = isMessageCreated;
         this.eventMonth = eventMonth;
+        this.totalSendingSeconds = totalSendingSeconds;
+    }
+
+    public MessageErrorEnum getIsErrorMessage() {
+        return isErrorMessage;
+    }
+
+    public void setIsErrorMessage(MessageErrorEnum isErrorMessage) {
+        this.isErrorMessage = isErrorMessage;
+    }
+
+    public BigDecimal getTotalSendingSeconds() {
+        return totalSendingSeconds;
+    }
+
+    public void setTotalSendingSeconds(BigDecimal totalSendingSeconds) {
+        this.totalSendingSeconds = totalSendingSeconds;
     }
 
     public Boolean getEventPosted() {
@@ -71,12 +88,12 @@ public class EventStatistic implements Entity {
         this.eventPostingSeconds = eventPostingSeconds;
     }
 
-    public BigDecimal getMessagesSendSeconds() {
-        return messagesSendSeconds;
+    public BigDecimal getMessagesSendSecondsAvg() {
+        return messagesSendSecondsAvg;
     }
 
-    public void setMessagesSendSeconds(BigDecimal messagesSendSeconds) {
-        this.messagesSendSeconds = messagesSendSeconds;
+    public void setMessagesSendSecondsAvg(BigDecimal messagesSendSecondsAvg) {
+        this.messagesSendSecondsAvg = messagesSendSecondsAvg;
     }
 
     public Boolean getErrorEvent() {

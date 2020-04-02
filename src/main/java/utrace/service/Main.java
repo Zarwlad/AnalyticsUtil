@@ -1,9 +1,20 @@
 package utrace.service;
 
+import utrace.data.AuthData;
+
 import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
+
+        System.out.println("Аутенфикация");
+        try {
+            AuthService.Auth();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(AuthData.getInstance().getAuth().getAccessToken());
 
         System.out.println("Начинаю скачивать события!");
         try {
@@ -22,7 +33,8 @@ public class Main {
 
         System.out.println("Печатаю статистику!");
         try {
-            ReportBuilderService.buildReport();
+            ReportBuilderService.buildMainReport();
+            ReportBuilderService.buildTotalReport();
         }
         catch (IOException e){
             e.printStackTrace();

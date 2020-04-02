@@ -8,6 +8,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import utrace.data.AuthData;
 import utrace.data.EventData;
 import utrace.dto.*;
 import utrace.entities.Event;
@@ -34,7 +35,7 @@ public class DownloadEventsService {
     static Properties properties = new Properties();
     static {
         try {
-            properties.load(new FileReader(new File("C:\\Users\\Vladimir\\IdeaProjects\\AnalyticsUtil\\src\\main\\java\\utrace\\service\\app.properties")));
+            properties.load(new FileReader(new File("src\\main\\java\\utrace\\service\\app.properties")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,8 +131,6 @@ public class DownloadEventsService {
                         catch (NullPointerException e){
                             pageMessageDto = getOldPagedMessageDtoById(eventMessageDto.getMessageId());
                         }
-
-
 
                         Message message = null;
                                 try {
@@ -258,7 +257,7 @@ public class DownloadEventsService {
         return new Request.Builder()
                 .get()
                 .url(urlPath)
-                .addHeader("authorization", properties.getProperty("authorization"))
+                .addHeader("authorization", AuthData.getInstance().getAuth().getAccessToken())
                 .build();
     }
 
