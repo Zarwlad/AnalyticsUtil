@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import utrace.entities.Event;
 import utrace.entities.Message;
+import utrace.util.DateTimeUtil;
 
 import java.time.ZonedDateTime;
 
@@ -95,8 +96,8 @@ public class MessageDto implements Dto {
         return new Message(messageDto.getId(),
                 messageDto.getStatus(),
                 messageDto.getDocumentType().getId(),
-                ZonedDateTime.parse(messageDto.getCreated()),
-                ZonedDateTime.parse(messageDto.getOperationDate()),
+                DateTimeUtil.toZonedDateTime(messageDto.getCreated()),
+                DateTimeUtil.toZonedDateTime(messageDto.getOperationDate()),
                 null);
     }
 

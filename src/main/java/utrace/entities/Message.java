@@ -5,11 +5,11 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Message {
-    String id;
-    String status;
-    String documentTypeId;
-    ZonedDateTime createdDate;
-    ZonedDateTime operationDate;
+    private String id;
+    private String status;
+    private String documentTypeId;
+    private ZonedDateTime createdDate;
+    private ZonedDateTime operationDate;
 
     Set<MessageHistory> messageHistories;
 

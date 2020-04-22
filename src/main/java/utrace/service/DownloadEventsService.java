@@ -8,6 +8,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import utrace.data.AuthData;
 import utrace.data.EventData;
 import utrace.dto.*;
 import utrace.entities.Event;
@@ -34,7 +35,7 @@ public class DownloadEventsService {
     static Properties properties = new Properties();
     static {
         try {
-            properties.load(new FileReader(new File("C:\\Users\\Vladimir\\IdeaProjects\\AnalyticsUtil\\src\\main\\java\\utrace\\service\\app.properties")));
+            properties.load(new FileReader(new File("src\\main\\java\\utrace\\service\\app.properties")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -124,6 +125,13 @@ public class DownloadEventsService {
                         System.out.println("Получаю сообщение с id=" + eventMessageDto.getMessageId());
 
                         PageMessageDto pageMessageDto = getPagedSingleMessageById(eventMessageDto.getMessageId());
+                        try {
+                            pageMessageDto.getMessageDtos().isEmpty();
+                        }
+                        catch (NullPointerException e){
+                            pageMessageDto = getOldPagedMessageDtoById(eventMessageDto.getMessageId());
+                        }
+
                         Message message = null;
                                 try {
                                     message = pageMessageDto.getMessageDtos().get(0).fromDtoToEntity();
@@ -234,11 +242,22 @@ public class DownloadEventsService {
                 .readValue(str, PageMessageDto.class);
     }
 
+    static PageMessageDto getOldPagedMessageDtoById (String id) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + properties.getProperty("journalApi1")
+                + "message/paged?Message.id=" + id;
+
+        String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, PageMessageDto.class);
+    }
+
     static Request getRequestWithAuthGetType(String urlPath){
         return new Request.Builder()
                 .get()
                 .url(urlPath)
-                .addHeader("authorization", properties.getProperty("authorization"))
+                .addHeader("authorization", AuthData.getInstance().getAuth().getAccessToken())
                 .build();
     }
 

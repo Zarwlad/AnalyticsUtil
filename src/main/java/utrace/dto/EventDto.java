@@ -3,6 +3,7 @@ package utrace.dto;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import utrace.entities.Event;
+import utrace.util.DateTimeUtil;
 
 import java.time.ZonedDateTime;
 
@@ -22,6 +23,9 @@ public class EventDto implements Dto{
 
     @JsonProperty(value = "regulatorStatus")
     String regulatorStatus;
+
+    @JsonProperty(value = "created")
+    String created;
 
     public EventDto() {
     }
@@ -66,15 +70,24 @@ public class EventDto implements Dto{
         this.regulatorStatus = regulatorStatus;
     }
 
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
     @Override
     public Object fromDtoToEntity() {
         EventDto eventDto = (EventDto) this;
         return new Event(eventDto.getId(),
                 eventDto.getType(),
-                ZonedDateTime.parse(eventDto.getOperationDate()),
+                DateTimeUtil.toZonedDateTime(eventDto.getOperationDate()),
                 eventDto.getStatus(),
                 eventDto.getRegulatorStatus(),
                 null,
-                null);
+                null,
+                DateTimeUtil.toZonedDateTime(eventDto.getCreated()));
     }
 }
