@@ -23,7 +23,7 @@ public class ReportBuilderService {
     static Properties properties = new Properties();
     static {
         try {
-            properties.load(new FileReader(new File("src\\main\\java\\ru.zarwlad.utrace\\service\\app.properties")));
+            properties.load(new FileReader(new File("src\\main\\resources\\application.properties")));
         } catch (IOException e) {
             log.error(e.toString());
         }

@@ -1,4 +1,4 @@
-package ru.zarwlad.utrace.permissions;
+package ru.zarwlad.permissions;
 
 import java.io.BufferedReader;
 import java.io.IOException;

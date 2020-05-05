@@ -41,7 +41,7 @@ public class EventStatisticCounterService {
         Month targetMonth = null;
 
         try {
-            properties.load(new FileReader("src\\main\\java\\ru.zarwlad.utrace\\service\\app.properties"));
+            properties.load(new FileReader("src\\main\\resources\\application.properties"));
             targetMonth = Month.valueOf(properties.getProperty("targetMonth"));
         }
         catch (Exception e){
