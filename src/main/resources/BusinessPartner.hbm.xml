@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping"
+package="ru.zarwlad.mdlp.downloadMdlpPartners.model">
+
+    <class name="BusinessPartner" table="business_partner">
+        <id name="systemSubjId" column="system_subj_id"/>
+
+        <property name="inn" column="inn"/>
+        <property name="kpp" column="kpp"/>
+        <property name="orgName" column="org_name"/>
+        <property name="ogrn" column="ogrn"/>
+        <property name="dirFirstName" column="dir_first_name"/>
+        <property name="dirMiddleName" column="dir_middle_name"/>
+        <property name="dirLastName" column="dir_last_name"/>
+        <property name="requestRegDate" column="request_reg_date"/>
+        <property name="factReqDate" column="fact_req_date"/>
+        <property name="countryCode" column="country_code"/>
+        <property name="federalSubjCode" column="federal_subj_code"/>
+        <property name="countryCode" column="country_code"/>
+        <property name="stateGovSupplier" column="state_gov_supplier"/>
+        <property name="entityType" column="entity_type"/>
+    </class>
+</hibernate-mapping>

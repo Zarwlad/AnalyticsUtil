@@ -1,4 +1,4 @@
-package ru.zarwlad.mdlp.service;
+package ru.zarwlad.mdlp.multiPackParser.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping xmlns="http://www.hibernate.org/xsd/hibernate-mapping"
+package="ru.zarwlad.mdlp.downloadMdlpPartners.model">
+
+    <class name="Fias" table="fias">
+        <id name="houseGuid" column="house_guid"/>
+
+        <property name="aoGuid" column="ao_guid"/>
+    </class>
+</hibernate-mapping>

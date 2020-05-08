@@ -1,9 +1,9 @@
-package ru.zarwlad.mdlp.dto.messages;
+package ru.zarwlad.mdlp.multiPackParser.dto.messages;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import ru.zarwlad.mdlp.dto.messages.multiPackDto.MultiPackDTO;
-import ru.zarwlad.mdlp.dto.messages.ticketDto.ResultDTO;
+import ru.zarwlad.mdlp.multiPackParser.dto.messages.multiPackDto.MultiPackDTO;
+import ru.zarwlad.mdlp.multiPackParser.dto.messages.ticketDto.ResultDTO;
 //import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 @JsonAutoDetect

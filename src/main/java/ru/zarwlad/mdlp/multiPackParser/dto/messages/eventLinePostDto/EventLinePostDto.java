@@ -1,4 +1,4 @@
-package ru.zarwlad.mdlp.dto.messages.eventLinePostDto;
+package ru.zarwlad.mdlp.multiPackParser.dto.messages.eventLinePostDto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;

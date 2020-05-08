@@ -23,5 +23,11 @@ C:/Users/Vladimir/IdeaProjects/AnalyticsUtil/src/main/resources/hibernate.cfg.xm
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://analyst-tool-1.ccwpnhppgquk.us-east-2.rds.amazonaws.com:5432/analyst_tool</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="mdlp_data_local" uuid="027e8c0f-e6ae-4930-b368-2a593a96327f">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/mdlp_data</jdbc-url>
+    </data-source>
   </component>
 </project>

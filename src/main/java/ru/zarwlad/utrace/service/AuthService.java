@@ -44,7 +44,10 @@ public class AuthService {
 
         String urlPath = properties.getProperty("host") + "api/" + "auth";
 
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsString(postAuthDto));
+        RequestBody requestBody = RequestBody.create(
+                MediaType.parse("application/json"),
+                objectMapper.writeValueAsString(postAuthDto));
+
         Request request = new Request.Builder()
                 .post(requestBody)
                 .url(urlPath)
@@ -52,6 +55,7 @@ public class AuthService {
                 .build();
 
         Response response = okHttpClient.newCall(request).execute();
+
         ResponseBody responseBody = response.body();
 
         String responseBodyStr = responseBody.string();

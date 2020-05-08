@@ -1,4 +1,4 @@
-package ru.zarwlad.mdlp.dto.messages.multiPackDto;
+package ru.zarwlad.mdlp.multiPackParser.dto.messages.multiPackDto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 
