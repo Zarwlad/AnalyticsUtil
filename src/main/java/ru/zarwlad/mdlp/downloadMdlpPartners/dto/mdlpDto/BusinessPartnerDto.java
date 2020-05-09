@@ -1,13 +1,10 @@
-package ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto;
+package ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import ru.zarwlad.mdlp.downloadMdlpPartners.model.BusinessPartner;
 
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @JsonAutoDetect
 @NoArgsConstructor

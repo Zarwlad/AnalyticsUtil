@@ -1,7 +1,10 @@
-package ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDtoModelMapper;
+package ru.zarwlad.mdlp.downloadMdlpPartners.dtoModelMapper;
 
-import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto.BusinessPartnerDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto.LocationShortDto;
+import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.BusinessPartnerDto;
+import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.LocationShortDto;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.*;
 
 import java.time.ZonedDateTime;
@@ -13,6 +16,7 @@ import java.util.UUID;
 public class BusinessPartnerMapper  {
 
     public static BusinessPartner fromDtoToEntity(BusinessPartnerDto businessPartnerDto){
+
         EntityType entityType = null;
         switch (businessPartnerDto.getEntityType()){
             case 1: entityType = EntityType.RESIDENT;

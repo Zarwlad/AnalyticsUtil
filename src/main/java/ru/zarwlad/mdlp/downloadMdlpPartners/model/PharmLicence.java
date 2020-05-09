@@ -3,6 +3,7 @@ package ru.zarwlad.mdlp.downloadMdlpPartners.model;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -17,4 +18,7 @@ public class PharmLicence {
     private String licenceNumber;
     private LocalDate licenceDate;
     private boolean terminated;
+    private String activityType;
+    private List<RznAddress> rznAddresses;
+
 }

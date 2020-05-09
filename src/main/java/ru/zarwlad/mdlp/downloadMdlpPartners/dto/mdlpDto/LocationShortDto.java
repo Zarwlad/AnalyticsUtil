@@ -1,4 +1,4 @@
-package ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto;
+package ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;

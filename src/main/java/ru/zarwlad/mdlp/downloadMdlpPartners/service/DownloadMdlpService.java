@@ -6,11 +6,10 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpAuth.MdlpAuthService;
-import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto.BusinessPartnerDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto.ResponsePageDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDtoModelMapper.BusinessPartnerMapper;
+import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.BusinessPartnerDto;
+import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.ResponsePageDto;
+import ru.zarwlad.mdlp.downloadMdlpPartners.dtoModelMapper.BusinessPartnerMapper;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.BusinessPartner;
-import ru.zarwlad.mdlp.downloadMdlpPartners.model.Location;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto.auth;
+package ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,10 +11,10 @@ import lombok.*;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class RequestAuthTokenMdlpDto {
-    @JsonProperty(value = "code")
-    String code;
+public class AddressFiasShortDto {
+    @JsonProperty(value = "houseguid")
+    String houseguid;
 
-    @JsonProperty(value = "password")
-    String password;
+    @JsonProperty(value = "aoguid")
+    String aoguid;
 }

@@ -1,8 +1,6 @@
 package ru.zarwlad.mdlp.downloadMdlpPartners.model;
 
 import lombok.*;
-
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -11,10 +9,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString
-public class RznAddress {
+public class WorkDescription {
     private UUID id;
-    private Fias fias;
-    private PharmLicence pharmLicence;
-    private String rznAddress;
-    private List<WorkDescription> workDescriptions;
+    private RznAddress rznAddress;
+    private String workDescription;
 }
