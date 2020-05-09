@@ -3,6 +3,7 @@ package ru.zarwlad.mdlp.downloadMdlpPartners.model;
 import lombok.*;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -10,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "systemSubjId")
+@ToString
 public class BusinessPartner {
     private UUID systemSubjId;
     private String inn;
@@ -25,24 +27,7 @@ public class BusinessPartner {
     private int federalSubjCode;
     private boolean stateGovSupplier;
     private EntityType entityType;
-
-    private enum EntityType{
-        RESIDENT(1),
-        NON_RES_AGENCY(2),
-        NON_RESIDENT(3);
-
-        private int type;
-
-        EntityType(int type){
-            this.type = type;
-        }
-
-        @Override
-        public String toString() {
-            return "EntityType{" +
-                    "type=" + type +
-                    '}';
-        }
-    }
+    @ToString.Exclude
+    private Set<Location> locations;
 
 }

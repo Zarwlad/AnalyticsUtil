@@ -9,6 +9,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Fias {
     private UUID aoGuid;
     private UUID houseGuid;

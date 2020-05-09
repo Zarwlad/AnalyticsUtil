@@ -3,7 +3,7 @@ package ru.zarwlad.mdlp.downloadMdlpPartners.mdlpAuth;
 import java.time.LocalDateTime;
 import java.time.Month;
 
-class MdlpSession {
+public class MdlpSession {
     private String mdlpToken;
     private LocalDateTime createdDate;
     private long tokenLifetime;
@@ -33,6 +33,15 @@ class MdlpSession {
     }
 
     protected MdlpSession() {
+        createdDate = LocalDateTime.of(1970, Month.JANUARY, 1, 1, 1, 1);
     }
 
+    @Override
+    public String toString() {
+        return "MdlpSession{" +
+                "mdlpToken='" + mdlpToken + '\'' +
+                ", createdDate=" + createdDate +
+                ", tokenLifetime=" + tokenLifetime +
+                '}';
+    }
 }

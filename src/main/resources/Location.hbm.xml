@@ -10,7 +10,12 @@ package="ru.zarwlad.mdlp.downloadMdlpPartners.model">
         <id name="branchId" column="branch_id"/>
 
         <property name="address" column="address"/>
-        <property name="locationStatus" column="location_status"/>
+        <property name="locationStatus" column="location_status">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">ru.zarwlad.mdlp.downloadMdlpPartners.model.LocationStatus</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
         <property name="addressFoundInFias" column="is_address_found_in_fias"/>
         <property name="safeWarehouse" column="is_safe_warehouse" />
 

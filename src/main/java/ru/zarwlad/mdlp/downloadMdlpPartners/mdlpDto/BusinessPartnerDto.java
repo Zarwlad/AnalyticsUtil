@@ -72,8 +72,8 @@ public class BusinessPartnerDto {
     @Getter
     @ToString
     @EqualsAndHashCode
-    private class RequestRegDateDto{
+    public class RequestRegDateDto{
         @JsonProperty(value = "$date")
-        String requestRegDate;
+        private String requestRegDate;
     }
 }

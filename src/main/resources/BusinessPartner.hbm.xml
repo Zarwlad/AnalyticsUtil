@@ -20,8 +20,13 @@ package="ru.zarwlad.mdlp.downloadMdlpPartners.model">
         <property name="factReqDate" column="fact_req_date"/>
         <property name="countryCode" column="country_code"/>
         <property name="federalSubjCode" column="federal_subj_code"/>
-        <property name="countryCode" column="country_code"/>
         <property name="stateGovSupplier" column="state_gov_supplier"/>
-        <property name="entityType" column="entity_type"/>
+        <property name="entityType" column="entity_type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">ru.zarwlad.mdlp.downloadMdlpPartners.model.EntityType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
     </class>
 </hibernate-mapping>

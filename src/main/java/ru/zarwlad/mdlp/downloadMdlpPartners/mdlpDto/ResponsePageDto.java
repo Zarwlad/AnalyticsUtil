@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.List;
+
 @JsonAutoDetect
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class ResponsePageDto {
     @JsonProperty(value = "filtered_records")
-    private FilteredRecordsDto filteredRecordsDto;
+    private List<BusinessPartnerDto> businessPartnerDtos;
 
     @JsonProperty(value = "filtered_records_count")
     private int filteredRecordsCount;

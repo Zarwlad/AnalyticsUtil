@@ -11,6 +11,7 @@ import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpDto.auth.ResponseAuthTokenMdlpDt
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Properties;
@@ -27,29 +28,27 @@ public class MdlpAuthService {
     private static Properties properties = new Properties();
     static {
         try {
-            properties.load(new FileInputStream("src/resources/application.properties"));
+            properties.load(new FileInputStream("src/main/resources/application.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static MdlpSession mdlpSession = null;
+    private static MdlpSession mdlpSession = new MdlpSession();
 
-    public MdlpSession getMdlpSession(){
+    public static MdlpSession getMdlpSession(){
+        initializeMdlpSession();
         return mdlpSession;
     }
 
-    private static void initializeMlpSession(){
+    private static void initializeMdlpSession(){
         LocalDateTime currentDateTime = LocalDateTime.now();
-        Duration checkTokenExpires = Duration.between(currentDateTime, mdlpSession.getCreatedDate());
 
-        if (mdlpSession == null ||
-                mdlpSession.getTokenLifetime()*60-1 <= checkTokenExpires.getSeconds()){
+        Duration checkTokenExpires = Duration.between(mdlpSession.getCreatedDate(), currentDateTime);
+
+        if (mdlpSession.getTokenLifetime()*60-1 <= checkTokenExpires.getSeconds()){
             ResponseAuthCodeMdlpDto responseCode = getMdlpCode();
             ResponseAuthTokenMdlpDto responseAuthToken = getMdlpToken(responseCode);
-
-            if (mdlpSession == null)
-                mdlpSession = new MdlpSession();
 
             mdlpSession.setMdlpToken(responseAuthToken.getToken());
             mdlpSession.setCreatedDate(LocalDateTime.now());

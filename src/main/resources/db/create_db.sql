@@ -33,3 +33,29 @@ CREATE TABLE IF NOT EXISTS location (
     foreign key (business_partner_id) references business_partner(system_subj_id)
 );
 
+CREATE TABLE IF NOT EXISTS licence(
+    id uuid primary key,
+    business_partner_id uuid,
+    licence_number varchar not null,
+    licence_date date not null,
+    is_terminated bool not null,
+
+    foreign key (business_partner_id) references business_partner(system_subj_id)
+);
+
+CREATE TABLE IF NOT EXISTS rzn_address(
+    id uuid primary key,
+    fias_id uuid not null,
+    licence_id uuid not null,
+    rzn_address varchar,
+
+    foreign key (fias_id) references fias(house_guid),
+    foreign key (licence_id) references licence(id)
+);
+
+CREATE TABLE If NOT EXISTS rzn_work(
+    rzn_address uuid primary key,
+    work_description varchar not null,
+
+    foreign key (rzn_address) references rzn_address(fias_id)
+)

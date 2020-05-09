@@ -2,13 +2,12 @@ package ru.zarwlad.mdlp.downloadMdlpPartners.model;
 
 import lombok.*;
 
-import java.util.UUID;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
 @EqualsAndHashCode(of = "branchId")
+@ToString
 public class Location {
     private String branchId;
     private Fias fias;
@@ -18,15 +17,4 @@ public class Location {
     private BusinessPartner businessPartner;
     private boolean safeWarehouse;
 
-    private enum LocationStatus{
-        NOT_ACTIVE(0),
-        ACTIVE(1),
-        DEACTIVATION(2);
-
-        private int status;
-
-        LocationStatus(int status){
-            this.status = status;
-        }
-    }
 }
