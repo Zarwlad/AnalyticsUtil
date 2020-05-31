@@ -2,7 +2,7 @@ package ru.zarwlad.utrace.modelDtoMapper;
 
 import ru.zarwlad.utrace.model.Event;
 import ru.zarwlad.utrace.util.DateTimeUtil;
-import ru.zarwlad.utrace.utraceDto.EventDto;
+import ru.zarwlad.utrace.utraceDto.entityDtos.EventDto;
 
 public class EventModelMapper {
     public static Event fromDtoToEntity(EventDto eventDto){

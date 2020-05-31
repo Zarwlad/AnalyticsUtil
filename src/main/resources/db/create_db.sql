@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS rzn_address(
 
 CREATE TABLE If NOT EXISTS rzn_work(
     id uuid primary key,
-    rzn_address uuid not null ,
+    rzn_address_id uuid not null,
     work_description varchar not null,
 
-    unique (rzn_address, work_description),
-    foreign key (rzn_address) references rzn_address(fias_id)
+    unique (rzn_address_id, work_description),
+    foreign key (rzn_address_id) references rzn_address(id)
 )

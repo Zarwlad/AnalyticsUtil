@@ -3,48 +3,51 @@ package ru.zarwlad.mdlp.downloadMdlpPartners.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.BusinessPartner;
-import ru.zarwlad.mdlp.downloadMdlpPartners.model.Fias;
+import ru.zarwlad.mdlp.downloadMdlpPartners.model.PharmLicence;
 
 import java.util.UUID;
 
-public class FiasDAO implements DAO<Fias, UUID>{
-    private SessionFactory sessionFactory;
+public class PharmLicenceDAO implements DAO<PharmLicence, UUID>{
+    private static SessionFactory sessionFactory;
 
-    public FiasDAO(SessionFactory sessionFactory){
-        this.sessionFactory = sessionFactory;
+    public PharmLicenceDAO(SessionFactory sessionFactory){
+        PharmLicenceDAO.sessionFactory = sessionFactory;
     }
 
     @Override
-    public void create(Fias fias) {
+    public void create(PharmLicence pharmLicence) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.saveOrUpdate(fias);
+            session.saveOrUpdate(pharmLicence);
             session.getTransaction().commit();
+            session.close();
         }
     }
 
     @Override
-    public void delete(Fias fias) {
+    public void delete(PharmLicence pharmLicence) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.delete(fias);
+            session.save(pharmLicence);
             session.getTransaction().commit();
+            session.close();
         }
     }
 
     @Override
-    public void update(Fias fias) {
+    public void update(PharmLicence pharmLicence) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.update(fias);
+            session.save(pharmLicence);
             session.getTransaction().commit();
+            session.close();
         }
     }
 
     @Override
-    public Fias read(UUID id) {
+    public PharmLicence read(UUID id) {
         try (Session session = sessionFactory.openSession()){
-            return session.get(Fias.class, id);
+            return session.get(PharmLicence.class, id);
         }
     }
 }
