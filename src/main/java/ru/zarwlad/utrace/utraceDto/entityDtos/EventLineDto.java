@@ -3,15 +3,16 @@ package ru.zarwlad.utrace.utraceDto.entityDtos;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import ru.zarwlad.utrace.utraceDto.Dto;
 
 @JsonAutoDetect
-@Setter
-@Getter
-@EqualsAndHashCode
-@ToString
-@AllArgsConstructor
 @NoArgsConstructor
-public class EventLineDto {
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "id")
+public class EventLineDto implements Dto {
     @JsonProperty(value = "id")
     String id;
 

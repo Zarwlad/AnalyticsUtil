@@ -2,11 +2,18 @@ package ru.zarwlad.utrace.utraceDto.entityDtos;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 import ru.zarwlad.utrace.model.MessageHistory;
 import ru.zarwlad.utrace.util.DateTimeUtil;
 import ru.zarwlad.utrace.utraceDto.Dto;
 
 @JsonAutoDetect
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "id")
 public class MessageHistoryDto implements Dto {
 
     @JsonProperty(value = "authoredBy")
@@ -23,57 +30,6 @@ public class MessageHistoryDto implements Dto {
 
     @JsonProperty(value = "status")
     String status;
-
-    public MessageHistoryDto() {
-    }
-
-    public MessageHistoryDto(String authoredBy, String created, String id, MessageDto messageDto, String status) {
-        this.authoredBy = authoredBy;
-        this.created = created;
-        this.id = id;
-        this.messageDto = messageDto;
-        this.status = status;
-    }
-
-    public String getAuthoredBy() {
-        return authoredBy;
-    }
-
-    public void setAuthoredBy(String authoredBy) {
-        this.authoredBy = authoredBy;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public MessageDto getMessageDto() {
-        return messageDto;
-    }
-
-    public void setMessageDto(MessageDto messageDto) {
-        this.messageDto = messageDto;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public Object fromDtoToEntity() {
         MessageHistoryDto messageHistoryDto = (MessageHistoryDto) this;
