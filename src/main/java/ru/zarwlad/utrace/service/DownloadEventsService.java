@@ -3,10 +3,7 @@ package ru.zarwlad.utrace.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
+import okhttp3.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -252,7 +249,7 @@ public class DownloadEventsService {
                 .readValue(str, PageMessageDto.class);
     }
 
-    static Request getRequestWithAuthGetType(String urlPath){
+    public static Request getRequestWithAuthGetType(String urlPath){
         return new Request.Builder()
                 .get()
                 .url(urlPath)
@@ -260,8 +257,33 @@ public class DownloadEventsService {
                 .build();
     }
 
-    static String getResponseBody(String urlPath) throws IOException {
-        Request getRequest = getRequestWithAuthGetType(urlPath);
+    public static Request getMdlpProxyRequestWithAuthGetType(String urlPath){
+        return new Request.Builder()
+                .get()
+                .url(urlPath)
+                .addHeader("authorization", AuthData.getInstance().getAuth().getAccessToken())
+                .addHeader("Route", properties.getProperty("mdlpRoute"))
+                .build();
+    }
+
+    public static Request postMdlpProxyRequestWithAuthGetType(String urlPath, RequestBody requestBody){
+        return new Request.Builder()
+                .post(requestBody)
+                .url(urlPath)
+                .addHeader("authorization", AuthData.getInstance().getAuth().getAccessToken())
+                .addHeader("Route", properties.getProperty("mdlpRoute"))
+                .build();
+    }
+
+    public static String getResponseBody(String urlPath) throws IOException {
+        Request getRequest = null;
+
+        if (!urlPath.contains("/mdlp/api")) {
+            getRequest = getRequestWithAuthGetType(urlPath);
+        }
+        else {
+            getRequest = getMdlpProxyRequestWithAuthGetType(urlPath);
+        }
         Response getResponseReq = okHttpClient.newCall(getRequest).execute();
         ResponseBody getRespBody = getResponseReq.body();
 

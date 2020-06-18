@@ -2,9 +2,18 @@ package ru.zarwlad.mdlp.multiPackParser.dto.messages.multiPackDto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import lombok.*;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+@JacksonXmlRootElement
 public class MultiPackDTO {
     @JacksonXmlProperty(localName = "subject_id")
     String subjectId;
@@ -15,30 +24,4 @@ public class MultiPackDTO {
     @JacksonXmlElementWrapper(localName = "by_sgtin")
     ArrayList<DetailDTO> detail;
 
-    public MultiPackDTO() {
-    }
-
-    public String getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
-    }
-
-    public String getOperationDate() {
-        return operationDate;
-    }
-
-    public void setOperationDate(String operationDate) {
-        this.operationDate = operationDate;
-    }
-
-    public ArrayList<DetailDTO> getDetail() {
-        return detail;
-    }
-
-    public void setDetail(ArrayList<DetailDTO> detailDTO) {
-        this.detail = detailDTO;
-    }
 }

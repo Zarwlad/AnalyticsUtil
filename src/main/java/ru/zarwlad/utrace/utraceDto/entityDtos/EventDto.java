@@ -10,13 +10,15 @@ import ru.zarwlad.utrace.utraceDto.Dto;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+@ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(of = "id")
 public class EventDto implements Dto {
     @JsonProperty(value = "id")
+    @ToString.Include
     String id;
 
     @JsonProperty(value = "type")
+    @ToString.Include
     String type;
 
     @JsonProperty(value = "operationDate")

@@ -1,7 +1,11 @@
-package ru.zarwlad.utrace.service;
+package ru.zarwlad.utrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zarwlad.utrace.service.AuthService;
+import ru.zarwlad.utrace.service.DownloadEventsService;
+import ru.zarwlad.utrace.service.EventStatisticCounterService;
+import ru.zarwlad.utrace.service.ReportBuilderService;
 
 import java.io.IOException;
 

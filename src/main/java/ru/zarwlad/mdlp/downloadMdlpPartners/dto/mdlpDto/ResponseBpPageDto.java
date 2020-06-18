@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class ResponsePageDto {
+public class ResponseBpPageDto {
     @JsonProperty(value = "filtered_records")
     private List<BusinessPartnerDto> businessPartnerDtos;
 

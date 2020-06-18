@@ -1,9 +1,11 @@
 package ru.zarwlad.mdlp.multiPackParser.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import ru.zarwlad.mdlp.multiPackParser.dto.messages.Documents;
 import ru.zarwlad.mdlp.multiPackParser.dto.messages.multiPackDto.DetailDTO;
+import ru.zarwlad.mdlp.multiPackParser.dto.messages.multiPackDto.MultiPackDTO;
 import ru.zarwlad.mdlp.multiPackParser.dto.messages.ticketDto.ErrorDTO;
 
 import java.io.BufferedReader;
@@ -18,6 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class MultiPackAnalyzer {
+    static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
+
     public static void main(String[] args) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
         xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -33,7 +37,10 @@ public class MultiPackAnalyzer {
         System.out.println("Введи путь к ответу, полученному из МДЛП");
         String mdlpResponse = consoleReader.readLine();
         Path mdlpRespPath = Paths.get(mdlpResponse);
-        Documents mdlpRespTicket = xmlMapper.readValue(Files.readAllBytes(mdlpRespPath), Documents.class);
+        String string = Files.readString(mdlpRespPath);
+        string.replace("\\", "");
+
+        Documents mdlpRespTicket = xmlMapper.readValue(string, Documents.class);
 
         Set<String> problemSgtins = new HashSet<>();
 
@@ -43,7 +50,8 @@ public class MultiPackAnalyzer {
 
         HashMap<String, HashMap<String, Boolean>> problemSscc = getProblemSsccList(mdlpRequestDoc, problemSgtins);
 
-        Report(problemSscc);
+        report(problemSscc);
+        reportOrderDetails(problemSscc);
     }
 
     static HashMap<String, HashMap<String, Boolean>> getProblemSsccList (Documents multiPackReq, Set<String> problemSgtins) {
@@ -58,9 +66,8 @@ public class MultiPackAnalyzer {
                     isSsccProblem = true;
                     sgtinsInProblemSscc.put(s, true);
                 }
-                else {
+                else
                     sgtinsInProblemSscc.put(s, false);
-                }
             }
 
             try {
@@ -79,10 +86,10 @@ public class MultiPackAnalyzer {
         return problemSsccListWithSgtins;
     }
 
-    static void Report (HashMap<String, HashMap<String, Boolean>> problemSscc) throws IOException {
+    static void report(HashMap<String, HashMap<String, Boolean>> problemSscc) throws IOException {
         //TODO: Метод Report должен только выводить на печать, все данные должны быть переведены в классы
         String filename = "operationResult" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss"));
-        Path newReport = Paths.get("C:\\Users\\Vladimir\\Desktop\\" + filename + ".txt");
+        Path newReport = Paths.get("src\\reports\\" + filename + ".txt");
         if (!Files.notExists(newReport))
                 Files.createFile(newReport);
 
@@ -113,5 +120,32 @@ public class MultiPackAnalyzer {
             fileWriter.flush();
         }
         fileWriter.close();
+    }
+
+    static void reportOrderDetails (HashMap<String, HashMap<String, Boolean>> problemSscc){
+        MultiPackDTO multiPackDTO = new MultiPackDTO();
+        ArrayList<DetailDTO> detailDTOS = new ArrayList<>();
+
+        for (Map.Entry<String, HashMap<String, Boolean>> stringHashMapEntry : problemSscc.entrySet()) {
+            detailDTOS.add(new DetailDTO(
+                    stringHashMapEntry.getKey(),
+                    new ArrayList<>(stringHashMapEntry.getValue().keySet())
+                )
+            );
+
+            multiPackDTO.setDetail(detailDTOS);
+        }
+
+        try {
+            Path path = Files.createFile(Paths.get("src\\reports\\"
+                    + "multiPackDto" + "____"
+                    + LocalDateTime.now().format(dateTimeFormatter) + ".xml"));
+
+            XmlMapper xmlMapper = new XmlMapper();
+            xmlMapper.writeValue(path.toFile(), multiPackDTO);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.mdlp.downloadMdlpPartners.mdlpAuth.MdlpAuthService;
 import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.BusinessPartnerDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.ResponsePageDto;
+import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.ResponseBpPageDto;
 import ru.zarwlad.mdlp.downloadMdlpPartners.dtoModelMapper.BusinessPartnerMapper;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.BusinessPartner;
 
@@ -41,13 +41,13 @@ public class DownloadMdlpService {
         int totalRecords = 0;
         int startFrom = 59060;
         int pageSize = 80;
-        ResponsePageDto responsePageDto = getMdlpPage(startFrom, pageSize);
+        ResponseBpPageDto responseBpPageDto = getBpMdlpPage(startFrom, pageSize);
 
-        totalRecords = responsePageDto.getFilteredRecordsCount();
+        totalRecords = responseBpPageDto.getFilteredRecordsCount();
 
         List<BusinessPartner> businessPartners = new ArrayList<>();
 
-        for (BusinessPartnerDto businessPartnerDto : responsePageDto.getBusinessPartnerDtos()) {
+        for (BusinessPartnerDto businessPartnerDto : responseBpPageDto.getBusinessPartnerDtos()) {
             businessPartners.add(BusinessPartnerMapper.fromDtoToEntity(businessPartnerDto));
         }
 
@@ -60,16 +60,16 @@ public class DownloadMdlpService {
 
             startFrom = startFrom + pageSize;
 
-            responsePageDto = getMdlpPage(startFrom, pageSize);
+            responseBpPageDto = getBpMdlpPage(startFrom, pageSize);
 
-            for (BusinessPartnerDto businessPartnerDto : responsePageDto.getBusinessPartnerDtos()) {
+            for (BusinessPartnerDto businessPartnerDto : responseBpPageDto.getBusinessPartnerDtos()) {
                 businessPartners.add(BusinessPartnerMapper.fromDtoToEntity(businessPartnerDto));
             }
         }
         return businessPartners;
     }
 
-    private static ResponsePageDto getMdlpPage(int currentPage, int pageSize){
+    private static ResponseBpPageDto getBpMdlpPage(int currentPage, int pageSize){
         String url = properties.getProperty("hostMdlp") + "/api/v1/reestr_partners/filter";
 
         MediaType mediaType = MediaType.parse("application/json");
@@ -104,7 +104,7 @@ public class DownloadMdlpService {
 
         ResponseBody responseBody = response.body();
 
-        ResponsePageDto responsePageDto = null;
+        ResponseBpPageDto responseBpPageDto = null;
         try {
             String responseBodyStr = responseBody.string();
 
@@ -113,11 +113,11 @@ public class DownloadMdlpService {
             log.info("Ответ: " + response.toString());
             log.info("Тело ответа: " + responseBodyStr);
 
-            responsePageDto = objectMapper.readValue(responseBodyStr, ResponsePageDto.class);
+            responseBpPageDto = objectMapper.readValue(responseBodyStr, ResponseBpPageDto.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return responsePageDto;
+        return responseBpPageDto;
     }
 }
