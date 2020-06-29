@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.rznDto.LicencesListDto;
+import ru.zarwlad.unitedDtos.rznDto.LicencesListDto;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -7,12 +7,12 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.HierarchySsccMdlpDto;
+import ru.zarwlad.unitedDtos.mdlpDto.HierarchySsccMdlpDto;
 import ru.zarwlad.utrace.service.AuthService;
-import ru.zarwlad.utrace.utraceDto.entityDtos.EventLineDto;
-import ru.zarwlad.utrace.utraceDto.pagedDtos.PageDtoOfCodeTreeRootDto;
-import ru.zarwlad.utrace.utraceDto.pagedDtos.PageDtoOfEventLineDto;
-import ru.zarwlad.utrace.utraceDto.xmlDto.OrderDetailsDto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventLineDto;
+import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageDtoOfCodeTreeRootDto;
+import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageDtoOfEventLineDto;
+import ru.zarwlad.unitedDtos.mdlpDto.documentDto.OrderDetailsDto;
 
 import java.io.File;
 import java.io.FileReader;
@@ -27,7 +27,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static ru.zarwlad.utrace.service.DownloadEventsService.getResponseBody;
+import static ru.zarwlad.util.client.MdlpClient.getMdlpHierarchy;
+import static ru.zarwlad.util.client.MdlpClient.getPagedCodeTreeRootsByCode;
+import static ru.zarwlad.util.client.UtraceClient.getPageEventLinesFromEvent;
 
 public class ChiesiCodesExporting {
     private static Logger log = LoggerFactory.getLogger(ChiesiCodesExporting.class);
@@ -137,59 +139,4 @@ public class ChiesiCodesExporting {
         xmlMapper.writeValue(fileCodesInUtraceOnly.toFile(), codesInUtraceOnly);
         xmlMapper.writeValue(fileCodesInMdlpOnly.toFile(), codesInMdlpOnly);
     }
-
-    static PageDtoOfEventLineDto getPageEventLinesFromEvent (String eventId, int page) throws IOException {
-        String urlPath = properties.getProperty("host")
-                + "api/2.0/event-lines"
-                + "?event.id=" + eventId
-                + "&page=" + page;
-        String str = getResponseBody(urlPath);
-
-        return objectMapper
-                .readValue(str, PageDtoOfEventLineDto.class);
-    }
-
-    static HierarchySsccMdlpDto getMdlpHierarchy (String sscc) throws IOException {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        String urlPath = properties.getProperty("host")
-                + "mdlp/api/sscc/"
-                + sscc
-                + "/hierarchy";
-        String str = getResponseBody(urlPath);
-
-        HierarchySsccMdlpDto hierarchySsccMdlpDto = null;
-        try {
-            hierarchySsccMdlpDto =
-                    objectMapper.readValue(str, HierarchySsccMdlpDto.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        if (hierarchySsccMdlpDto.getUp() != null){
-            log.info(hierarchySsccMdlpDto.toString());
-            return  hierarchySsccMdlpDto;
-        }
-        else {
-            log.info("Пустая иерархия на запросе sscc " + sscc);
-            return null;
-        }
-    }
-
-    static PageDtoOfCodeTreeRootDto getPagedCodeTreeRootsByCode (String code) throws IOException {
-        String urlPath = properties.getProperty("host")
-                + "api/2.0/codetreeroots"
-                + "?code.sgtinOrSscc=" + code;
-        String str = getResponseBody(urlPath);
-
-        log.info(str);
-
-        return objectMapper
-                .readValue(str, PageDtoOfCodeTreeRootDto.class);
-    }
-
 }

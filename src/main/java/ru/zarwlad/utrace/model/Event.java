@@ -1,7 +1,7 @@
 package ru.zarwlad.utrace.model;
 
-import ru.zarwlad.utrace.utraceDto.Dto;
-import ru.zarwlad.utrace.utraceDto.entityDtos.EventDto;
+import ru.zarwlad.unitedDtos.utraceDto.Dto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.auth.RequestAuthCodeMdlpDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.auth.RequestAuthTokenMdlpDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.auth.ResponseAuthCodeMdlpDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.auth.ResponseAuthTokenMdlpDto;
+import ru.zarwlad.unitedDtos.mdlpDto.auth.RequestAuthCodeMdlpDto;
+import ru.zarwlad.unitedDtos.mdlpDto.auth.RequestAuthTokenMdlpDto;
+import ru.zarwlad.unitedDtos.mdlpDto.auth.ResponseAuthCodeMdlpDto;
+import ru.zarwlad.unitedDtos.mdlpDto.auth.ResponseAuthTokenMdlpDto;
 
 import java.io.FileInputStream;
 import java.io.IOException;

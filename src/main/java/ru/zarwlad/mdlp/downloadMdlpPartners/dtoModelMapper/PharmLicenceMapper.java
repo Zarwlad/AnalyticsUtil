@@ -6,9 +6,9 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.rznDto.PharmLicenceDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.rznDto.RznAddressDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.rznDto.WorkDescriptionDto;
+import ru.zarwlad.unitedDtos.rznDto.PharmLicenceDto;
+import ru.zarwlad.unitedDtos.rznDto.RznAddressDto;
+import ru.zarwlad.unitedDtos.rznDto.WorkDescriptionDto;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.*;
 
 import javax.persistence.criteria.CriteriaBuilder;

@@ -6,8 +6,8 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.data.AuthData;
-import ru.zarwlad.utrace.utraceDto.entityDtos.AuthDto;
-import ru.zarwlad.utrace.utraceDto.entityDtos.PostAuthDto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.AuthDto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.PostAuthDto;
 import ru.zarwlad.utrace.model.Auth;
 
 import java.io.*;
@@ -15,7 +15,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class AuthService {
-    private static Logger log = LoggerFactory.getLogger(EventStatisticCounterService.class);
+    private static Logger log = LoggerFactory.getLogger(AuthService.class);
 
     static ObjectMapper objectMapper = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -65,5 +65,7 @@ public class AuthService {
 
         AuthData authData = AuthData.getInstance();
         authData.setAuth((Auth) authDto.fromDtoToEntity());
+
+        log.info("Аутенфикация прошла успешно");
     }
 }

@@ -30,6 +30,11 @@ public class PostgresUtil {
         StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder();
 
         Map<String, String> settings = new HashMap<>();
+        settings.put(Environment.DRIVER, "org.postgresql.Driver");
+        settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/sgtins");
+        settings.put(Environment.USER, "postgres");
+        settings.put(Environment.PASS, "qwertyu123!@#");
+        settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQL95Dialect");
 
         serviceRegistryBuilder
                 .applySettings(settings);

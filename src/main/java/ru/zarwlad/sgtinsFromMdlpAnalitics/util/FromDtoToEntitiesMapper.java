@@ -1,7 +1,7 @@
 package ru.zarwlad.sgtinsFromMdlpAnalitics.util;
 
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.SsccDto;
-import ru.zarwlad.sgtinsFromMdlpAnalitics.dto.SgtinFilterMdlpDto;
+import ru.zarwlad.unitedDtos.mdlpDto.SsccDto;
+import ru.zarwlad.unitedDtos.mdlpDto.SgtinFilterMdlpDto;
 import ru.zarwlad.sgtinsFromMdlpAnalitics.mdlpCodeModel.Sgtin;
 import ru.zarwlad.sgtinsFromMdlpAnalitics.mdlpCodeModel.Sscc;
 

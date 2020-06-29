@@ -1,15 +1,11 @@
 package ru.zarwlad.mdlp.downloadMdlpPartners.service;
 
-import org.hibernate.HibernateError;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.mdlp.downloadMdlpPartners.Application;
 import ru.zarwlad.mdlp.downloadMdlpPartners.dao.*;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.rznDto.LicencesListDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.rznDto.PharmLicenceDto;
+import ru.zarwlad.unitedDtos.rznDto.PharmLicenceDto;
 import ru.zarwlad.mdlp.downloadMdlpPartners.dtoModelMapper.PharmLicenceMapper;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.PharmLicence;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.RznAddress;

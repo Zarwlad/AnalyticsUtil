@@ -1,10 +1,7 @@
 package ru.zarwlad.mdlp.downloadMdlpPartners.dtoModelMapper;
 
-import org.hibernate.Criteria;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.BusinessPartnerDto;
-import ru.zarwlad.mdlp.downloadMdlpPartners.dto.mdlpDto.LocationShortDto;
+import ru.zarwlad.unitedDtos.mdlpDto.BusinessPartnerDto;
+import ru.zarwlad.unitedDtos.mdlpDto.LocationShortDto;
 import ru.zarwlad.mdlp.downloadMdlpPartners.model.*;
 
 import java.time.ZonedDateTime;

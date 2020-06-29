@@ -1,6 +1,6 @@
 package ru.zarwlad.utrace.model;
 
-import ru.zarwlad.utrace.utraceDto.Dto;
+import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
 public interface Entity {
     Dto fromEntityToDto(Object object);

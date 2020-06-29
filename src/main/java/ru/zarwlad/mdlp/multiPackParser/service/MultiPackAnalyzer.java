@@ -1,12 +1,11 @@
 package ru.zarwlad.mdlp.multiPackParser.service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import ru.zarwlad.mdlp.multiPackParser.dto.messages.Documents;
-import ru.zarwlad.mdlp.multiPackParser.dto.messages.multiPackDto.DetailDTO;
-import ru.zarwlad.mdlp.multiPackParser.dto.messages.multiPackDto.MultiPackDTO;
-import ru.zarwlad.mdlp.multiPackParser.dto.messages.ticketDto.ErrorDTO;
+import ru.zarwlad.unitedDtos.mdlpDto.documentDto.Documents;
+import ru.zarwlad.unitedDtos.mdlpDto.documentDto.multiPackDto.DetailDTO;
+import ru.zarwlad.unitedDtos.mdlpDto.documentDto.multiPackDto.MultiPackDTO;
+import ru.zarwlad.unitedDtos.mdlpDto.documentDto.ticketDto.ErrorDTO;
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
