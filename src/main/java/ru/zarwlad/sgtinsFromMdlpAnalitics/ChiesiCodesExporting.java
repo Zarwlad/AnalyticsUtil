@@ -1,10 +1,7 @@
 package ru.zarwlad.sgtinsFromMdlpAnalitics;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.unitedDtos.mdlpDto.HierarchySsccMdlpDto;
@@ -25,21 +22,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
 import static ru.zarwlad.util.client.MdlpClient.getMdlpHierarchy;
-import static ru.zarwlad.util.client.MdlpClient.getPagedCodeTreeRootsByCode;
-import static ru.zarwlad.util.client.UtraceClient.getPageEventLinesFromEvent;
+import static ru.zarwlad.util.client.UtraceClient.*;
 
 public class ChiesiCodesExporting {
     private static Logger log = LoggerFactory.getLogger(ChiesiCodesExporting.class);
-    static ObjectMapper objectMapper = new ObjectMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-    static OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .readTimeout(50_000, TimeUnit.MILLISECONDS)
-            .build();
-
     static Properties properties = new Properties();
     static {
         try {

@@ -1,6 +1,8 @@
 package ru.zarwlad.unitedDtos.utraceDto.entityDtos.briefs;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvRecurse;
 import lombok.*;
 
 @JsonAutoDetect
@@ -11,6 +13,9 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode(of = "id")
 public class BusinessPartnerBriefDto {
+    @CsvBindByName(column = "businessPartnerId")
     String id;
+
+    @CsvBindByName
     String name;
 }

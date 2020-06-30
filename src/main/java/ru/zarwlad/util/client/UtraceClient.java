@@ -1,5 +1,6 @@
 package ru.zarwlad.util.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.*;
 import org.slf4j.Logger;
@@ -148,5 +149,97 @@ public class UtraceClient {
 
         return objectMapper
                 .readValue(str, PageDtoOfEventLineDto.class);
+    }
+
+    public static PageDtoOfCodeTreeRootDto getPagedCodeTreeRootsByCode (String code) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/codetreeroots"
+                + "?code.sgtinOrSscc=" + code;
+        String str = getResponseBody(urlPath);
+
+        log.info(str);
+
+        return objectMapper
+                .readValue(str, PageDtoOfCodeTreeRootDto.class);
+    }
+
+    public static PageDtoOfCodeTreeRootDto getPagedCodeTreeRootsByFilter (String filter, Integer page, Integer size) {
+
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/codetreeroots"
+                + "?page=" + page
+                + "&size=" + size;
+
+        if (!"NO".equals(filter))
+            urlPath = urlPath + "&" + filter;
+
+        String str = null;
+        try {
+            str = getResponseBody(urlPath);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+        }
+
+        log.info(str);
+
+        try {
+            return objectMapper
+                    .readValue(str, PageDtoOfCodeTreeRootDto.class);
+        } catch (JsonProcessingException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static PageCodeDto getPagedCodesByFilter (String filter, Integer page, Integer size) {
+
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/codes"
+                + "?page=" + page
+                + "&size=" + size;
+
+        if (!"NO".equals(filter))
+            urlPath = urlPath + "&" + filter;
+
+        String str = null;
+        try {
+            str = getResponseBody(urlPath);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+        }
+
+        log.info(str);
+
+        try {
+            return objectMapper
+                    .readValue(str, PageCodeDto.class);
+        } catch (JsonProcessingException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static PageBatchSgtinQuantityDto getPagedBatchesInSscc (String ssccValue, Integer page, Integer size){
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/codes/sscc/"
+                + ssccValue + "/batches"
+                + "?page=" + page
+                + "&size=" + size;
+        String str = null;
+        try {
+            str = getResponseBody(urlPath);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+        }
+
+        log.info(str);
+
+        try {
+            return objectMapper
+                    .readValue(str, PageBatchSgtinQuantityDto.class);
+        } catch (JsonProcessingException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
     }
 }

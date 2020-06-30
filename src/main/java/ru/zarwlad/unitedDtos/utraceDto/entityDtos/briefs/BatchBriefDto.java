@@ -1,7 +1,9 @@
 package ru.zarwlad.unitedDtos.utraceDto.entityDtos.briefs;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvRecurse;
 import lombok.*;
 
 @JsonAutoDetect
@@ -11,13 +13,14 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode(of = "id")
-public class CodeBriefDto {
+public class BatchBriefDto {
     @CsvBindByName
+    String batchOrLot;
+
+    @CsvBindByName(column = "batchId")
     String id;
 
-    @CsvBindByName
-    String sgtinOrSscc;
-
-    @CsvBindByName
-    boolean sscc;
+    @JsonProperty(value = "tradeItem")
+    @CsvRecurse
+    TradeItemBriefDto tradeItemBriefDto;
 }

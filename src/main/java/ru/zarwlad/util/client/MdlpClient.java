@@ -213,16 +213,4 @@ public class MdlpClient {
             return null;
         }
     }
-
-    public static PageDtoOfCodeTreeRootDto getPagedCodeTreeRootsByCode (String code) throws IOException {
-        String urlPath = properties.getProperty("host")
-                + "api/2.0/codetreeroots"
-                + "?code.sgtinOrSscc=" + code;
-        String str = getResponseBody(urlPath);
-
-        log.info(str);
-
-        return objectMapper
-                .readValue(str, PageDtoOfCodeTreeRootDto.class);
-    }
 }

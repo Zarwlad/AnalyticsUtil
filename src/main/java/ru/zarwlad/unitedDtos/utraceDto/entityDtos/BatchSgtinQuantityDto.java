@@ -1,10 +1,11 @@
-package ru.zarwlad.unitedDtos.utraceDto.entityDtos.briefs;
+package ru.zarwlad.unitedDtos.utraceDto.entityDtos;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvRecurse;
 import lombok.*;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.briefs.BatchBriefDto;
 
 @JsonAutoDetect
 @NoArgsConstructor
@@ -12,12 +13,12 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = "id")
-public class LegalEntityBriefDto {
-    @CsvBindByName(column = "legalEntitId")
-    String id;
-
-    @JsonProperty(value = "businessPartner")
+@EqualsAndHashCode
+public class BatchSgtinQuantityDto {
+    @JsonProperty(value = "batch")
     @CsvRecurse
-    BusinessPartnerBriefDto businessPartnerBriefDto;
+    BatchBriefDto batchBriefDto;
+
+    @CsvBindByName
+    Integer quantity;
 }
