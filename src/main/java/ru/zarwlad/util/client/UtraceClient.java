@@ -5,7 +5,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zarwlad.unitedDtos.utraceDto.EventLinePostDto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventLineDto;
 import ru.zarwlad.unitedDtos.utraceDto.entityDtos.MessageHistoryDto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.UnitUnpackEventDto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.UnitUnpackEventPostDto;
 import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.*;
 import ru.zarwlad.utrace.data.AuthData;
 import ru.zarwlad.utrace.model.Event;
@@ -120,6 +124,22 @@ public class UtraceClient {
                 .build();
     }
 
+    public static Request postRequestWithAuthGetType(String urlPath, RequestBody requestBody){
+        return new Request.Builder()
+                .post(requestBody)
+                .url(urlPath)
+                .addHeader("authorization", AuthData.getInstance().getAuth().getAccessToken())
+                .build();
+    }
+
+    public static Request putRequestWithAuthGetType(String urlPath, RequestBody requestBody){
+        return new Request.Builder()
+                .put(requestBody)
+                .url(urlPath)
+                .addHeader("authorization", AuthData.getInstance().getAuth().getAccessToken())
+                .build();
+    }
+
     public static String getResponseBody(String urlPath) throws IOException {
         Request getRequest = null;
 
@@ -144,7 +164,9 @@ public class UtraceClient {
         String urlPath = properties.getProperty("host")
                 + "api/2.0/event-lines"
                 + "?event.id=" + eventId
-                + "&page=" + page;
+                + "&parent"
+                + "&page=" + page
+                + "&size=" + 2000;
         String str = getResponseBody(urlPath);
 
         return objectMapper
@@ -238,6 +260,76 @@ public class UtraceClient {
             return objectMapper
                     .readValue(str, PageBatchSgtinQuantityDto.class);
         } catch (JsonProcessingException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static UnitUnpackEventDto postUnitUnpackEvent (UnitUnpackEventPostDto unitUnpackEventPostDto){
+        try {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),
+                    objectMapper.writeValueAsString(unitUnpackEventPostDto));
+
+            String urlPath = properties.getProperty("host")
+                    + "api/2.0/events/unit-unpack";
+
+            Request request = postRequestWithAuthGetType(urlPath, requestBody);
+
+            Response response = okHttpClient.newCall(request).execute();
+
+            String str = response.body().string();
+
+            return objectMapper.readValue(str, UnitUnpackEventDto.class);
+
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static EventLineDto postUnitUnpackEventLine (List<EventLinePostDto> eventLinePostDtos, UnitUnpackEventDto event){
+        try {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),
+                    objectMapper.writeValueAsString(eventLinePostDtos));
+
+            String urlPath = properties.getProperty("host")
+                    + "api/2.0/events/unit-unpack/"
+                    + event.getId()
+                    + "/event-lines";
+
+            Request request = postRequestWithAuthGetType(urlPath, requestBody);
+
+            Response response = okHttpClient.newCall(request).execute();
+
+            String str = response.body().string();
+
+            return objectMapper.readValue(str, EventLineDto.class);
+
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static UnitUnpackEventDto putUnitUnpackCreatedStatus (UnitUnpackEventDto unitUnpackEventDto){
+        try {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),
+                    "");
+
+            String urlPath = properties.getProperty("host")
+                    + "api/2.0/events/unit-unpack/"
+                    + unitUnpackEventDto.getId()
+                    + "/status/create";
+
+            Request request = putRequestWithAuthGetType(urlPath, requestBody);
+
+            Response response = okHttpClient.newCall(request).execute();
+
+            String str = response.body().string();
+
+            return objectMapper.readValue(str, UnitUnpackEventDto.class);
+
+        } catch (IOException e) {
             log.error(e.getLocalizedMessage());
             return null;
         }

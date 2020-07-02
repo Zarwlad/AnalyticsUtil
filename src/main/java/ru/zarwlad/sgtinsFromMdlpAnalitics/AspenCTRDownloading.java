@@ -77,7 +77,7 @@ public class AspenCTRDownloading {
 
         Path csvs = Files.createFile(
                 Paths.get("src\\reports\\"
-                        + "aspen"
+                        + "novartis"
                         + LocalDateTime.now().format(dateTimeFormatter) + ".csv"));
 
         Writer writer = new FileWriter(csvs.toFile());
@@ -90,14 +90,19 @@ public class AspenCTRDownloading {
     }
 
     static List<PageDtoOfCodeTreeRootDto> downloadCTRs () {
-        PageDtoOfCodeTreeRootDto firstCtr = UtraceClient.getPagedCodeTreeRootsByFilter("NO", 0, 100);
+        PageDtoOfCodeTreeRootDto firstCtr = downloadSingleCTR("NO", 0, 2000);
 
         List<PageDtoOfCodeTreeRootDto> codeTreeRootDtoPages = new ArrayList<>();
 
         for (int i = 0; i < firstCtr.getPage().getTotalPages(); i++) {
-            codeTreeRootDtoPages.add(UtraceClient.getPagedCodeTreeRootsByFilter("NO", i, 100));
+            codeTreeRootDtoPages.add(UtraceClient.getPagedCodeTreeRootsByFilter("NO", i, 2000));
         }
 
         return codeTreeRootDtoPages;
+    }
+
+    static PageDtoOfCodeTreeRootDto downloadSingleCTR(String filter, Integer page, Integer size){
+        PageDtoOfCodeTreeRootDto ctr = UtraceClient.getPagedCodeTreeRootsByFilter(filter, page, size);
+        return ctr;
     }
 }
