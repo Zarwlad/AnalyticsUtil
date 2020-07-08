@@ -334,4 +334,21 @@ public class UtraceClient {
             return null;
         }
     }
+
+    public static void getMsgResetErrors (String id) throws IOException {
+
+        String urlPath = properties.getProperty("host")
+                + properties.getProperty("journalApi1")
+                + "message/paged?id=" + id
+                + "/reset-errors";
+        String str = getResponseBody(urlPath);
+
+        Request getRequest = getRequestWithAuthGetType(urlPath);
+        Response getResponseReq = okHttpClient.newCall(getRequest).execute();
+        ResponseBody rb = getResponseReq.body();
+        rb.close();
+
+        log.info(urlPath);
+        log.info(getRequest.headers().toString());
+    }
 }
