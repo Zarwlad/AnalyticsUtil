@@ -157,6 +157,7 @@ public class UtraceClient {
         String str = getRespBody.string();
         getRespBody.close();
 
+        log.info("getRespBody: {}, getResponseReq.code: {}", str, getResponseReq.code());
         return str;
     }
 
@@ -339,16 +340,10 @@ public class UtraceClient {
 
         String urlPath = properties.getProperty("host")
                 + properties.getProperty("journalApi1")
-                + "message/paged?id=" + id
+                + "message/" + id
                 + "/reset-errors";
         String str = getResponseBody(urlPath);
 
-        Request getRequest = getRequestWithAuthGetType(urlPath);
-        Response getResponseReq = okHttpClient.newCall(getRequest).execute();
-        ResponseBody rb = getResponseReq.body();
-        rb.close();
-
-        log.info(urlPath);
-        log.info(getRequest.headers().toString());
+        log.info("{}", urlPath);
     }
 }
