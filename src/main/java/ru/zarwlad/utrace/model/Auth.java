@@ -2,7 +2,7 @@ package ru.zarwlad.utrace.model;
 
 import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
-public class Auth implements Entity {
+public class Auth {
     String accessToken;
 
     public Auth() {
@@ -18,10 +18,5 @@ public class Auth implements Entity {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
-    }
-
-    @Override
-    public Dto fromEntityToDto(Object object) {
-        return null;
     }
 }

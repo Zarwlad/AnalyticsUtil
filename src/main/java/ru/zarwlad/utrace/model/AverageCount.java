@@ -4,7 +4,7 @@ import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
 import java.math.BigDecimal;
 
-public class AverageCount implements Entity {
+public class AverageCount {
     BigDecimal totalSeconds;
     Integer totalEvents;
     BigDecimal averageTime;
@@ -42,8 +42,4 @@ public class AverageCount implements Entity {
         this.averageTime = averageTime;
     }
 
-    @Override
-    public Dto fromEntityToDto(Object object) {
-        return null;
-    }
 }

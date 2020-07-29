@@ -12,18 +12,19 @@ public class EventDao implements DAO<Event, UUID> {
         this.connection = connection;
     }
 
+
     @Override
-    public void create() {
+    public void create(Event event) {
 
     }
 
     @Override
-    public void update() {
+    public void update(Event event) {
 
     }
 
     @Override
-    public void delete() {
+    public void delete(Event event) {
 
     }
 

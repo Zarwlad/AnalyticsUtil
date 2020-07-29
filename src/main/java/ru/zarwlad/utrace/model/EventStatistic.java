@@ -1,128 +1,52 @@
 package ru.zarwlad.utrace.model;
 
+import lombok.*;
 import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
+import javax.persistence.*;
+import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.time.Month;
+import java.util.UUID;
 
+@Entity
+@Table(name = "event_stat")
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
+public class EventStatistic {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-public class EventStatistic implements Entity {
+    @OneToOne(mappedBy = "event_id")
     private Event event;
+
+    @Column(name = "event_posting_secs")
     private BigDecimal eventPostingSeconds;
+
+    @Column(name = "message_send_secs_avg")
     private BigDecimal messagesSendSecondsAvg;
+
+    @Column(name = "is_error_event")
     private Boolean isErrorEvent;
+
+    @Column(name = "is_error_message")
     private MessageErrorEnum isErrorMessage;
+
+    @Column(name = "is_event_posted")
     private Boolean isEventPosted;
+
+    @Column(name = "is_message_created")
     private Boolean isMessageCreated;
+
+    @Column(name = "event_month")
+    @Enumerated(value = EnumType.STRING)
     private Month eventMonth;
+
+    @Column(name = "total_sending_secs")
     private BigDecimal totalSendingSeconds;
-
-    public EventStatistic() {
-    }
-
-    public EventStatistic(Event event,
-                          BigDecimal eventPostingSeconds,
-                          BigDecimal messagesSendSecondsAvg,
-                          Boolean isErrorEvent,
-                          MessageErrorEnum isErrorMessage,
-                          Boolean isEventPosted,
-                          Boolean isMessageCreated,
-                          Month eventMonth,
-                          BigDecimal totalSendingSeconds) {
-        this.event = event;
-        this.eventPostingSeconds = eventPostingSeconds;
-        this.messagesSendSecondsAvg = messagesSendSecondsAvg;
-        this.isErrorEvent = isErrorEvent;
-        this.isErrorMessage = isErrorMessage;
-        this.isEventPosted = isEventPosted;
-        this.isMessageCreated = isMessageCreated;
-        this.eventMonth = eventMonth;
-        this.totalSendingSeconds = totalSendingSeconds;
-    }
-
-    public MessageErrorEnum getIsErrorMessage() {
-        return isErrorMessage;
-    }
-
-    public void setIsErrorMessage(MessageErrorEnum isErrorMessage) {
-        this.isErrorMessage = isErrorMessage;
-    }
-
-    public BigDecimal getTotalSendingSeconds() {
-        return totalSendingSeconds;
-    }
-
-    public void setTotalSendingSeconds(BigDecimal totalSendingSeconds) {
-        this.totalSendingSeconds = totalSendingSeconds;
-    }
-
-    public Boolean getEventPosted() {
-        return isEventPosted;
-    }
-
-    public void setEventPosted(Boolean eventPosted) {
-        isEventPosted = eventPosted;
-    }
-
-    public Boolean getMessageCreated() {
-        return isMessageCreated;
-    }
-
-    public void setMessageCreated(Boolean messageCreated) {
-        isMessageCreated = messageCreated;
-    }
-
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
-    public BigDecimal getEventPostingSeconds() {
-        return eventPostingSeconds;
-    }
-
-    public void setEventPostingSeconds(BigDecimal eventPostingSeconds) {
-        this.eventPostingSeconds = eventPostingSeconds;
-    }
-
-    public BigDecimal getMessagesSendSecondsAvg() {
-        return messagesSendSecondsAvg;
-    }
-
-    public void setMessagesSendSecondsAvg(BigDecimal messagesSendSecondsAvg) {
-        this.messagesSendSecondsAvg = messagesSendSecondsAvg;
-    }
-
-    public Boolean getErrorEvent() {
-        return isErrorEvent;
-    }
-
-    public void setErrorEvent(Boolean errorEvent) {
-        isErrorEvent = errorEvent;
-    }
-
-    public MessageErrorEnum getErrorMessage() {
-        return isErrorMessage;
-    }
-
-    public void setErrorMessage(MessageErrorEnum errorMessage) {
-        isErrorMessage = errorMessage;
-    }
-
-    public Month getEventMonth() {
-        return eventMonth;
-    }
-
-    public void setEventMonth(Month eventMonth) {
-        this.eventMonth = eventMonth;
-    }
-
-    @Override
-    public Dto fromEntityToDto(Object object) {
-        return null;
-    }
 
 }

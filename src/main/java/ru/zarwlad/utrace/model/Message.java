@@ -1,93 +1,40 @@
 package ru.zarwlad.utrace.model;
 
+import lombok.*;
+
+import javax.persistence.*;
+import javax.persistence.Entity;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "message")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of="id")
 public class Message {
+    @Id
     private String id;
+
+    @Column(name = "status")
     private String status;
+
+    @Column(name = "document_type_id")
     private String documentTypeId;
+
+    @Column(name = "created_date")
     private ZonedDateTime createdDate;
+
+    @Column(name = "operation_date")
     private ZonedDateTime operationDate;
 
-    Set<MessageHistory> messageHistories;
+    @OneToMany(mappedBy = "message_id")
+    private Set<MessageHistory> messageHistories;
 
-    public Message() {
-    }
-
-    public Message(String id,
-                   String status,
-                   String documentTypeId,
-                   ZonedDateTime createdDate,
-                   ZonedDateTime operationDate,
-                   Set<MessageHistory> messageHistories) {
-        this.id = id;
-        this.status = status;
-        this.documentTypeId = documentTypeId;
-        this.createdDate = createdDate;
-        this.operationDate = operationDate;
-        this.messageHistories = messageHistories;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Message)) return false;
-        Message message = (Message) o;
-        return getId().equals(message.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getDocumentTypeId() {
-        return documentTypeId;
-    }
-
-    public void setDocumentTypeId(String documentTypeId) {
-        this.documentTypeId = documentTypeId;
-    }
-
-    public ZonedDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(ZonedDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public ZonedDateTime getOperationDate() {
-        return operationDate;
-    }
-
-    public void setOperationDate(ZonedDateTime operationDate) {
-        this.operationDate = operationDate;
-    }
-
-    public Set<MessageHistory> getMessageHistories() {
-        return messageHistories;
-    }
-
-    public void setMessageHistories(Set<MessageHistory> messageHistories) {
-        this.messageHistories = messageHistories;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "event_id")
+    private Event event;
 }
