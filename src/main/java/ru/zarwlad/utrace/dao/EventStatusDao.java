@@ -4,23 +4,22 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.utrace.model.Event;
+import ru.zarwlad.utrace.model.EventStatus;
 
-import java.sql.Connection;
 import java.util.UUID;
 
-public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
-    private Logger log = LoggerFactory.getLogger(EventDao.class);
+public class EventStatusDao extends AbstractDAO implements DAO<EventStatus, UUID>{
+    private Logger log = LoggerFactory.getLogger(EventStatusDao.class);
 
-    public EventDao(SessionFactory sessionFactory){
+    public EventStatusDao(SessionFactory sessionFactory){
         super.sessionFactory = sessionFactory;
     }
 
     @Override
-    public void create(Event event) {
+    public void create(EventStatus eventStatus) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.save(event);
+            session.save(eventStatus);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -29,10 +28,10 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
     }
 
     @Override
-    public void update(Event event) {
+    public void update(EventStatus eventStatus) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.update(event);
+            session.update(eventStatus);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -41,10 +40,10 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
     }
 
     @Override
-    public void delete(Event event) {
+    public void delete(EventStatus eventStatus) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.delete(event);
+            session.delete(eventStatus);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -53,9 +52,9 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
     }
 
     @Override
-    public Event readById(UUID id) {
+    public EventStatus readById(UUID id) {
         try (Session session = sessionFactory.openSession()){
-            return session.get(Event.class, id);
+            return session.get(EventStatus.class, id);
         }
         catch (Exception e) {
             log.error(e.getLocalizedMessage());

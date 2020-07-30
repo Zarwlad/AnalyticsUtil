@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "message")
+@Table(name = "mdlp_message")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -33,6 +33,9 @@ public class Message {
 
     @OneToMany(mappedBy = "message_id")
     private Set<MessageHistory> messageHistories;
+
+    @Column(name = "for_mdlp")
+    private Boolean forMdlp;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id")

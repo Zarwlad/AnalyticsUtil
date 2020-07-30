@@ -47,6 +47,9 @@ public class Event {
     @Column(name = "created_date")
     private ZonedDateTime createdDate;
 
+    @Column(name = "client")
+    private String client;
+
     public EventStatistic fromEventToEventStat(){
         BigDecimal eventPostingSeconds = null;
         BigDecimal messagesSendSecondsAvg = null;

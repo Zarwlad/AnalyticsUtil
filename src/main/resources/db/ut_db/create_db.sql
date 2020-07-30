@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS event(
     operation_date timestamp not null,
     status varchar(50) not null,
     reg_status varchar(50) not null,
-    created_date timestamp not null
+    created_date timestamp not null,
+    client varchar(50) not null
 );
 
 CREATE TABLE IF NOT EXISTS event_status(
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS message(
     created_date timestamp not null,
     operation_date timestamp not null,
     event_id uuid not null,
+    for_mdlp bool not null,
     foreign key (event_id) references event(id)
 );
 
