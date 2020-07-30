@@ -58,10 +58,10 @@ public class ReportBuilderService {
                             + eventStatistic.getEventPostingSeconds() + ";"
                             + eventStatistic.getMessagesSendSecondsAvg() + ";"
                             + eventStatistic.getTotalSendingSeconds() + ";"
-                            + eventStatistic.getErrorEvent() + ";"
-                            + eventStatistic.getErrorMessage() + ";"
-                            + eventStatistic.getEventPosted() + ";"
-                            + eventStatistic.getMessageCreated() + ";"
+                            + eventStatistic.getIsErrorEvent() + ";"
+                            + eventStatistic.getIsErrorMessage() + ";"
+                            + eventStatistic.getIsEventPosted() + ";"
+                            + eventStatistic.getIsMessageCreated() + ";"
                             + eventStatistic.getEventMonth() + ";" + "\n",
                     StandardOpenOption.APPEND);
         }

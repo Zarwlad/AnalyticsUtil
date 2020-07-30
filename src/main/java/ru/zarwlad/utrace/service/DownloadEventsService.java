@@ -15,6 +15,8 @@ import ru.zarwlad.utrace.model.Event;
 import ru.zarwlad.utrace.model.EventStatus;
 import ru.zarwlad.utrace.model.Message;
 import ru.zarwlad.utrace.model.MessageHistory;
+import ru.zarwlad.utrace.modelDtoMapper.MessageHistoryMapper;
+import ru.zarwlad.utrace.modelDtoMapper.MessageModelMapper;
 import ru.zarwlad.utrace.util.MappingEventTypeToAuditUrl;
 import ru.zarwlad.unitedDtos.utraceDto.entityDtos.AuditRecordDto;
 import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
@@ -133,7 +135,7 @@ public class DownloadEventsService {
 
                         PageMessageDto pageMessageDto = getPagedSingleMessageById(eventMessageDto.getMessageId());
                         try {
-                            pageMessageDto.getMessageDtos().isEmpty();
+                            boolean b = pageMessageDto.getMessageDtos().isEmpty();
                         }
                         catch (NullPointerException e){
                             log.warn("Необходимо использовать старое API для загрузки, {}",
@@ -144,7 +146,7 @@ public class DownloadEventsService {
 
                         Message message = null;
                                 try {
-                                    message = pageMessageDto.getMessageDtos().get(0).fromDtoToEntity();
+                                    message = MessageModelMapper.fromDtoToEntity(pageMessageDto.getMessageDtos().get(0));
                                 }
                                 catch (IndexOutOfBoundsException e){
                                     log.warn("По событию {} есть запись в eventMessage, но нет сообщения!", event.getId());
@@ -160,7 +162,7 @@ public class DownloadEventsService {
                             List<MessageHistoryDto> messageHistoryDtos = getMessageHistoriesByMsg(message);
                             Set<MessageHistory> messageHistories = new HashSet<>();
                             for (MessageHistoryDto messageHistoryDto : messageHistoryDtos) {
-                                messageHistories.add((MessageHistory) messageHistoryDto.fromDtoToEntity());
+                                messageHistories.add(MessageHistoryMapper.fromDtoToEntity(messageHistoryDto));
                             }
                             message.setMessageHistories(messageHistories);
                             messages.add(message);

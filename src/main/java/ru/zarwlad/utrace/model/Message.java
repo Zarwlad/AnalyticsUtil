@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "mdlp_message")
@@ -17,7 +18,7 @@ import java.util.Set;
 @EqualsAndHashCode(of="id")
 public class Message {
     @Id
-    private String id;
+    private UUID id;
 
     @Column(name = "status")
     private String status;

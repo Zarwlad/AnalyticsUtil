@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import ru.zarwlad.utrace.model.MessageHistory;
+import ru.zarwlad.utrace.modelDtoMapper.MessageModelMapper;
 import ru.zarwlad.utrace.util.DateTimeUtil;
 import ru.zarwlad.unitedDtos.utraceDto.Dto;
+
+import java.util.UUID;
 
 @JsonAutoDetect
 @NoArgsConstructor
@@ -14,7 +17,7 @@ import ru.zarwlad.unitedDtos.utraceDto.Dto;
 @Setter
 @ToString
 @EqualsAndHashCode(of = "id")
-public class MessageHistoryDto implements Dto {
+public class MessageHistoryDto {
 
     @JsonProperty(value = "authoredBy")
     String authoredBy;
@@ -31,11 +34,4 @@ public class MessageHistoryDto implements Dto {
     @JsonProperty(value = "status")
     String status;
 
-    public Object fromDtoToEntity() {
-        MessageHistoryDto messageHistoryDto = (MessageHistoryDto) this;
-        return new MessageHistory(messageHistoryDto.getId(),
-                messageHistoryDto.getAuthoredBy(),
-                DateTimeUtil.toZonedDateTime(messageHistoryDto.getCreated()),
-                messageHistoryDto.getStatus());
-    }
 }

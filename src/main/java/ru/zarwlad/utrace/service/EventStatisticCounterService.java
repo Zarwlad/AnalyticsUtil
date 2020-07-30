@@ -50,7 +50,7 @@ public class EventStatisticCounterService {
 
         for (EventStatistic eventStatistic : eventStatsData.getEventStatistics()) {
             if (eventStatistic.getEventMonth().equals(targetMonth)){
-                if (eventStatistic.getMessageCreated()){
+                if (eventStatistic.getIsMessageCreated()){
                     totalSendingForAllEvents = totalSendingForAllEvents.add(eventStatistic.getTotalSendingSeconds());
                     totalEventsSended++;
                 }

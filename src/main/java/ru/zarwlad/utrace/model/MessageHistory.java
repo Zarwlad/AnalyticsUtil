@@ -6,6 +6,7 @@ import ru.zarwlad.unitedDtos.utraceDto.Dto;
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @javax.persistence.Entity
 @Table(name = "message_history")
@@ -16,7 +17,7 @@ import java.util.Objects;
 @EqualsAndHashCode(of="id")
 public class MessageHistory {
     @Id
-    private String id;
+    private UUID id;
 
     @Column(name = "authored_by")
     private String authoredBy;
