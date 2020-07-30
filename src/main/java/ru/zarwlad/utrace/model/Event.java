@@ -38,10 +38,10 @@ public class Event {
     @Column(name = "reg_status")
     private String regulatorStatus;
 
-    @OneToMany(mappedBy = "event_id")
+    @OneToMany(mappedBy = "event")
     private Set<EventStatus> eventStatuses;
 
-    @OneToMany(mappedBy = "event_id")
+    @OneToMany(mappedBy = "event")
     private Set<Message> messages;
 
     @Column(name = "created_date")

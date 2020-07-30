@@ -21,7 +21,8 @@ public class EventStatistic {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @OneToOne(mappedBy = "event_id")
+    @ManyToOne()
+    @JoinColumn(name = "event_id")
     private Event event;
 
     @Column(name = "event_posting_secs")
