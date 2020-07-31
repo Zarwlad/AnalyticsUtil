@@ -105,8 +105,8 @@ public class MultiThreadEventDownloader implements Runnable {
 
     private static Set<AuditRecordDto> downloadAuditRecords(EventDto eventDto) throws IOException {
         /*
-            Download Audit records
-             */
+         Download Audit records
+        */
 
         PageDtoOfAuditRecordDto pageDtoOfAuditRecordDto = getPagedAuditRecords(eventDto.getType(), eventDto.getId());
         log.info("Thread {}, Загружено {} записей из аудитлога по событию = {}",
@@ -157,6 +157,19 @@ public class MultiThreadEventDownloader implements Runnable {
         Map<MessageHistoryDto, MessageDto> messageHistoryMap = new HashMap<>();
         List<MessageHistoryDto> messageHistoryDtos = getMessageHistoriesByMsgId(messageDto.getId());
         for (MessageHistoryDto historyDto : messageHistoryDtos) {
+            try {
+                if (historyDto.getStatus() == null){
+                    historyDto.setStatus("UPLOADED");
+                }
+            }
+            catch (NullPointerException e){
+                log.error("Thread {}, {}, historyDto.getId = {}, messageDto.getId = {}",
+                        Thread.currentThread().getName(),
+                        e.getLocalizedMessage(),
+                        historyDto.getId(),
+                        messageDto.getId());
+            }
+
             messageHistoryMap.put(historyDto, null);
         }
 

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "mdlp_message")
+@Table(name = "message")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
