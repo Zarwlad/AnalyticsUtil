@@ -105,7 +105,8 @@ public class DownloadEventsService {
                 log.info("Получаю статусы по событию с id= {}",
                         event.getId());
 
-                PageDtoOfAuditRecordDto pageDtoOfAuditRecordDto = getPagedAuditRecords(event);
+                PageDtoOfAuditRecordDto pageDtoOfAuditRecordDto = getPagedAuditRecords(event.getType(),
+                                                                                        event.getId().toString());
                 log.info("Загружено {} записей из аудитлога по событию = {}",
                         pageDtoOfAuditRecordDto.getData().size(),
                         event.getId());
@@ -119,7 +120,7 @@ public class DownloadEventsService {
 
                 if (!event.getRegulatorStatus().equals("QUEUE")
                         && !event.getRegulatorStatus().equals("NOT_REQUIRED")){
-                    PageDtoOfBusinessEventMessageDto pageDtoOfBusinessEventMessageDto = getPagedEventMessages(event);
+                    PageDtoOfBusinessEventMessageDto pageDtoOfBusinessEventMessageDto = getPagedEventMessagesForMdlp(event.getId().toString());
 
                     log.info("Число отправленных в МДЛП сообщений по событию с id= {}  равно: {}",
                             event.getId(),
@@ -159,7 +160,7 @@ public class DownloadEventsService {
                                 eventMessageDto.getMessageId());
 
                         if (message != null) {
-                            List<MessageHistoryDto> messageHistoryDtos = getMessageHistoriesByMsg(message);
+                            List<MessageHistoryDto> messageHistoryDtos = getMessageHistoriesByMsgId(message.getId().toString());
                             Set<MessageHistory> messageHistories = new HashSet<>();
                             for (MessageHistoryDto messageHistoryDto : messageHistoryDtos) {
                                 messageHistories.add(MessageHistoryMapper.fromDtoToEntity(messageHistoryDto));
