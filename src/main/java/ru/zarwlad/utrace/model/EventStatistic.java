@@ -25,10 +25,10 @@ public class EventStatistic {
     @JoinColumn(name = "event_id")
     private Event event;
 
-    @Column(name = "event_posting_secs")
+    @Column(name = "event_posting_ms")
     private BigDecimal eventPostingSeconds;
 
-    @Column(name = "message_send_secs_avg")
+    @Column(name = "message_send_ms_avg")
     private BigDecimal messagesSendSecondsAvg;
 
     @Column(name = "is_error_event")
@@ -47,7 +47,7 @@ public class EventStatistic {
     @Enumerated(value = EnumType.STRING)
     private Month eventMonth;
 
-    @Column(name = "total_sending_secs")
+    @Column(name = "total_sending_ms")
     private BigDecimal totalSendingSeconds;
 
 }

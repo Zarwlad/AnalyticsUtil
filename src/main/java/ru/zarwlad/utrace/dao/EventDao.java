@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.sql.Connection;
+import java.util.List;
 import java.util.UUID;
 
 public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
@@ -60,6 +63,15 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
         catch (Exception e) {
             log.error(e.getLocalizedMessage());
             return null;
+        }
+    }
+
+    public List<Event> readAll(){
+        try (Session session = sessionFactory.openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<Event> query = builder.createQuery(Event.class);
+            query.from(Event.class);
+            return session.createQuery(query).getResultList();
         }
     }
 }

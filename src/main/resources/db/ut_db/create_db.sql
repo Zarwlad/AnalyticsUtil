@@ -38,13 +38,16 @@ CREATE TABLE IF NOT EXISTS message_history(
 CREATE TABLE IF NOT EXISTS event_stat(
     id uuid not null primary key,
     event_id uuid not null,
-    event_posting_secs numeric,
-    message_send_secs_avg numeric,
+    event_posting_ms integer,
+    message_send_ms_avg integer,
     is_error_event boolean not null,
     is_error_message boolean not null,
     is_event_posted boolean not null,
     is_message_created boolean not null,
     event_month varchar(50) not null,
-    total_sending_secs numeric,
+    total_sending_ms integer,
     foreign key (event_id) references event(id)
 );
+
+create unique index event_stat_event_id_uindex
+    on event_stat (event_id);

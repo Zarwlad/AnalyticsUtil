@@ -19,7 +19,7 @@ public class Main {
         }
 
         log.info("Начинаю скачивать события");
-        DownloadEventsWithDbService.downloadEventsByIds();
+        DownloadEventsWithDbService.downloadMissedEventStatuses();
 
     }
 

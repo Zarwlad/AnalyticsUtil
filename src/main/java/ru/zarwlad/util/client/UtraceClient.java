@@ -77,6 +77,30 @@ public class UtraceClient {
                 .readValue(str, EventDto.class);
     }
 
+    public static List<String> postProcessDefaultConvMsg(String id){
+        String urlPath = properties.getProperty("host")
+                + "default-converter/api/"
+                + "convert-message-to-business-event"
+                + "?messageId="
+                + id;
+        try {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), "");
+
+            Request request = postRequestWithAuthGetType(urlPath, requestBody);
+
+            Response response = okHttpClient.newCall(request).execute();
+
+            assert response.body() != null;
+            String str = response.body().string();
+
+            return objectMapper.readValue(str, List.class);
+
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
     public static List<MessageHistoryDto> getMessageHistoriesByMsgId(String id) throws IOException {
         String urlPath = properties.getProperty("host")
                 + properties.getProperty("journalApi1")
@@ -94,6 +118,27 @@ public class UtraceClient {
                 + properties.getProperty("journalApi2")
                 + "message/paged?id=" + id;
         String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, PageMessageDto.class);
+    }
+
+    public static PageMessageDto getPagedMessagesList (boolean filterEnabled, List<String> filters) throws IOException {
+
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("journalApi2"))
+                .append("message/paged");
+
+        if (filterEnabled){
+            urlPath.append("?");
+            for (String filter : filters) {
+                urlPath.append("&");
+                urlPath.append(filter);
+            }
+        }
+
+        String str = getResponseBody(urlPath.toString());
 
         return objectMapper
                 .readValue(str, PageMessageDto.class);

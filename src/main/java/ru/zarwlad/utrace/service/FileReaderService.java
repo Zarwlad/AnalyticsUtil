@@ -10,10 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class FilterService {
-    private static Logger log = LoggerFactory.getLogger(FilterService.class);
+public class FileReaderService {
+    private static Logger log = LoggerFactory.getLogger(FileReaderService.class);
 
     public static List<String> readIdsFromFile() throws IOException {
         log.info("Введи путь к файлу");

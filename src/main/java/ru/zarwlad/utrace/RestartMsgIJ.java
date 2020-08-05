@@ -2,8 +2,11 @@ package ru.zarwlad.utrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.MessageDto;
+import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
+import ru.zarwlad.util.client.UtraceClient;
 import ru.zarwlad.utrace.service.AuthService;
-import ru.zarwlad.utrace.service.FilterService;
+import ru.zarwlad.utrace.service.FileReaderService;
 import ru.zarwlad.utrace.service.MultiThreadRestart;
 
 import java.io.IOException;
@@ -14,7 +17,7 @@ public class RestartMsgIJ {
     private static Logger log = LoggerFactory.getLogger(RestartMsgIJ.class);
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         log.info("Аутенфикация");
         try {
             AuthService.Auth();
@@ -22,15 +25,21 @@ public class RestartMsgIJ {
             log.error(e.toString());
         }
 
+        List<String> filter = new ArrayList<>();
+        filter.add("status=ERROR");
+        filter.add("sort=created,desc");
+        filter.add("filename=321");
+        filter.add("size=2000");
+        filter.add("integrationDirection.id=5c727794-4b30-482d-8172-d253b0a346b5");
+
+        PageMessageDto messageDtos = UtraceClient.getPagedMessagesList(true, filter);
         List<String> strings = new ArrayList<>();
 
-        try {
-            strings = FilterService.readIdsFromFile();
-        } catch (IOException e) {
-            log.error(e.getLocalizedMessage());
+        for (MessageDto messageDto : messageDtos.getMessageDtos()) {
+            strings.add(messageDto.getId());
         }
 
-        int limit = 2000;
+        int limit = 200;
 
         List<String> batchId = new ArrayList<>();
 

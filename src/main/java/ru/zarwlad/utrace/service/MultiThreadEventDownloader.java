@@ -34,6 +34,7 @@ public class MultiThreadEventDownloader implements Runnable {
     private static Logger log = LoggerFactory.getLogger(MultiThreadEventDownloader.class);
 
     private List<String> ids;
+    private List<EventDto> eventDtos;
 
     @Override
     public String toString() {
@@ -49,7 +50,22 @@ public class MultiThreadEventDownloader implements Runnable {
     @SneakyThrows
     @Override
     public void run() {
-        download(ids);
+        //download(ids);
+
+        for (EventDto eventDto : eventDtos) {
+            Set<AuditRecordDto> recordDtos = downloadAuditRecords(eventDto);
+            EventDao eventDao = new EventDao(DbManager.getSessionFactory());
+            Event event = eventDao.readById(UUID.fromString(eventDto.getId()));
+
+            for (AuditRecordDto recordDto : recordDtos) {
+                EventStatus eventStatus = EventStatusMapper.fromDtoToEntity(recordDto);
+                eventStatus.setEvent(event);
+
+                EventStatusDao eventStatusDao = new EventStatusDao(DbManager.getSessionFactory());
+                eventStatusDao.create(eventStatus);
+            }
+        }
+
     }
 
 
@@ -60,7 +76,7 @@ public class MultiThreadEventDownloader implements Runnable {
                 ids.get(ids.size() - 1));
 
         for (String id : ids) {
-            EventDto eventDto = UtraceClient.getEventById(id);
+            EventDto eventDto = UtraceClient.getEventById(id.trim());
 
             Set<AuditRecordDto> auditRecordDtos = downloadAuditRecords(eventDto);
 
@@ -103,7 +119,7 @@ public class MultiThreadEventDownloader implements Runnable {
         }
     }
 
-    private static Set<AuditRecordDto> downloadAuditRecords(EventDto eventDto) throws IOException {
+    public static Set<AuditRecordDto> downloadAuditRecords(EventDto eventDto) throws IOException {
         /*
          Download Audit records
         */

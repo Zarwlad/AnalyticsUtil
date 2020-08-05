@@ -4,8 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zarwlad.utrace.model.Event;
 import ru.zarwlad.utrace.model.EventStatistic;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 import java.util.UUID;
 
 public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUID>{
@@ -59,6 +63,15 @@ public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUI
         catch (Exception e) {
             log.error(e.getLocalizedMessage());
             return null;
+        }
+    }
+
+    public List<EventStatistic> readAll(){
+        try (Session session = sessionFactory.openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<EventStatistic> query = builder.createQuery(EventStatistic.class);
+            query.from(EventStatistic.class);
+            return session.createQuery(query).getResultList();
         }
     }
 }
