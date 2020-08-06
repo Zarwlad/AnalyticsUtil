@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
 import ru.zarwlad.utrace.model.EventStatistic;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,6 +74,20 @@ public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUI
             CriteriaQuery<EventStatistic> query = builder.createQuery(EventStatistic.class);
             query.from(EventStatistic.class);
             return session.createQuery(query).getResultList();
+        }
+    }
+
+    public List<EventStatistic> readByEventId(UUID id){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT e FROM EventStatistic e WHERE e.event.id = :id";
+            return session.createQuery(hql).setParameter("id", id).getResultList();
+        }
+    }
+
+    public List<Event> readAllCalculatedEvents(){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT DISTINCT e.event FROM EventStatistic e";
+            return session.createQuery(hql).getResultList();
         }
     }
 }

@@ -38,7 +38,7 @@ public class Message {
     @Column(name = "for_mdlp")
     private Boolean forMdlp;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private Event event;
 }

@@ -5,8 +5,10 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
+import ru.zarwlad.utrace.model.EventStatus;
 import ru.zarwlad.utrace.model.Message;
 
+import java.util.List;
 import java.util.UUID;
 
 public class MessageDao extends AbstractDAO implements DAO<Message, UUID>{
@@ -60,6 +62,13 @@ public class MessageDao extends AbstractDAO implements DAO<Message, UUID>{
         catch (Exception e) {
             log.error(e.getLocalizedMessage());
             return null;
+        }
+    }
+
+    public List<Message> readByEventId(UUID id){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT e FROM Message e WHERE e.event.id = :id";
+            return session.createQuery(hql).setParameter("id", id).getResultList();
         }
     }
 }

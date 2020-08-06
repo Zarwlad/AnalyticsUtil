@@ -26,7 +26,7 @@ public class EventStatus {
     @Column(name = "change_operation_date")
     private ZonedDateTime changeOperationDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private Event event;
 }

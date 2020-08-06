@@ -4,10 +4,7 @@ import lombok.*;
 import ru.zarwlad.unitedDtos.utraceDto.Dto;
 import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
@@ -38,10 +35,10 @@ public class Event {
     @Column(name = "reg_status")
     private String regulatorStatus;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     private Set<EventStatus> eventStatuses;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     private Set<Message> messages;
 
     @Column(name = "created_date")
@@ -49,6 +46,9 @@ public class Event {
 
     @Column(name = "client")
     private String client;
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    private List<EventStatistic> eventStatistic;
 
     public EventStatistic fromEventToEventStat(){
         BigDecimal eventPostingSeconds = null;
@@ -66,7 +66,7 @@ public class Event {
         }
         else {
             isEventPosted = false;
-            isErrorEvent = this.getStatus().equals("ERROR");
+            isErrorEvent = this.getStatus().equals("WAITING");
         }
 
         try {

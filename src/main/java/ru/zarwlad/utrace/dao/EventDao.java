@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.sql.Connection;
@@ -72,6 +73,15 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
             CriteriaQuery<Event> query = builder.createQuery(Event.class);
             query.from(Event.class);
             return session.createQuery(query).getResultList();
+        }
+    }
+
+    public List<Event> read500NotCalculatedEvents(){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT e FROM Event e LEFT JOIN fetch EventStatistic es ON es.event.id = e.id";
+            Query query = session.createQuery(hql);
+            query.setMaxResults(500);
+            return query.getResultList();
         }
     }
 }

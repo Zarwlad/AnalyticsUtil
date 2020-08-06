@@ -21,7 +21,7 @@ public class EventStatistic {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "event_id")
     private Event event;
 
@@ -31,20 +31,20 @@ public class EventStatistic {
     @Column(name = "message_send_ms_avg")
     private BigDecimal messagesSendSecondsAvg;
 
-    @Column(name = "is_error_event")
+    //@Column(name = "is_error_event")
     private Boolean isErrorEvent;
 
-    @Column(name = "is_error_message")
+    //@Column(name = "is_error_message")
     private MessageErrorEnum isErrorMessage;
 
-    @Column(name = "is_event_posted")
+    //@Column(name = "is_event_posted")
     private Boolean isEventPosted;
 
-    @Column(name = "is_message_created")
+    //@Column(name = "is_message_created")
     private Boolean isMessageCreated;
 
-    @Column(name = "event_month")
-    @Enumerated(value = EnumType.STRING)
+    //@Column(name = "event_month")
+    //@Enumerated(value = EnumType.STRING)
     private Month eventMonth;
 
     @Column(name = "total_sending_ms")

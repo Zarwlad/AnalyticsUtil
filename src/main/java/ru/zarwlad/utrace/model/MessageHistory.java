@@ -28,7 +28,7 @@ public class MessageHistory {
     @Column(name = "status")
     private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "message_id")
     private Message message;
 

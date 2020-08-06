@@ -4,8 +4,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zarwlad.utrace.model.EventStatistic;
 import ru.zarwlad.utrace.model.EventStatus;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EventStatusDao extends AbstractDAO implements DAO<EventStatus, UUID>{
@@ -59,6 +61,13 @@ public class EventStatusDao extends AbstractDAO implements DAO<EventStatus, UUID
         catch (Exception e) {
             log.error(e.getLocalizedMessage());
             return null;
+        }
+    }
+
+    public List<EventStatus> readByEventId(UUID id){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT e FROM EventStatus e WHERE e.event.id = :id";
+            return session.createQuery(hql).setParameter("id", id).getResultList();
         }
     }
 }
