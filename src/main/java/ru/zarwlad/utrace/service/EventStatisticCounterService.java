@@ -6,7 +6,7 @@ import ru.zarwlad.utrace.data.EventData;
 import ru.zarwlad.utrace.data.EventStatsData;
 import ru.zarwlad.utrace.model.AverageCount;
 import ru.zarwlad.utrace.model.Event;
-import ru.zarwlad.utrace.model.EventStatistic;
+import ru.zarwlad.utrace.model.EventStat;
 
 import java.io.FileReader;
 import java.math.BigDecimal;
@@ -23,13 +23,13 @@ public class EventStatisticCounterService {
         EventData eventData = EventData.getInstance();
         EventStatsData eventStatsData = EventStatsData.getInstance();
 
-        Set<EventStatistic> eventStatistics = new HashSet<>();
+        Set<EventStat> eventStats = new HashSet<>();
 
         for (Event event : eventData.getEvents()) {
             log.info("Рассчитываю статистику по событию id = {}", event.getId());
-            eventStatistics.add(event.fromEventToEventStat());
+            eventStats.add(event.fromEventToEventStat());
         }
-        eventStatsData.setEventStatistics(eventStatistics);
+        eventStatsData.setEventStatistics(eventStats);
     }
 
     public static AverageCount calculateAverageForMonth(){
@@ -48,10 +48,10 @@ public class EventStatisticCounterService {
             log.error(e.toString());
         }
 
-        for (EventStatistic eventStatistic : eventStatsData.getEventStatistics()) {
-            if (eventStatistic.getEventMonth().equals(targetMonth)){
-                if (eventStatistic.getIsMessageCreated()){
-                    totalSendingForAllEvents = totalSendingForAllEvents.add(eventStatistic.getTotalSendingSeconds());
+        for (EventStat eventStat : eventStatsData.getEventStatistics()) {
+            if (eventStat.getEventMonth().equals(targetMonth)){
+                if (eventStat.getIsMessageCreated()){
+                    totalSendingForAllEvents = totalSendingForAllEvents.add(eventStat.getTotalSendingSeconds());
                     totalEventsSended++;
                 }
             }

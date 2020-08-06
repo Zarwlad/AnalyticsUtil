@@ -32,7 +32,7 @@ public class Message {
     @Column(name = "operation_date")
     private ZonedDateTime operationDate;
 
-    @OneToMany(mappedBy = "message")
+    @OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
     private Set<MessageHistory> messageHistories;
 
     @Column(name = "for_mdlp")

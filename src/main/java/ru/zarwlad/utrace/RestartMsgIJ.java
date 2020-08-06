@@ -39,7 +39,7 @@ public class RestartMsgIJ {
             strings.add(messageDto.getId());
         }
 
-        int limit = 200;
+        int limit = 100;
 
         List<String> batchId = new ArrayList<>();
 

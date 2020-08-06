@@ -16,7 +16,7 @@ import java.util.UUID;
 @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventStatistic {
+public class EventStat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -31,20 +31,24 @@ public class EventStatistic {
     @Column(name = "message_send_ms_avg")
     private BigDecimal messagesSendSecondsAvg;
 
-    //@Column(name = "is_error_event")
+    @Transient
+    @Deprecated
     private Boolean isErrorEvent;
 
-    //@Column(name = "is_error_message")
+    @Transient
+    @Deprecated
     private MessageErrorEnum isErrorMessage;
 
-    //@Column(name = "is_event_posted")
+    @Transient
+    @Deprecated
     private Boolean isEventPosted;
 
-    //@Column(name = "is_message_created")
+    @Transient
+    @Deprecated
     private Boolean isMessageCreated;
 
-    //@Column(name = "event_month")
-    //@Enumerated(value = EnumType.STRING)
+    @Transient
+    @Deprecated
     private Month eventMonth;
 
     @Column(name = "total_sending_ms")

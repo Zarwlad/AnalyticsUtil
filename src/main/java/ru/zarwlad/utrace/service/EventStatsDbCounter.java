@@ -4,15 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.dao.EventDao;
 import ru.zarwlad.utrace.dao.EventStatDao;
-import ru.zarwlad.utrace.model.Event;
-import ru.zarwlad.utrace.model.EventStatistic;
-import ru.zarwlad.utrace.model.EventStatus;
+import ru.zarwlad.utrace.model.*;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,18 +18,30 @@ public class EventStatsDbCounter {
     public static void calculateStats(){
         EventDao eventDao = new EventDao(DbManager.getSessionFactory());
         EventStatDao eventStatDao = new EventStatDao(DbManager.getSessionFactory());
+
         List<Event> events = eventDao.read500NotCalculatedEvents();
 
-        for (Event event : events) {
-            EventStatistic eventStatistic = new EventStatistic();
-            eventStatistic.setEvent(event);
+        while (!events.isEmpty()) {
+            for (Event event : events) {
+                EventStat eventStat = new EventStat();
+                eventStat.setEvent(event);
+                eventStat.setEventPostingSeconds(EventStatsDbCounter.calcEventStatusesStat(event));
 
-//            eventStatistic.setEventPostingSeconds();
-//            eventStatistic.setEventPostingSeconds();
-//            eventStatistic.setMessagesSendSecondsAvg();
-//            eventStatistic.setTotalSendingSeconds();
+                if (!"QUEUE".equals(event.getRegulatorStatus())
+                        && !"NOT_REQUIRED".equals(event.getRegulatorStatus())
+                        && !"ARTIFICIAL".equals(event.getRegulatorStatus())) {
+                    eventStat.setMessagesSendSecondsAvg(EventStatsDbCounter.calcAvgMsgSend(event));
+                    eventStat.setTotalSendingSeconds(eventStat.getMessagesSendSecondsAvg()
+                            .add(eventStat.getEventPostingSeconds()));
+                } else {
+                    eventStat.setTotalSendingSeconds(eventStat.getEventPostingSeconds());
+                }
+
+                eventStatDao.create(eventStat);
+            }
+
+            events = eventDao.read500NotCalculatedEvents();
         }
-
     }
 
     private static BigDecimal calcEventStatusesStat(Event event){
@@ -75,11 +83,67 @@ public class EventStatsDbCounter {
                         maxValue = status;
             }
         }
-
-        Duration duration = Duration.between(minValue.getChangeOperationDate(),
-                maxValue.getChangeOperationDate());
-
+        Duration duration = null;
+        try {
+            duration = Duration.between(minValue.getChangeOperationDate(),
+                    maxValue.getChangeOperationDate());
+        }
+        catch (NullPointerException e){
+            log.error(e.getLocalizedMessage());
+            log.error("event " + event.getId());
+        }
         return BigDecimal.valueOf(duration.toMillis());
+    }
+
+    private static BigDecimal calcAvgMsgSend(Event event){
+        List<MessageHistory> histories = new ArrayList<>();
+        for (Message message : event.getMessages()) {
+            histories.addAll(message.getMessageHistories());
+        }
+        
+        Comparator<MessageHistory> comparator = Comparator.comparing(MessageHistory::getCreated);
+        histories.sort(comparator);
+        
+        MessageHistory minValue = null;
+        MessageHistory maxValue = null;
+
+        for (MessageHistory history : histories) {
+            switch (history.getStatus()) {
+                case "CREATED":
+                    if (minValue == null
+                    || minValue.getCreated().isAfter(history.getCreated())) {
+                        minValue = history;
+                        continue;
+                    }
+                case "SENT":
+                    if (maxValue == null
+                    || maxValue.getCreated().isBefore(history.getCreated()))
+                        maxValue = history;
+            }
+        }
+
+        if (!histories.contains("SENT")){
+            for (MessageHistory history : histories) {
+                if ("TECH_ERROR".equals(history.getStatus())
+                || "ERROR".equals(history.getStatus())){
+                    maxValue = history;
+                    break;
+                }
+            }
+        }
+
+        try {
+            Duration duration = Duration.between(minValue.getCreated(), maxValue.getCreated());
+            return BigDecimal.valueOf(duration.toMillis());
+        }
+        catch (NullPointerException e){
+            log.error(e.getLocalizedMessage());
+            log.error(event.getId().toString());
+            log.error("minValue " + minValue.toString());
+            log.error("maxValue " + maxValue.toString());
+
+            return null;
+        }
     }
 
 }

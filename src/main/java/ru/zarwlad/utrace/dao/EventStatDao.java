@@ -5,16 +5,14 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
-import ru.zarwlad.utrace.model.EventStatistic;
+import ru.zarwlad.utrace.model.EventStat;
 
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
 
-public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUID>{
+public class EventStatDao extends AbstractDAO implements DAO<EventStat, UUID>{
     private Logger log = LoggerFactory.getLogger(EventStatDao.class);
 
     public EventStatDao(SessionFactory sessionFactory){
@@ -22,10 +20,10 @@ public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUI
     }
 
     @Override
-    public void create(EventStatistic eventStatistic) {
+    public void create(EventStat eventStat) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.save(eventStatistic);
+            session.save(eventStat);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -34,10 +32,10 @@ public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUI
     }
 
     @Override
-    public void update(EventStatistic eventStatistic) {
+    public void update(EventStat eventStat) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.update(eventStatistic);
+            session.update(eventStat);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -46,10 +44,10 @@ public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUI
     }
 
     @Override
-    public void delete(EventStatistic eventStatistic) {
+    public void delete(EventStat eventStat) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.delete(eventStatistic);
+            session.delete(eventStat);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -58,9 +56,9 @@ public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUI
     }
 
     @Override
-    public EventStatistic readById(UUID id) {
+    public EventStat readById(UUID id) {
         try (Session session = sessionFactory.openSession()){
-            return session.get(EventStatistic.class, id);
+            return session.get(EventStat.class, id);
         }
         catch (Exception e) {
             log.error(e.getLocalizedMessage());
@@ -68,25 +66,25 @@ public class EventStatDao extends AbstractDAO implements DAO<EventStatistic, UUI
         }
     }
 
-    public List<EventStatistic> readAll(){
+    public List<EventStat> readAll(){
         try (Session session = sessionFactory.openSession()){
             CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<EventStatistic> query = builder.createQuery(EventStatistic.class);
-            query.from(EventStatistic.class);
+            CriteriaQuery<EventStat> query = builder.createQuery(EventStat.class);
+            query.from(EventStat.class);
             return session.createQuery(query).getResultList();
         }
     }
 
-    public List<EventStatistic> readByEventId(UUID id){
+    public List<EventStat> readByEventId(UUID id){
         try (Session session = sessionFactory.openSession()){
-            String hql = "SELECT e FROM EventStatistic e WHERE e.event.id = :id";
+            String hql = "SELECT e FROM EventStat e WHERE e.event.id = :id";
             return session.createQuery(hql).setParameter("id", id).getResultList();
         }
     }
 
     public List<Event> readAllCalculatedEvents(){
         try (Session session = sessionFactory.openSession()){
-            String hql = "SELECT DISTINCT e.event FROM EventStatistic e";
+            String hql = "SELECT DISTINCT e.event FROM EventStat e";
             return session.createQuery(hql).getResultList();
         }
     }

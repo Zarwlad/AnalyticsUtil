@@ -1,8 +1,6 @@
 package ru.zarwlad.utrace.model;
 
 import lombok.*;
-import ru.zarwlad.unitedDtos.utraceDto.Dto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -48,9 +46,9 @@ public class Event {
     private String client;
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
-    private List<EventStatistic> eventStatistic;
+    private List<EventStat> eventStat;
 
-    public EventStatistic fromEventToEventStat(){
+    public EventStat fromEventToEventStat(){
         BigDecimal eventPostingSeconds = null;
         BigDecimal messagesSendSecondsAvg = null;
         Boolean isErrorEvent = null;
@@ -210,7 +208,7 @@ public class Event {
             totalSendingSeconds = messagesSendSecondsAvg;
         }
 
-        return  new EventStatistic(null,
+        return  new EventStat(null,
                 this,
                 eventPostingSeconds,
                 messagesSendSecondsAvg,

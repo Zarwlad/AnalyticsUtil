@@ -15,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of="id")
+@ToString(exclude = "message")
 public class MessageHistory {
     @Id
     private UUID id;

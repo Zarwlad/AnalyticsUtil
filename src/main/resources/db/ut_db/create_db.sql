@@ -40,11 +40,6 @@ CREATE TABLE IF NOT EXISTS event_stat(
     event_id uuid not null,
     event_posting_ms integer,
     message_send_ms_avg integer,
-    is_error_event boolean not null,
-    is_error_message boolean not null,
-    is_event_posted boolean not null,
-    is_message_created boolean not null,
-    event_month varchar(50) not null,
     total_sending_ms integer,
     foreign key (event_id) references event(id)
 );
