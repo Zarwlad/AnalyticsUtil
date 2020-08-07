@@ -1,0 +1,9 @@
+select to_char(date_trunc('day', e.created_date), 'dd.mm.yyyy') as day,
+       count(1) as calc_events,
+       round(avg(event_posting_ms)/3600000, 2) as event_posting_hours,
+       round(avg(total_sending_ms)/3600000, 2) as total_sending_hours
+from event e
+join event_stat es on e.id = es.event_id
+where e.created_date between timestamp '2020-07-01 00:00:00' and timestamp '2020-07-31 23:59:59'
+group by 1
+order by day asc

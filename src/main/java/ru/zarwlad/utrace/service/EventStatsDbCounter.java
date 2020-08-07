@@ -23,21 +23,32 @@ public class EventStatsDbCounter {
 
         while (!events.isEmpty()) {
             for (Event event : events) {
-                EventStat eventStat = new EventStat();
-                eventStat.setEvent(event);
-                eventStat.setEventPostingSeconds(EventStatsDbCounter.calcEventStatusesStat(event));
+                boolean cont = false;
 
-                if (!"QUEUE".equals(event.getRegulatorStatus())
-                        && !"NOT_REQUIRED".equals(event.getRegulatorStatus())
-                        && !"ARTIFICIAL".equals(event.getRegulatorStatus())) {
-                    eventStat.setMessagesSendSecondsAvg(EventStatsDbCounter.calcAvgMsgSend(event));
-                    eventStat.setTotalSendingSeconds(eventStat.getMessagesSendSecondsAvg()
-                            .add(eventStat.getEventPostingSeconds()));
-                } else {
-                    eventStat.setTotalSendingSeconds(eventStat.getEventPostingSeconds());
+                for (EventStatus eventStatus : event.getEventStatuses()) {
+                    if ("FILLED".equals(eventStatus.getStatus())) {
+                        cont = true;
+                        break;
+                    }
                 }
 
-                eventStatDao.create(eventStat);
+                if (cont) {
+                    EventStat eventStat = new EventStat();
+                    eventStat.setEvent(event);
+                    eventStat.setEventPostingSeconds(EventStatsDbCounter.calcEventStatusesStat(event));
+
+                    if (!"QUEUE".equals(event.getRegulatorStatus())
+                            && !"NOT_REQUIRED".equals(event.getRegulatorStatus())
+                            && !"ARTIFICIAL".equals(event.getRegulatorStatus())) {
+                        eventStat.setMessagesSendSecondsAvg(EventStatsDbCounter.calcAvgMsgSend(event));
+                        eventStat.setTotalSendingSeconds(eventStat.getMessagesSendSecondsAvg()
+                                .add(eventStat.getEventPostingSeconds()));
+                    } else {
+                        eventStat.setTotalSendingSeconds(eventStat.getEventPostingSeconds());
+                    }
+
+                    eventStatDao.create(eventStat);
+                }
             }
 
             events = eventDao.read500NotCalculatedEvents();
