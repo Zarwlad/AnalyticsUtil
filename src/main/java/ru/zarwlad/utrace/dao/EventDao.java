@@ -80,9 +80,11 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
         try (Session session = sessionFactory.openSession()){
             String hql = "SELECT e FROM Event e " +
                     "LEFT JOIN EventStat es ON e.id = es.event.id " +
+                    "JOIN EventStatus est ON e.id = est.event.id " +
                     "WHERE e.type != 'BASE' " +
                     "AND e.status NOT IN ('CANCELLED', 'DRAFT', 'CREATED', 'FILLED')" +
-                    "AND es.event IS NULL";
+                    "AND es.event IS NULL " +
+                    "AND est.status = 'FILLED'";
             Query query = session.createQuery(hql);
             query.setMaxResults(500);
             return query.getResultList();

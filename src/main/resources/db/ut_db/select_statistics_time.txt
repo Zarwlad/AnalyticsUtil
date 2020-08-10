@@ -5,8 +5,9 @@ select e.type,
        count(*) as calculated_events_count
 from event_stat
          join event e on event_stat.event_id = e.id
-where e.created_date between timestamp '2020-07-01 00:00:00' and timestamp '2020-07-31 23:59:59'
-
+where e.created_date between timestamp '2020-07-01 00:00:00'
+                        and timestamp '2020-07-31 23:59:59'
+and client = '%CLIENT%'
 group by e.type
 
 union
@@ -18,4 +19,6 @@ select
     count(*) as calculated_events_count
 from event_stat
          join event e on event_stat.event_id = e.id
-where e.created_date between timestamp '2020-07-01 00:00:00' and timestamp '2020-07-31 23:59:59';
+where e.created_date between timestamp '2020-07-01 00:00:00'
+                        and timestamp '2020-07-31 23:59:59'
+and client = '%CLIENT%'

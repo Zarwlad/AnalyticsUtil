@@ -19,7 +19,12 @@ public class Main {
         }
 
         log.info("Начинаю скачивать события");
-        DownloadEventsWithDbService.downloadMissedEventStatuses();
+        DownloadEventsWithDbService.downloadEventsByIds();
+
+        log.info("Рассчитываю статистикику по событиям");
+        MultiThreadStartCalculateDbEvents calculateDbEvents = new MultiThreadStartCalculateDbEvents();
+        Thread thread = new Thread(calculateDbEvents);
+        thread.start();
 
     }
 

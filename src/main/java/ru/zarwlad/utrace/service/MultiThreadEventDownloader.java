@@ -36,35 +36,24 @@ public class MultiThreadEventDownloader implements Runnable {
     private List<String> ids;
     private List<EventDto> eventDtos;
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for (String id : ids) {
-            builder.append(id).append(" ");
-        }
-        return "MultiThreadEventDownloader{" +
-                "ids=" + builder +
-                '}';
-    }
-
     @SneakyThrows
     @Override
     public void run() {
-        //download(ids);
+        download(ids);
 
-        for (EventDto eventDto : eventDtos) {
-            Set<AuditRecordDto> recordDtos = downloadAuditRecords(eventDto);
-            EventDao eventDao = new EventDao(DbManager.getSessionFactory());
-            Event event = eventDao.readById(UUID.fromString(eventDto.getId()));
-
-            for (AuditRecordDto recordDto : recordDtos) {
-                EventStatus eventStatus = EventStatusMapper.fromDtoToEntity(recordDto);
-                eventStatus.setEvent(event);
-
-                EventStatusDao eventStatusDao = new EventStatusDao(DbManager.getSessionFactory());
-                eventStatusDao.create(eventStatus);
-            }
-        }
+//        for (EventDto eventDto : eventDtos) {
+//            Set<AuditRecordDto> recordDtos = downloadAuditRecords(eventDto);
+//            EventDao eventDao = new EventDao(DbManager.getSessionFactory());
+//            Event event = eventDao.readById(UUID.fromString(eventDto.getId()));
+//
+//            for (AuditRecordDto recordDto : recordDtos) {
+//                EventStatus eventStatus = EventStatusMapper.fromDtoToEntity(recordDto);
+//                eventStatus.setEvent(event);
+//
+//                EventStatusDao eventStatusDao = new EventStatusDao(DbManager.getSessionFactory());
+//                eventStatusDao.create(eventStatus);
+//            }
+//        }
 
     }
 

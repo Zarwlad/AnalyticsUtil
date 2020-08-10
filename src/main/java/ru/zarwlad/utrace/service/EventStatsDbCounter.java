@@ -15,6 +15,7 @@ import java.util.List;
 public class EventStatsDbCounter {
     private static Logger log = LoggerFactory.getLogger(EventStatisticCounterService.class);
 
+
     public static void calculateStats(){
         EventDao eventDao = new EventDao(DbManager.getSessionFactory());
         EventStatDao eventStatDao = new EventStatDao(DbManager.getSessionFactory());
@@ -23,16 +24,6 @@ public class EventStatsDbCounter {
 
         while (!events.isEmpty()) {
             for (Event event : events) {
-                boolean cont = false;
-
-                for (EventStatus eventStatus : event.getEventStatuses()) {
-                    if ("FILLED".equals(eventStatus.getStatus())) {
-                        cont = true;
-                        break;
-                    }
-                }
-
-                if (cont) {
                     EventStat eventStat = new EventStat();
                     eventStat.setEvent(event);
                     eventStat.setEventPostingSeconds(EventStatsDbCounter.calcEventStatusesStat(event));
@@ -46,11 +37,8 @@ public class EventStatsDbCounter {
                     } else {
                         eventStat.setTotalSendingSeconds(eventStat.getEventPostingSeconds());
                     }
-
                     eventStatDao.create(eventStat);
                 }
-            }
-
             events = eventDao.read500NotCalculatedEvents();
         }
     }
