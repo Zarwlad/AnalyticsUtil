@@ -25,7 +25,6 @@ public class Main {
         MultiThreadStartCalculateDbEvents calculateDbEvents = new MultiThreadStartCalculateDbEvents();
         Thread thread = new Thread(calculateDbEvents);
         thread.start();
-
     }
 
 }

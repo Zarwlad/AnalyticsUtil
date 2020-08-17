@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
     <session-factory>
-        <property name="connection.url">jdbc:postgresql://localhost:5432/events</property>
+        <property name="connection.url"></property>
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.username">postgres</property>
+        <property name="connection.username"></property>
         <property name="connection.password"></property>
-        <property name="connection.pool_size">1000</property><!--необяз?-->
+        <property name="connection.pool_size">1000</property>
         <property name="dialect">org.hibernate.dialect.PostgreSQL95Dialect</property>
         <property name="show_sql">true</property>
 
         <mapping class="ru.zarwlad.utrace.model.Event" />
         <mapping class="ru.zarwlad.utrace.model.EventStatus" />
-        <mapping class="ru.zarwlad.utrace.model.EventStatistic" />
+        <mapping class="ru.zarwlad.utrace.model.EventStat" />
         <mapping class="ru.zarwlad.utrace.model.Message" />
         <mapping class="ru.zarwlad.utrace.model.MessageHistory" />
 

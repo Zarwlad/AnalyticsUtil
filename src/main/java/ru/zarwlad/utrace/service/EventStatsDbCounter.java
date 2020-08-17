@@ -8,39 +8,41 @@ import ru.zarwlad.utrace.model.*;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class EventStatsDbCounter {
+class EventStatsDbCounter {
     private static Logger log = LoggerFactory.getLogger(EventStatisticCounterService.class);
 
 
     public static void calculateStats(){
         EventDao eventDao = new EventDao(DbManager.getSessionFactory());
-        EventStatDao eventStatDao = new EventStatDao(DbManager.getSessionFactory());
 
         List<Event> events = eventDao.read500NotCalculatedEvents();
 
         while (!events.isEmpty()) {
-            for (Event event : events) {
-                    EventStat eventStat = new EventStat();
-                    eventStat.setEvent(event);
-                    eventStat.setEventPostingSeconds(EventStatsDbCounter.calcEventStatusesStat(event));
-
-                    if (!"QUEUE".equals(event.getRegulatorStatus())
-                            && !"NOT_REQUIRED".equals(event.getRegulatorStatus())
-                            && !"ARTIFICIAL".equals(event.getRegulatorStatus())) {
-                        eventStat.setMessagesSendSecondsAvg(EventStatsDbCounter.calcAvgMsgSend(event));
-                        eventStat.setTotalSendingSeconds(eventStat.getMessagesSendSecondsAvg()
-                                .add(eventStat.getEventPostingSeconds()));
-                    } else {
-                        eventStat.setTotalSendingSeconds(eventStat.getEventPostingSeconds());
-                    }
-                    eventStatDao.create(eventStat);
-                }
+            events.forEach(EventStatsDbCounter::createEventStat);
             events = eventDao.read500NotCalculatedEvents();
         }
+    }
+
+    private static void createEventStat(Event event){
+        EventStatDao eventStatDao = new EventStatDao(DbManager.getSessionFactory());
+
+        EventStat eventStat = new EventStat();
+        eventStat.setEvent(event);
+        eventStat.setEventPostingSeconds(EventStatsDbCounter.calcEventStatusesStat(event));
+
+        if (!"QUEUE".equals(event.getRegulatorStatus())
+                && !"NOT_REQUIRED".equals(event.getRegulatorStatus())
+                && !"ARTIFICIAL".equals(event.getRegulatorStatus())) {
+            eventStat.setMessagesSendSecondsAvg(EventStatsDbCounter.calcAvgMsgSend(event));
+            eventStat.setTotalSendingSeconds(eventStat.getMessagesSendSecondsAvg()
+                    .add(eventStat.getEventPostingSeconds()));
+        } else {
+            eventStat.setTotalSendingSeconds(eventStat.getEventPostingSeconds());
+        }
+        eventStatDao.create(eventStat);
     }
 
     private static BigDecimal calcEventStatusesStat(Event event){
@@ -95,10 +97,10 @@ public class EventStatsDbCounter {
     }
 
     private static BigDecimal calcAvgMsgSend(Event event){
-        List<MessageHistory> histories = new ArrayList<>();
-        for (Message message : event.getMessages()) {
-            histories.addAll(message.getMessageHistories());
-        }
+        List<MessageHistory> histories = event.getMessages().stream()
+                .map(Message::getMessageHistories)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
         
         Comparator<MessageHistory> comparator = Comparator.comparing(MessageHistory::getCreated);
         histories.sort(comparator);
