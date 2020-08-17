@@ -56,6 +56,9 @@ public class DownloadEventsWithDbService {
         assert lines != null;
         int threadBatchDivider = lines.size() / 6;
 
+        if (threadBatchDivider == 0)
+            threadBatchDivider = 1;
+
         for (int i = 0; i < lines.size(); i++) {
             portion.add(lines.get(i));
             if (portion.size() == threadBatchDivider){
