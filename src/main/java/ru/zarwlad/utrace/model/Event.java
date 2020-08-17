@@ -1,138 +1,60 @@
 package ru.zarwlad.utrace.model;
 
-import ru.zarwlad.unitedDtos.utraceDto.Dto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
+import lombok.*;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.Month;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-public class Event implements Entity{
-    private String id;
+@javax.persistence.Entity
+@Table(name = "event")
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
+@NoArgsConstructor
+public class Event {
+    @Id
+    private UUID id;
+
+    @Column(name = "type")
     private String type;
+
+    @Column(name = "operation_date")
     private ZonedDateTime operationDate;
+
+    @Column(name = "status")
     private String status;
+
+    @Column(name = "reg_status")
     private String regulatorStatus;
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     private Set<EventStatus> eventStatuses;
+
+    @OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
     private Set<Message> messages;
+
+    @Column(name = "created_date")
     private ZonedDateTime createdDate;
 
-    public Event() {
-    }
+    @Column(name = "client")
+    private String client;
 
-    public Event(String id,
-                 String type,
-                 ZonedDateTime operationDate,
-                 String status,
-                 String regulatorStatus,
-                 Set<EventStatus> eventStatuses,
-                 Set<Message> messages,
-                 ZonedDateTime createdDate) {
-        this.id = id;
-        this.type = type;
-        this.operationDate = operationDate;
-        this.status = status;
-        this.regulatorStatus = regulatorStatus;
-        this.eventStatuses = eventStatuses;
-        this.messages = messages;
-        this.createdDate = createdDate;
-    }
+    @OneToMany(mappedBy = "event", fetch = FetchType.LAZY)
+    private List<EventStat> eventStat;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public ZonedDateTime getOperationDate() {
-        return operationDate;
-    }
-
-    public void setOperationDate(ZonedDateTime operationDate) {
-        this.operationDate = operationDate;
-    }
-
-    public Set<EventStatus> getEventStatuses() {
-        return eventStatuses;
-    }
-
-    public void setEventStatuses(Set<EventStatus> eventStatuses) {
-        this.eventStatuses = eventStatuses;
-    }
-
-    public Set<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(Set<Message> messages) {
-        this.messages = messages;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getRegulatorStatus() {
-        return regulatorStatus;
-    }
-
-    public void setRegulatorStatus(String regulatorStatus) {
-        this.regulatorStatus = regulatorStatus;
-    }
-
-    public ZonedDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(ZonedDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Event)) return false;
-        Event event = (Event) o;
-        return getId().equals(event.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public Dto fromEntityToDto(Object object) {
-        return new EventDto();
-    }
-
-    public EventStatistic fromEventToEventStat(){
+    public EventStat fromEventToEventStat(){
         BigDecimal eventPostingSeconds = null;
         BigDecimal messagesSendSecondsAvg = null;
         Boolean isErrorEvent = null;
         MessageErrorEnum isErrorMessage;
-        Boolean isEventPosted;
-        Boolean isMessageCreated;
+        boolean isEventPosted;
+        boolean isMessageCreated;
         Month eventMonth;
         BigDecimal totalSendingSeconds = null;
 
@@ -142,11 +64,7 @@ public class Event implements Entity{
         }
         else {
             isEventPosted = false;
-
-            if (this.getStatus().equals("ERROR"))
-                isErrorEvent = true;
-            else
-                isErrorEvent = false;
+            isErrorEvent = this.getStatus().equals("WAITING");
         }
 
         try {
@@ -290,7 +208,8 @@ public class Event implements Entity{
             totalSendingSeconds = messagesSendSecondsAvg;
         }
 
-        return  new EventStatistic(this,
+        return  new EventStat(null,
+                this,
                 eventPostingSeconds,
                 messagesSendSecondsAvg,
                 isErrorEvent,

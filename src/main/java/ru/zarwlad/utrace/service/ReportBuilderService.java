@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.data.EventStatsData;
 import ru.zarwlad.utrace.model.AverageCount;
-import ru.zarwlad.utrace.model.EventStatistic;
+import ru.zarwlad.utrace.model.EventStat;
 
 import java.io.File;
 import java.io.FileReader;
@@ -51,18 +51,18 @@ public class ReportBuilderService {
 
         EventStatsData eventStatsData = EventStatsData.getInstance();
 
-        for (EventStatistic eventStatistic : eventStatsData.getEventStatistics()) {
+        for (EventStat eventStat : eventStatsData.getEventStatistics()) {
             Files.writeString(path,
-                    eventStatistic.getEvent().getId() + ";"
-                            + eventStatistic.getEvent().getType() + ";"
-                            + eventStatistic.getEventPostingSeconds() + ";"
-                            + eventStatistic.getMessagesSendSecondsAvg() + ";"
-                            + eventStatistic.getTotalSendingSeconds() + ";"
-                            + eventStatistic.getErrorEvent() + ";"
-                            + eventStatistic.getErrorMessage() + ";"
-                            + eventStatistic.getEventPosted() + ";"
-                            + eventStatistic.getMessageCreated() + ";"
-                            + eventStatistic.getEventMonth() + ";" + "\n",
+                    eventStat.getEvent().getId() + ";"
+                            + eventStat.getEvent().getType() + ";"
+                            + eventStat.getEventPostingSeconds() + ";"
+                            + eventStat.getMessagesSendSecondsAvg() + ";"
+                            + eventStat.getTotalSendingSeconds() + ";"
+                            + eventStat.getIsErrorEvent() + ";"
+                            + eventStat.getIsErrorMessage() + ";"
+                            + eventStat.getIsEventPosted() + ";"
+                            + eventStat.getIsMessageCreated() + ";"
+                            + eventStat.getEventMonth() + ";" + "\n",
                     StandardOpenOption.APPEND);
         }
     }

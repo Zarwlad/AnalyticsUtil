@@ -1,12 +1,12 @@
 package ru.zarwlad.utrace.data;
 
-import ru.zarwlad.utrace.model.EventStatistic;
+import ru.zarwlad.utrace.model.EventStat;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class EventStatsData {
-    private Set<EventStatistic> eventStatistics = new HashSet<>();
+    private Set<EventStat> eventStats = new HashSet<>();
     private static EventStatsData instance;
 
     private EventStatsData(){}
@@ -18,11 +18,11 @@ public class EventStatsData {
         return instance;
     }
 
-    public Set<EventStatistic> getEventStatistics() {
-        return eventStatistics;
+    public Set<EventStat> getEventStatistics() {
+        return eventStats;
     }
 
-    public void setEventStatistics(Set<EventStatistic> eventStatistics) {
-        this.eventStatistics = eventStatistics;
+    public void setEventStatistics(Set<EventStat> eventStats) {
+        this.eventStats = eventStats;
     }
 }

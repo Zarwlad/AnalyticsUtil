@@ -5,26 +5,25 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
+import ru.zarwlad.utrace.model.EventStat;
 
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
-public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
-    private Logger log = LoggerFactory.getLogger(EventDao.class);
+public class EventStatDao extends AbstractDAO implements DAO<EventStat, UUID>{
+    private Logger log = LoggerFactory.getLogger(EventStatDao.class);
 
-    public EventDao(SessionFactory sessionFactory){
+    public EventStatDao(SessionFactory sessionFactory){
         super.sessionFactory = sessionFactory;
     }
 
     @Override
-    public void create(Event event) {
+    public void create(EventStat eventStat) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.save(event);
+            session.save(eventStat);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -33,10 +32,10 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
     }
 
     @Override
-    public void update(Event event) {
+    public void update(EventStat eventStat) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.update(event);
+            session.update(eventStat);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -45,10 +44,10 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
     }
 
     @Override
-    public void delete(Event event) {
+    public void delete(EventStat eventStat) {
         try (Session session = sessionFactory.openSession()){
             session.beginTransaction();
-            session.delete(event);
+            session.delete(eventStat);
             session.getTransaction().commit();
         }
         catch (Exception e){
@@ -57,9 +56,9 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
     }
 
     @Override
-    public Event readById(UUID id) {
+    public EventStat readById(UUID id) {
         try (Session session = sessionFactory.openSession()){
-            return session.get(Event.class, id);
+            return session.get(EventStat.class, id);
         }
         catch (Exception e) {
             log.error(e.getLocalizedMessage());
@@ -67,27 +66,26 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
         }
     }
 
-    public List<Event> readAll(){
+    public List<EventStat> readAll(){
         try (Session session = sessionFactory.openSession()){
             CriteriaBuilder builder = session.getCriteriaBuilder();
-            CriteriaQuery<Event> query = builder.createQuery(Event.class);
-            query.from(Event.class);
+            CriteriaQuery<EventStat> query = builder.createQuery(EventStat.class);
+            query.from(EventStat.class);
             return session.createQuery(query).getResultList();
         }
     }
 
-    public List<Event> read500NotCalculatedEvents(){
+    public List<EventStat> readByEventId(UUID id){
         try (Session session = sessionFactory.openSession()){
-            String hql = "SELECT e FROM Event e " +
-                    "LEFT JOIN EventStat es ON e.id = es.event.id " +
-                    "JOIN EventStatus est ON e.id = est.event.id " +
-                    "WHERE e.type != 'BASE' " +
-                    "AND e.status NOT IN ('CANCELLED', 'DRAFT', 'CREATED', 'FILLED')" +
-                    "AND es.event IS NULL " +
-                    "AND est.status = 'FILLED'";
-            Query query = session.createQuery(hql);
-            query.setMaxResults(500);
-            return query.getResultList();
+            String hql = "SELECT e FROM EventStat e WHERE e.event.id = :id";
+            return session.createQuery(hql).setParameter("id", id).getResultList();
+        }
+    }
+
+    public List<Event> readAllCalculatedEvents(){
+        try (Session session = sessionFactory.openSession()){
+            String hql = "SELECT DISTINCT e.event FROM EventStat e";
+            return session.createQuery(hql).getResultList();
         }
     }
 }

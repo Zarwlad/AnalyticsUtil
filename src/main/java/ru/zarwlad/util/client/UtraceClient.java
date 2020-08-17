@@ -6,10 +6,7 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.unitedDtos.utraceDto.EventLinePostDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventLineDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.MessageHistoryDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.UnitUnpackEventDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.UnitUnpackEventPostDto;
+import ru.zarwlad.unitedDtos.utraceDto.entityDtos.*;
 import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.*;
 import ru.zarwlad.utrace.data.AuthData;
 import ru.zarwlad.utrace.model.Event;
@@ -38,26 +35,26 @@ public class UtraceClient {
                 .readValue(str, PageDtoOfBriefedBusinessEventDto.class);
     }
 
-    public static PageDtoOfAuditRecordDto getPagedAuditRecords(Event event) throws IOException {
+    public static PageDtoOfAuditRecordDto getPagedAuditRecords(String type, String id) throws IOException {
 
-        String mappedEventType = MappingEventTypeToAuditUrl.getAuditRecordTypeFromEventType(event.getType());
+        String mappedEventType = MappingEventTypeToAuditUrl.getAuditRecordTypeFromEventType(type);
 
         String urlPath = properties.getProperty("host")
                 + properties.getProperty("coreApi")
                 + "audit/" + mappedEventType
-                + "/" + event.getId();
+                + "/" + id;
         String str = getResponseBody(urlPath);
 
         return objectMapper
                 .readValue(str, PageDtoOfAuditRecordDto.class);
     }
 
-    public static PageDtoOfBusinessEventMessageDto getPagedEventMessages (Event event) throws IOException {
+    public static PageDtoOfBusinessEventMessageDto getPagedEventMessagesForMdlp (String id) throws IOException {
 
         String urlPath = properties.getProperty("host")
                 + properties.getProperty("coreApi")
                 + "event-messages?"
-                + "&businessEvent.id=" + event.getId()
+                + "&businessEvent.id=" + id
                 + "&direction=OUTCOME"
                 + "&externalSystemId=8154639c-ab67-11e8-98d0-529269fb2178";
 
@@ -67,10 +64,48 @@ public class UtraceClient {
                 .readValue(str, PageDtoOfBusinessEventMessageDto.class);
     }
 
-    public static List<MessageHistoryDto> getMessageHistoriesByMsg(Message message) throws IOException {
+    public static EventDto getEventById (String id) throws IOException {
+
+        String urlPath = properties.getProperty("host")
+                + properties.getProperty("coreApi")
+                + "events/"
+                + id;
+
+        String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, EventDto.class);
+    }
+
+    public static List<String> postProcessDefaultConvMsg(String id){
+        String urlPath = properties.getProperty("host")
+                + "default-converter/api/"
+                + "convert-message-to-business-event"
+                + "?messageId="
+                + id;
+        try {
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), "");
+
+            Request request = postRequestWithAuthGetType(urlPath, requestBody);
+
+            Response response = okHttpClient.newCall(request).execute();
+
+            assert response.body() != null;
+            String str = response.body().string();
+
+            return objectMapper.readValue(str, List.class);
+
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static List<MessageHistoryDto> getMessageHistoriesByMsgId(String id) throws IOException {
         String urlPath = properties.getProperty("host")
                 + properties.getProperty("journalApi1")
-                + "message/" + message.getId() + "/message-histories";
+                + "message/" + id
+                + "/message-histories";
         String str = getResponseBody(urlPath);
 
         return objectMapper
@@ -83,6 +118,27 @@ public class UtraceClient {
                 + properties.getProperty("journalApi2")
                 + "message/paged?id=" + id;
         String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, PageMessageDto.class);
+    }
+
+    public static PageMessageDto getPagedMessagesList (boolean filterEnabled, List<String> filters) throws IOException {
+
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("journalApi2"))
+                .append("message/paged");
+
+        if (filterEnabled){
+            urlPath.append("?");
+            for (String filter : filters) {
+                urlPath.append("&");
+                urlPath.append(filter);
+            }
+        }
+
+        String str = getResponseBody(urlPath.toString());
 
         return objectMapper
                 .readValue(str, PageMessageDto.class);
@@ -141,7 +197,7 @@ public class UtraceClient {
     }
 
     public static String getResponseBody(String urlPath) throws IOException {
-        Request getRequest = null;
+        Request getRequest;
 
         if (!urlPath.contains("/mdlp/api")) {
             getRequest = getRequestWithAuthGetType(urlPath);
@@ -206,6 +262,7 @@ public class UtraceClient {
         log.info(str);
 
         try {
+            assert str != null;
             return objectMapper
                     .readValue(str, PageDtoOfCodeTreeRootDto.class);
         } catch (JsonProcessingException e) {
@@ -234,6 +291,7 @@ public class UtraceClient {
         log.info(str);
 
         try {
+            assert str != null;
             return objectMapper
                     .readValue(str, PageCodeDto.class);
         } catch (JsonProcessingException e) {
@@ -258,6 +316,7 @@ public class UtraceClient {
         log.info(str);
 
         try {
+            assert str != null;
             return objectMapper
                     .readValue(str, PageBatchSgtinQuantityDto.class);
         } catch (JsonProcessingException e) {
@@ -278,6 +337,7 @@ public class UtraceClient {
 
             Response response = okHttpClient.newCall(request).execute();
 
+            assert response.body() != null;
             String str = response.body().string();
 
             return objectMapper.readValue(str, UnitUnpackEventDto.class);
@@ -302,6 +362,7 @@ public class UtraceClient {
 
             Response response = okHttpClient.newCall(request).execute();
 
+            assert response.body() != null;
             String str = response.body().string();
 
             return objectMapper.readValue(str, EventLineDto.class);
@@ -326,6 +387,7 @@ public class UtraceClient {
 
             Response response = okHttpClient.newCall(request).execute();
 
+            assert response.body() != null;
             String str = response.body().string();
 
             return objectMapper.readValue(str, UnitUnpackEventDto.class);

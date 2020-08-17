@@ -1,54 +1,32 @@
 package ru.zarwlad.utrace.model;
 
+import lombok.*;
 import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
+import javax.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
-public class EventStatus implements Entity {
+@javax.persistence.Entity
+@Table(name = "event_status")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+public class EventStatus {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+
+    @Column(name = "status")
     private String status;
+
+    @Column(name = "change_operation_date")
     private ZonedDateTime changeOperationDate;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EventStatus)) return false;
-        EventStatus that = (EventStatus) o;
-        return Objects.equals(getStatus(), that.getStatus()) &&
-                Objects.equals(getChangeOperationDate(), that.getChangeOperationDate());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getStatus(), getChangeOperationDate());
-    }
-
-    public EventStatus(String status, ZonedDateTime changeOperationDate) {
-        this.status = status;
-        this.changeOperationDate = changeOperationDate;
-    }
-
-    public EventStatus() {
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public ZonedDateTime getChangeOperationDate() {
-        return changeOperationDate;
-    }
-
-    public void setChangeOperationDate(ZonedDateTime changeOperationDate) {
-        this.changeOperationDate = changeOperationDate;
-    }
-
-    @Override
-    public Dto fromEntityToDto(Object object) {
-        return null;
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "event_id")
+    private Event event;
 }

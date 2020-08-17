@@ -10,22 +10,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
-public class FilterService {
-    private static Logger log = LoggerFactory.getLogger(FilterService.class);
+public class FileReaderService {
+    private static final Logger log = LoggerFactory.getLogger(FileReaderService.class);
 
     public static List<String> readIdsFromFile() throws IOException {
         log.info("Введи путь к файлу");
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         List<String> strings = Files.readAllLines(Paths.get(bufferedReader.readLine()));
 
-        List<String> normalizedStrings = new ArrayList<>();
-
-        for (String string : strings) {
-            normalizedStrings.add(string.trim());
-        }
-
-        return normalizedStrings;
+        return strings.stream().map(String::trim).collect(Collectors.toList());
     }
 }

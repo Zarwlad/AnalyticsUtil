@@ -7,6 +7,8 @@ import ru.zarwlad.utrace.model.Message;
 import ru.zarwlad.utrace.util.DateTimeUtil;
 import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
+import java.util.UUID;
+
 @JsonAutoDetect
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,16 +36,6 @@ public class MessageDto implements Dto {
     @JsonProperty(value = "documentType")
     DocumentType documentType;
 
-    public Message fromDtoToEntity() {
-        MessageDto messageDto = (MessageDto) this;
-        return new Message(messageDto.getId(),
-                messageDto.getStatus(),
-                messageDto.getDocumentType().getId(),
-                DateTimeUtil.toZonedDateTime(messageDto.getCreated()),
-                DateTimeUtil.toZonedDateTime(messageDto.getOperationDate()),
-                null);
-    }
-
     @JsonAutoDetect
     @NoArgsConstructor
     @AllArgsConstructor
@@ -51,12 +43,12 @@ public class MessageDto implements Dto {
     @Setter
     @ToString
     @EqualsAndHashCode(of = "id")
-    static class DocumentType{
+    public static class DocumentType{
 
         @JsonProperty(value = "id")
-        String id;
+        private String id;
 
         @JsonProperty(value = "description")
-        String description;
+        private String description;
     }
 }

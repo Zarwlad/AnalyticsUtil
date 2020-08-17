@@ -6,6 +6,7 @@ import lombok.*;
 import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
 import java.util.List;
+import java.util.UUID;
 
 @JsonAutoDetect
 @NoArgsConstructor
@@ -13,8 +14,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 public class AuditRecordDto implements Dto {
+    private UUID id = UUID.randomUUID();
 
     @JsonProperty(value = "author")
     private String author;

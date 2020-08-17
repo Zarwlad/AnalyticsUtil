@@ -1,0 +1,24 @@
+select e.type,
+       round(avg(event_posting_ms)/1000, 0) as avg_total_posting_in_secs,
+       round(avg(event_posting_ms)/3600000, 2) as avg_total_posting_in_hours,
+       round(avg(event_posting_ms)/(3600000 * 24), 2) as avg_total_posting_in_days,
+       count(*) as calculated_events_count
+from event_stat
+         join event e on event_stat.event_id = e.id
+where e.created_date between timestamp '2020-07-01 00:00:00'
+                        and timestamp '2020-07-31 23:59:59'
+and client = '%CLIENT%'
+group by e.type
+
+union
+select
+    '_TOTAL_',
+    round(avg(event_posting_ms)/1000, 0) as avg_total_posting_in_secs,
+    round(avg(event_posting_ms)/3600000, 2) as avg_total_posting_in_hours,
+    round(avg(event_posting_ms)/(3600000 * 24), 2) as avg_total_posting_in_days,
+    count(*) as calculated_events_count
+from event_stat
+         join event e on event_stat.event_id = e.id
+where e.created_date between timestamp '2020-07-01 00:00:00'
+                        and timestamp '2020-07-31 23:59:59'
+and client = '%CLIENT%'

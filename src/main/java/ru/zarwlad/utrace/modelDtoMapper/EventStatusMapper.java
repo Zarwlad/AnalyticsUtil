@@ -4,10 +4,15 @@ import ru.zarwlad.utrace.model.EventStatus;
 import ru.zarwlad.utrace.util.DateTimeUtil;
 import ru.zarwlad.unitedDtos.utraceDto.entityDtos.AuditRecordDto;
 
+import java.util.UUID;
+
 public class EventStatusMapper {
     public static EventStatus fromDtoToEntity(AuditRecordDto auditRecordDto){
-        return new EventStatus(
-                auditRecordDto.getSnapshot().getStatus(),
-                DateTimeUtil.toZonedDateTime(auditRecordDto.getOperationDateTime()));
+        EventStatus eventStatus = new EventStatus();
+        eventStatus.setChangeOperationDate(DateTimeUtil.toZonedDateTime(auditRecordDto.getOperationDateTime()));
+        eventStatus.setId(auditRecordDto.getId());
+        eventStatus.setStatus(auditRecordDto.getSnapshot().getStatus());
+
+        return eventStatus;
     }
 }

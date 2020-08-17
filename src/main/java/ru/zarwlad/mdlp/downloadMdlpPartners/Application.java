@@ -64,7 +64,7 @@ public class Application {
 //                PharmLicenceDAO pharmLicenceDAO = new PharmLicenceDAO(sessionFactory);
 //                RznAddressDAO rznAddressDAO = new RznAddressDAO(sessionFactory);
 //                WorkDescriptionDAO workDescriptionDAO = new WorkDescriptionDAO(sessionFactory);
-//                FiasDAO fiasDAO = new FiasDAO(sessionFactory);
+//                FiasDAO fiasDAO = new FiasDAO(nFactory);
 //
 //                for (PharmLicence pharmLicence : pharmLicences) {
 //                    pharmLicenceDAO.create(pharmLicence);
