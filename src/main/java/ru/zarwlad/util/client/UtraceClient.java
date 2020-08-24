@@ -23,13 +23,30 @@ import static ru.zarwlad.util.client.PropertiesConfig.properties;
 public class UtraceClient {
     private static Logger log = LoggerFactory.getLogger(UtraceClient.class);
 
+    @Deprecated
     public static PageDtoOfBriefedBusinessEventDto getPagedEvents(Integer pageNum) throws IOException {
         String urlPath = properties.getProperty("host")
                 + properties.getProperty("coreApi")
-                + "events/register?&size=" + properties.getProperty("eventSizeReq")
+                + "events?&size=" + properties.getProperty("eventSizeReq")
                 + "&page=" + pageNum;
 
         String str = getResponseBody(urlPath);
+
+        return objectMapper
+                .readValue(str, PageDtoOfBriefedBusinessEventDto.class);
+    }
+
+    public static PageDtoOfBriefedBusinessEventDto getPagedEventsByFilter(List<String> filter) throws IOException {
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("coreApi"));
+
+        if (!filter.isEmpty()){
+            urlPath.append("?");
+            filter.forEach(urlPath::append);
+        }
+
+        String str = getResponseBody(urlPath.toString());
 
         return objectMapper
                 .readValue(str, PageDtoOfBriefedBusinessEventDto.class);
@@ -407,5 +424,21 @@ public class UtraceClient {
         String str = getResponseBody(urlPath);
 
         log.info("{}", urlPath);
+    }
+
+    public static EventDto postEventById(String id) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/events/"
+                + id
+                + "/post";
+
+        Request request = postRequestWithAuthGetType(urlPath, null);
+        Response response = okHttpClient.newCall(request).execute();
+        log.info("Thread: {}, eventId: {}, status: {}, body: {}",
+                Thread.currentThread().getName(),
+                id,
+                response.code(),
+                response.body().string());
+        return objectMapper.readValue(response.body().string(), EventDto.class);
     }
 }
