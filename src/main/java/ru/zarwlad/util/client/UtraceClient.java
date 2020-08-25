@@ -39,7 +39,8 @@ public class UtraceClient {
     public static PageDtoOfBriefedBusinessEventDto getPagedEventsByFilter(List<String> filter) throws IOException {
         StringBuilder urlPath = new StringBuilder();
         urlPath.append(properties.getProperty("host"))
-                .append(properties.getProperty("coreApi"));
+                .append(properties.getProperty("coreApi"))
+                .append("events");
 
         if (!filter.isEmpty()){
             urlPath.append("?");
@@ -440,5 +441,24 @@ public class UtraceClient {
                 response.code(),
                 response.body().string());
         return objectMapper.readValue(response.body().string(), EventDto.class);
+    }
+
+    public static String postEventByIdReturnString(String id) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/events/"
+                + id
+                + "/post";
+
+        RequestBody rb = RequestBody.create(MediaType.parse("application/json"), "");
+        Request request = postRequestWithAuthGetType(urlPath, rb);
+        Response response = okHttpClient.newCall(request).execute();
+
+        String str = response.body().string();
+        log.info("Thread: {}, eventId: {}, status: {}, body: {}",
+                Thread.currentThread().getName(),
+                id,
+                response.code(),
+                str);
+        return str;
     }
 }
