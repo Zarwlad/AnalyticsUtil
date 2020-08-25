@@ -1,7 +1,5 @@
 package ru.zarwlad.utrace.model;
 
-import ru.zarwlad.unitedDtos.utraceDto.Dto;
-
 public class Auth {
     String accessToken;
 

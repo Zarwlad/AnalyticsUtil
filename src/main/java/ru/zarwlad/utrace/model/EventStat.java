@@ -1,7 +1,6 @@
 package ru.zarwlad.utrace.model;
 
 import lombok.*;
-import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
 import javax.persistence.*;
 import javax.persistence.Entity;

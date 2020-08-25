@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
 import ru.zarwlad.utrace.util.DateTimeUtil;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventDto;
 
 import java.io.File;
 import java.io.FileReader;

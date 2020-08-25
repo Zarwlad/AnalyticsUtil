@@ -9,7 +9,6 @@ import ru.zarwlad.utrace.model.Event;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 

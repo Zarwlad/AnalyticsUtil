@@ -1,13 +1,11 @@
 package ru.zarwlad.utrace.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.utrace.data.AuthData;
 import ru.zarwlad.utrace.data.EventData;
 import ru.zarwlad.utrace.modelDtoMapper.EventModelMapper;
 import ru.zarwlad.utrace.modelDtoMapper.EventStatusMapper;
@@ -17,15 +15,14 @@ import ru.zarwlad.utrace.model.Message;
 import ru.zarwlad.utrace.model.MessageHistory;
 import ru.zarwlad.utrace.modelDtoMapper.MessageHistoryMapper;
 import ru.zarwlad.utrace.modelDtoMapper.MessageModelMapper;
-import ru.zarwlad.utrace.util.MappingEventTypeToAuditUrl;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.AuditRecordDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventMessageDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.MessageHistoryDto;
-import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageDtoOfAuditRecordDto;
-import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageDtoOfBriefedBusinessEventDto;
-import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageDtoOfBusinessEventMessageDto;
-import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.AuditRecordDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventMessageDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.MessageHistoryDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfAuditRecordDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfBriefedBusinessEventDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfBusinessEventMessageDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
 
 import java.io.File;
 import java.io.FileReader;
@@ -33,7 +30,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static ru.zarwlad.util.client.UtraceClient.*;
+import static ru.zarwlad.utrace.util.client.UtraceClient.*;
 
 public class DownloadEventsService {
     private static Logger log = LoggerFactory.getLogger(DownloadEventsService.class);

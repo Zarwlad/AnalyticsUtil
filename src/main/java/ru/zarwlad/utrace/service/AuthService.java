@@ -6,8 +6,8 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.data.AuthData;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.AuthDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.PostAuthDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.AuthDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.PostAuthDto;
 import ru.zarwlad.utrace.model.Auth;
 
 import java.io.*;

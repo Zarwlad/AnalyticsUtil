@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventDto;
 import ru.zarwlad.utrace.dao.EventDao;
 import ru.zarwlad.utrace.model.Event;
 

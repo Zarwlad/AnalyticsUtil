@@ -1,6 +1,6 @@
 package ru.zarwlad.utrace.modelDtoMapper;
 
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.MessageDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.MessageDto;
 import ru.zarwlad.utrace.model.Message;
 import ru.zarwlad.utrace.util.DateTimeUtil;
 
