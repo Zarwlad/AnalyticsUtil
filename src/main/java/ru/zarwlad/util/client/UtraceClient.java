@@ -35,6 +35,23 @@ public class UtraceClient {
                 .readValue(str, PageDtoOfBriefedBusinessEventDto.class);
     }
 
+    public static PageEventStateDto getPagedEventState(String eventId, List<String> filter) throws IOException {
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("coreApi"))
+                .append("event-state/")
+                .append(eventId);
+
+        if (!filter.isEmpty()) {
+            urlPath.append("?");
+            filter.forEach(urlPath::append);
+        }
+        String str = getResponseBody(urlPath.toString());
+
+        return objectMapper
+                .readValue(str, PageEventStateDto.class);
+    }
+
     public static PageDtoOfAuditRecordDto getPagedAuditRecords(String type, String id) throws IOException {
 
         String mappedEventType = MappingEventTypeToAuditUrl.getAuditRecordTypeFromEventType(type);
@@ -294,6 +311,30 @@ public class UtraceClient {
             assert str != null;
             return objectMapper
                     .readValue(str, PageCodeDto.class);
+        } catch (JsonProcessingException e) {
+            log.error(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    public static PageCodeDto getPageCodeDtoOfHierarchyDown (String ssccValue, List<String> filter) throws IOException {
+
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append("api/2.0/codes/sscc/")
+                .append(ssccValue)
+                .append("/hierarchy-down");
+
+        if (!filter.isEmpty()){
+            urlPath.append("?");
+            filter.forEach(urlPath::append);
+        }
+
+        String str = getResponseBody(urlPath.toString());
+
+        log.info(str);
+        try {
+            return objectMapper.readValue(str, PageCodeDto.class);
         } catch (JsonProcessingException e) {
             log.error(e.getLocalizedMessage());
             return null;
