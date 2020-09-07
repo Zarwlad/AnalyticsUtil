@@ -1,5 +1,6 @@
 package ru.zarwlad.utrace.util;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -19,5 +20,7 @@ public class DateTimeUtil {
         }
         return zonedDateTime;
     }
+
+    public static volatile LocalDateTime currentDateTime;
 
 }

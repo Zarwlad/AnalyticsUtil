@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventDto;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfBriefedBusinessEventDto;
+import ru.zarwlad.utrace.util.DateTimeUtil;
 import ru.zarwlad.utrace.util.client.UtraceClient;
 
 import java.io.IOException;
@@ -21,15 +22,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostJobTwinService {
+public class PostJobTwinService implements Runnable{
     static Logger log = LoggerFactory.getLogger(PostJobTwinService.class);
+
+    @Override
+    public void run() {
+        try {
+            PostJobProcess();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void PostJobProcess() throws IOException, InterruptedException {
         List<String> evFilter = new ArrayList<>();
-        evFilter.add("&size=200");
+        evFilter.add("&size=600");
         evFilter.add("&sort=created,asc");
-        evFilter.add("&priority=0");
+        //evFilter.add("&priority=0");
         evFilter.add("&status=FILLED");
+        evFilter.add("&group=AGGREGATION");
 
         StringBuilder filtersForLog = new StringBuilder();
         evFilter.forEach(filtersForLog::append);
@@ -38,8 +49,12 @@ public class PostJobTwinService {
         log.info("Извлечено событий: {}", events.getPage().getSize());
 
         List<EventDtoStatusProcessing> processings = new ArrayList<>();
-        for (
-                EventDto event : events.getData()) {
+        for (EventDto event : events.getData()) {
+            Duration duration = Duration.between(DateTimeUtil.currentDateTime, LocalDateTime.now());
+            if (duration.getSeconds() > 12600L){
+                break;
+            }
+
             EventDtoStatusProcessing processing = new EventDtoStatusProcessing();
             processing.setEventDto(event);
             processing.setStartProcessing(LocalDateTime.now());

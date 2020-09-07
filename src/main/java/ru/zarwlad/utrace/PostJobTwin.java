@@ -2,21 +2,36 @@ package ru.zarwlad.utrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zarwlad.utrace.service.PostJobTwinService;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
+import ru.zarwlad.utrace.util.DateTimeUtil;
 import ru.zarwlad.utrace.util.client.UtraceClient;
 import ru.zarwlad.utrace.service.AuthService;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostJobTwin {
+public class PostJobTwin implements Runnable{
     static Logger log = LoggerFactory.getLogger(PostJobTwin.class);
 
-    public static void main(String[] args) throws IOException {
-        //PostJobTwinService.PostJobProcess();
+    @Override
+    public void run() {
+        try {
+            PostJobTwin.main(null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-        log.info("Аутенфикация");
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        DateTimeUtil.currentDateTime = LocalDateTime.now();
+        log.info("Аутенфикация, время {}", DateTimeUtil.currentDateTime);
         try {
             AuthService.Auth();
         } catch (
@@ -24,26 +39,23 @@ public class PostJobTwin {
             log.error(e.toString());
         }
 
-        List<String> filterForStFormat = new ArrayList<>();
-        filterForStFormat.add("&integrationDirection.id=abe989cb-d991-4440-8c70-1c0527335611");
-        filterForStFormat.add("&page=0");
-        filterForStFormat.add("&size=2000");
-        filterForStFormat.add("&status=CREATED");
-        filterForStFormat.add("&sort=created,asc");
+        while (true){
+            Duration duration = Duration.between(DateTimeUtil.currentDateTime, LocalDateTime.now());
+            if (duration.getSeconds() > 12600L){
+                DateTimeUtil.currentDateTime = LocalDateTime.now();
+                log.info("Аутенфикация, время {}", DateTimeUtil.currentDateTime);
+                try {
+                    AuthService.Auth();
+                } catch (
+                        IOException e) {
+                    log.error(e.toString());
+                }
+            }
+            Thread thread = new Thread(new PostJobTwinService());
+            thread.start();
+            thread.join();
+            Thread.sleep(300000);
+        }
 
-        PageMessageDto messageDto = UtraceClient.getPagedMessagesByFilter(filterForStFormat);
-
-        List<String> errorArgs = new ArrayList<>();
-        errorArgs.add("Artificial error");
-        messageDto.getMessageDtos().forEach(x -> {
-            System.out.println(x.getDocumentType() + " " + x.getFilename());
-
-            UtraceClient.postErrorForMessage(
-                    x.getId(),
-                    "http://integration-journal/journal/api/1.0/integration-error-message/get-message-text-from-bundle",
-                    "ERROR",
-                    "J000007",
-                    errorArgs);
-        });
     }
 }

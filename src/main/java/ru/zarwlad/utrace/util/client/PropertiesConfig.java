@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
-class PropertiesConfig {
+public class PropertiesConfig {
     private static Logger log = LoggerFactory.getLogger(PropertiesConfig.class);
 
     static Properties properties = new Properties();

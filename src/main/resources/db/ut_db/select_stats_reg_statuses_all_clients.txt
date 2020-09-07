@@ -1,0 +1,19 @@
+select e.type,
+       e.client,
+       e.reg_status,
+       count(*) as events_in_status
+from event e
+where e.created_date between timestamp '2020-08-01'
+          and timestamp '2020-08-31'
+group by e.client, e.type, e.reg_status
+
+union
+select '_TOTAL_',
+       e.client,
+       e.reg_status,
+       count(*) as events_in_status
+from event e
+where e.created_date between timestamp '2020-08-01'
+    and timestamp '2020-08-31'
+group by e.client, e.reg_status
+order by client, reg_status asc
