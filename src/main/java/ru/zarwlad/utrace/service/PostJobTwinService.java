@@ -40,7 +40,7 @@ public class PostJobTwinService implements Runnable{
         evFilter.add("&sort=created,asc");
         //evFilter.add("&priority=0");
         evFilter.add("&status=FILLED");
-        evFilter.add("&group=AGGREGATION");
+        //evFilter.add("&group=AGGREGATION");
 
         StringBuilder filtersForLog = new StringBuilder();
         evFilter.forEach(filtersForLog::append);
