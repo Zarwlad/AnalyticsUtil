@@ -24,22 +24,31 @@ import java.util.List;
 
 public class PostJobTwinService implements Runnable{
     static Logger log = LoggerFactory.getLogger(PostJobTwinService.class);
+    private String location;
+
+    public PostJobTwinService(String location) {
+        this.location = location;
+    }
+
+    public PostJobTwinService() {
+    }
 
     @Override
     public void run() {
         try {
-            PostJobProcess();
+            PostJobProcess(this.location);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public static void PostJobProcess() throws IOException, InterruptedException {
+    public static void PostJobProcess(String location) throws IOException, InterruptedException {
         List<String> evFilter = new ArrayList<>();
         evFilter.add("&size=600");
         evFilter.add("&sort=created,asc");
         //evFilter.add("&priority=0");
         evFilter.add("&status=FILLED");
+        evFilter.add("&location.id=" + location);
         //evFilter.add("&group=AGGREGATION");
 
         StringBuilder filtersForLog = new StringBuilder();
@@ -96,39 +105,6 @@ public class PostJobTwinService implements Runnable{
                     processing.setStatus(ProcStatus.ERROR_TIME_OVER);
                 }
             }
-        }
-
-        String t = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh-mm-ss"));
-        Path p = Paths.get(String.format("src/reports/result_%s.csv", t));
-        if (!Files.exists(p)) {
-            Files.createFile(p);
-        }
-
-        Files.writeString(p,
-                "eventId;"
-                        + "eventType;"
-                        + "eventCreated;"
-                        + "startProcessing;"
-                        + "endProcessing;"
-                        + "durationSecs;"
-                        + "errorText"
-                        + "statusProcessing"
-                        + "eventStatus\n",
-                StandardOpenOption.APPEND);
-
-        for (EventDtoStatusProcessing processing : processings) {
-            Files.writeString(p,
-                    processing.getEventDto().getId() + ";"
-                            + processing.getEventDto().getType() + ";"
-                            + processing.getEventDto().getCreated() + ";"
-                            + processing.getStartProcessing() + ";"
-                            + processing.getEndProcessing() + ";"
-                            + processing.getDuration().getSeconds() + ";"
-                            + processing.getErrorText() + ";"
-                            + processing.getStatus() + ";"
-                            + processing.getEventDto().getStatus() + ";"
-                            + "\n",
-                    StandardOpenOption.APPEND);
         }
     }
     @Getter
