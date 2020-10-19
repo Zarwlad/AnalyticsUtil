@@ -508,4 +508,34 @@ public class UtraceClient {
             return null;
         }
     }
+
+    public static MessageHistoryDto postSuccessForMessage(String messageId,
+                                                          String externalSystemResponse,
+                                                          String status){
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), "");
+
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("journalApi1"))
+                .append("message-history/save-success")
+                .append("?")
+                .append("externalSystemResponse=")
+                .append(externalSystemResponse)
+                .append("&messageId=")
+                .append(messageId)
+                .append("&status=")
+                .append(status.toUpperCase());
+        Request request = postRequestWithAuthGetType(urlPath.toString(), requestBody);
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            String str = response.body().string();
+            return objectMapper.readValue(str, MessageHistoryDto.class);
+        } catch (IOException e) {
+            log.error(e.getLocalizedMessage());
+            log.error(urlPath.toString());
+            log.error(requestBody.toString());
+            return null;
+        }
+    }
 }

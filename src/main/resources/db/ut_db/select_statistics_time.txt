@@ -1,4 +1,5 @@
-select e.type,
+select e.client,
+       e.type,
        round(avg(event_posting_ms)/1000, 0) as avg_total_posting_in_secs,
        round(avg(event_posting_ms)/3600000, 2) as avg_total_posting_in_hours,
        round(avg(event_posting_ms)/(3600000 * 24), 2) as avg_total_posting_in_days,
@@ -11,7 +12,7 @@ and client = '%CLIENT%'
 group by e.type
 
 union
-select
+select e.client,
     '_TOTAL_',
     round(avg(event_posting_ms)/1000, 0) as avg_total_posting_in_secs,
     round(avg(event_posting_ms)/3600000, 2) as avg_total_posting_in_hours,

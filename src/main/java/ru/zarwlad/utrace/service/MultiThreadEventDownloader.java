@@ -62,6 +62,13 @@ public class MultiThreadEventDownloader implements Runnable {
                 ids.get(ids.size() - 1));
 
         for (String id : ids) {
+
+            Event e = new EventDao(DbManager.getSessionFactory()).readById(UUID.fromString(id));
+            if (e != null){
+                log.info("Thread {}, Событие с id = {} уже есть в базе", Thread.currentThread().getName(), id);
+                continue;
+            }
+
             EventDto eventDto = UtraceClient.getEventById(id.trim());
 
             Set<AuditRecordDto> auditRecordDtos = downloadAuditRecords(eventDto);

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.service.PostJobTwinService;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
 import ru.zarwlad.utrace.util.DateTimeUtil;
+import ru.zarwlad.utrace.util.client.PropertiesConfig;
 import ru.zarwlad.utrace.util.client.UtraceClient;
 import ru.zarwlad.utrace.service.AuthService;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,12 +49,7 @@ public class PostJobTwin implements Runnable{
                         log.error(e.toString());
                     }
                 }
-                List<String> locations = new ArrayList<>();
-                Collections.addAll(locations,
-                        "0c49828b-296e-454e-94a3-86eb3112cea8",
-                        "3b2aeff3-8ebf-41db-a297-f9ce126f2806",
-                        "708ae89b-dec8-412d-bc3b-4065dff71c61",
-                        "7eaf8486-9b8e-4829-99fe-ed654c59593a");
+                List<String> locations = new ArrayList<>(Arrays.asList(PropertiesConfig.properties.getProperty("kraken.locations").split(";")));
 
                 List<Thread> threads = new ArrayList<>();
 
@@ -67,7 +64,7 @@ public class PostJobTwin implements Runnable{
                     }
                 });
 
-                Thread.sleep(300000);
+                Thread.sleep(Long.parseLong(PropertiesConfig.properties.getProperty("kraken.sleepMs")));
             }
             catch (Exception e){
                 continue;

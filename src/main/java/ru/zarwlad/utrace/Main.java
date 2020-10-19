@@ -28,14 +28,7 @@ public class Main {
             log.error(e.toString());
         }
 
-        PostJobTwin postJobTwin = new PostJobTwin();
-
-        Thread th = new Thread(postJobTwin);
-
-        th.start();
-
         log.info("Начинаю скачивать события");
-/*
         List<String> f = new ArrayList<>();
         f.add("&size=2000");
         f.add("&sort=created,desc");
@@ -62,8 +55,7 @@ public class Main {
                         .equals(finalTargetMonth))
                 .collect(Collectors.toList()));
 
-*/
-        DownloadEventsWithDbService.downloadEventsByFileIds();
+        //DownloadEventsWithDbService.downloadEventsByFileIds();
 
         log.info("Рассчитываю статистикику по событиям");
         MultiThreadStartCalculateDbEvents calculateDbEvents = new MultiThreadStartCalculateDbEvents();

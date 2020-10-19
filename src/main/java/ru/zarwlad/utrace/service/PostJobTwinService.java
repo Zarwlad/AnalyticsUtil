@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventDto;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfBriefedBusinessEventDto;
 import ru.zarwlad.utrace.util.DateTimeUtil;
+import ru.zarwlad.utrace.util.client.PropertiesConfig;
 import ru.zarwlad.utrace.util.client.UtraceClient;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,13 +45,9 @@ public class PostJobTwinService implements Runnable{
     }
 
     public static void PostJobProcess(String location) throws IOException, InterruptedException {
-        List<String> evFilter = new ArrayList<>();
-        evFilter.add("&size=600");
-        evFilter.add("&sort=created,asc");
-        //evFilter.add("&priority=0");
-        evFilter.add("&status=FILLED");
+        List<String> evFilter = new ArrayList<>(Arrays.asList(PropertiesConfig.properties.getProperty("kraken.evFilter").split(";")));
         evFilter.add("&location.id=" + location);
-        //evFilter.add("&group=AGGREGATION");
+
 
         StringBuilder filtersForLog = new StringBuilder();
         evFilter.forEach(filtersForLog::append);
@@ -58,6 +56,7 @@ public class PostJobTwinService implements Runnable{
         log.info("Thread {}, Извлечено событий: {}", Thread.currentThread().getName(), events.getPage().getSize());
 
         List<EventDto> registers = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
         for (EventDto event : events.getData()) {
             Duration duration = Duration.between(DateTimeUtil.currentDateTime, LocalDateTime.now());
             if (duration.getSeconds() > 12600L)
@@ -76,9 +75,18 @@ public class PostJobTwinService implements Runnable{
 //                MultiThreadEvents multiThreadEvents = new MultiThreadEvents();
 //                multiThreadEvents.setEventDtos(new ArrayList<>(List.copyOf(registers)));
 //                Thread thread = new Thread(multiThreadEvents);
-//                thread.start();
+//                threads.add(thread);
 //                registers.clear();
 //            }
+//            threads.forEach(Thread::start);
+//
+//            threads.forEach(x -> {
+//                try {
+//                    x.join();
+//                } catch (InterruptedException e) {
+//                    log.error(e.getLocalizedMessage());
+//                }
+//            });
 
         }
 
@@ -124,8 +132,9 @@ public class PostJobTwinService implements Runnable{
 
             log.info("Thread {}, Событие {}, status {}", Thread.currentThread().getName(), event.getId(), processing.getStatus());
 
-            log.info("Thread {}, Событие {}, засыпаю на {}", Thread.currentThread().getName(), event.getId(), 300_000);
-            Thread.sleep(300_000);
+            log.info("Thread {}, Событие {}, засыпаю на {}", Thread.currentThread().getName(), event.getId(), Long.parseLong(PropertiesConfig.properties.getProperty("kraken.sleepMs")));
+
+            Thread.sleep(Long.parseLong(PropertiesConfig.properties.getProperty("kraken.sleepMs")));
 
         } else if (s.contains("{}")) {
             processing.setStatus(ProcStatus.SUCCESS);

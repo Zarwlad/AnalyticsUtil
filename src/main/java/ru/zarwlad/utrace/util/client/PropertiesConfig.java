@@ -1,5 +1,6 @@
 package ru.zarwlad.utrace.util.client;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,7 @@ import java.util.Properties;
 public class PropertiesConfig {
     private static Logger log = LoggerFactory.getLogger(PropertiesConfig.class);
 
-    static Properties properties = new Properties();
+    public static Properties properties = new Properties();
     static {
         try {
             properties.load(new FileReader(
