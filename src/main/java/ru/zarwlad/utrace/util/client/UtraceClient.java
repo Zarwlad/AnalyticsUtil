@@ -538,4 +538,30 @@ public class UtraceClient {
             return null;
         }
     }
+
+    public static EventDto validateEventById(String id) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/events/"
+                + id
+                + "/validate";
+        log.info("Thread {}, url: {}", Thread.currentThread(), urlPath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), "");
+        Request request = postRequestWithAuthGetType(urlPath, requestBody);
+        Response response = okHttpClient.newCall(request).execute();
+        log.info("Thread: {}, eventId: {}, status: {}, body: {}",
+                Thread.currentThread().getName(),
+                id,
+                response.code(),
+                response.body().string());
+        try {
+            return objectMapper.readValue(response.body().string(), EventDto.class);
+        }catch (IllegalStateException e){
+            log.error(e.getLocalizedMessage());
+            log.error("Thread: {}, eventId: {}, status: {}",
+                    Thread.currentThread().getName(),
+                    id,
+                    response.code());
+            return new EventDto();
+        }
+    }
 }

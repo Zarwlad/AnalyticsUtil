@@ -2,5 +2,6 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/db/mdlp_partners_db/create_db_sgtins.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/ut_db/create_db.sql" dialect="GenericSQL" />
   </component>
 </project>

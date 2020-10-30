@@ -2,6 +2,7 @@ package ru.zarwlad.utrace;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.zarwlad.utrace.service.FilledJob;
 import ru.zarwlad.utrace.service.PostJobTwinService;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
 import ru.zarwlad.utrace.util.DateTimeUtil;
@@ -49,21 +50,9 @@ public class PostJobTwin implements Runnable{
                         log.error(e.toString());
                     }
                 }
-                List<String> locations = new ArrayList<>(Arrays.asList(PropertiesConfig.properties.getProperty("kraken.locations").split(";")));
 
-                List<Thread> threads = new ArrayList<>();
-
-                locations.forEach(x -> threads.add(new Thread(new PostJobTwinService(x))));
-
-                threads.forEach(Thread::start);
-
-                threads.forEach(x -> {
-                    try {
-                        x.join();
-                    } catch (InterruptedException ignored) {
-                    }
-                });
-
+                //validateJobTwin();
+                postJobTwin();
                 Thread.sleep(Long.parseLong(PropertiesConfig.properties.getProperty("kraken.sleepMs")));
             }
             catch (Exception e){
@@ -71,5 +60,23 @@ public class PostJobTwin implements Runnable{
             }
         }
 
+    }
+
+    private static void postJobTwin() throws InterruptedException {
+        List<String> locations = new ArrayList<>(Arrays.asList(PropertiesConfig.properties.getProperty("kraken.locations").split(";")));
+        List<Thread> threads = new ArrayList<>();
+        locations.forEach(x -> threads.add(new Thread(new PostJobTwinService(x))));
+        threads.forEach(Thread::start);
+        threads.forEach(x -> {
+            try {
+                x.join();
+            } catch (InterruptedException ignored) {}
+        });
+    }
+
+    private static void validateJobTwin(){
+        FilledJob filledJob = new FilledJob();
+        Thread t = new Thread(filledJob);
+        t.start();
     }
 }
