@@ -45,7 +45,7 @@ public class PostJobTwinService implements Runnable{
     public static void PostJobProcess(String location) throws IOException, InterruptedException {
         List<String> evFilter = new ArrayList<>();
         evFilter.add("&size=600");
-        evFilter.add("&sort=created,asc");
+        evFilter.add("&sort=operationDate,asc");
         //evFilter.add("&priority=0");
         evFilter.add("&status=FILLED");
         evFilter.add("&location.id=" + location);
@@ -63,22 +63,23 @@ public class PostJobTwinService implements Runnable{
             if (duration.getSeconds() > 12600L)
                 break;
 
-            EventDtoStatusProcessing processing = processEvent(event);
-//            if (event.getType().equals("REGISTER")) {
-//                registers.add(event);
-//            } else {
-//                EventDtoStatusProcessing processing = processEvent(event);
-//            }
-//
-//            if (!registers.isEmpty() &&
-//                            (registers.size() == 200
-//                            || events.getData().indexOf(event) == events.getData().size() -1)){
-//                MultiThreadEvents multiThreadEvents = new MultiThreadEvents();
-//                multiThreadEvents.setEventDtos(new ArrayList<>(List.copyOf(registers)));
-//                Thread thread = new Thread(multiThreadEvents);
-//                thread.start();
-//                registers.clear();
-//            }
+            //EventDtoStatusProcessing processing = processEvent(event);
+            if (event.getType().equals("REGISTER") || event.getType().equals("FOREIGN_EMISSION")) {
+                registers.add(event);
+            } else {
+                EventDtoStatusProcessing processing = processEvent(event);
+            }
+
+            if (!registers.isEmpty() &&
+                            (registers.size() == 300
+                            || events.getData().indexOf(event) == events.getData().size() -1)){
+                MultiThreadEvents multiThreadEvents = new MultiThreadEvents();
+                multiThreadEvents.setEventDtos(new ArrayList<>(List.copyOf(registers)));
+                Thread thread = new Thread(multiThreadEvents);
+                thread.start();
+                thread.join();
+                registers.clear();
+            }
 
         }
 

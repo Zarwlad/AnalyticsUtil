@@ -27,4 +27,8 @@ public class EventLineDto implements Dto {
 
     @JsonProperty(value = "parent")
     EventLineDto parentLineDto;
+
+    @JsonProperty(value = "batchInfo")
+    BatchInfoDto batchInfoDto;
+
 }

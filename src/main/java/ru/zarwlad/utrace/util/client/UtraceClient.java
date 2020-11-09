@@ -5,13 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.utrace.unitedDtos.utraceDto.EventLinePostDto;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.*;
 import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.*;
 import ru.zarwlad.utrace.data.AuthData;
 import ru.zarwlad.utrace.util.MappingEventTypeToAuditUrl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static ru.zarwlad.utrace.util.client.ObjectMapperConfig.objectMapper;
@@ -361,7 +362,7 @@ public class UtraceClient {
         }
     }
 
-    public static EventLineDto postUnitUnpackEventLine (List<EventLinePostDto> eventLinePostDtos, UnitUnpackEventDto event){
+    public static EventLineDto postUnitUnpackEventLine (List<EventLineDto> eventLinePostDtos, UnitUnpackEventDto event){
         try {
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),
                     objectMapper.writeValueAsString(eventLinePostDtos));
@@ -507,5 +508,97 @@ public class UtraceClient {
 
             return null;
         }
+    }
+
+    public static PageDtoOfEventLineDto getPagedEventLinesByFilter(List<String> filter) throws IOException {
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("coreApi"))
+                .append("event-lines");
+
+        if (!filter.isEmpty()){
+            urlPath.append("?");
+            filter.forEach(urlPath::append);
+        }
+
+        String str = getResponseBody(urlPath.toString());
+
+        return objectMapper
+                .readValue(str, PageDtoOfEventLineDto.class);
+    }
+
+    public static PageBatchInfoDto getPagedBatchInfoByFilter(List<String> filter) throws IOException {
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("coreApi"))
+                .append("event-batch-info");
+
+        if (!filter.isEmpty()){
+            urlPath.append("?");
+            filter.forEach(urlPath::append);
+        }
+
+        String str = getResponseBody(urlPath.toString());
+
+        return objectMapper
+                .readValue(str, PageBatchInfoDto.class);
+    }
+
+    public static BatchInfoDto postBatchInfo(BatchInfoDto batchInfoDto) throws IOException {
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("coreApi"))
+                .append("event-batch-info");
+
+        RequestBody rb = RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsString(batchInfoDto));
+        Request request = postRequestWithAuthGetType(urlPath.toString(), rb);
+        Response response = okHttpClient.newCall(request).execute();
+
+        String str = response.body().string();
+        return objectMapper.readValue(str, BatchInfoDto.class);
+    }
+
+    public static PageTradeItemBriefDto getPagedTradeItemsByFilter(List<String> filter) throws IOException {
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("coreApi"))
+                .append("trade-items");
+
+        if (!filter.isEmpty()){
+            urlPath.append("?");
+            filter.forEach(urlPath::append);
+        }
+
+        String str = getResponseBody(urlPath.toString());
+
+        return objectMapper
+                .readValue(str, PageTradeItemBriefDto.class);
+    }
+
+    public static List<EventLineDto> postLinesForMoveOwnerNotif(List<EventLineDto> eventLineDtos, String eventId) throws IOException {
+        StringBuilder urlPath = new StringBuilder();
+        urlPath.append(properties.getProperty("host"))
+                .append(properties.getProperty("coreApi"))
+                .append("events/move-owner-notification/")
+                .append(eventId + "/")
+                .append("event-lines");
+
+        log.info("Посылаю тело запроса {} ", objectMapper.writeValueAsString(eventLineDtos));
+        RequestBody rb = RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsString(eventLineDtos));
+        Request request = postRequestWithAuthGetType(urlPath.toString(), rb);
+        Response response = okHttpClient.newCall(request).execute();
+
+        String str = response.body().string();
+        EventLineDto[] answers = objectMapper.readValue(str, EventLineDto[].class);
+        return Arrays.asList(answers);
+    }
+
+    public static EventLineDto postLinesForMoveOwnerNotif(EventLineDto eventLineDto, String eventId) throws IOException {
+        List<EventLineDto> lines = new ArrayList<>();
+        lines.add(eventLineDto);
+
+        List<EventLineDto> newLines = UtraceClient.postLinesForMoveOwnerNotif(lines, eventId);
+
+        return newLines.get(0);
     }
 }

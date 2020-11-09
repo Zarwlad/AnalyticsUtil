@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.*;
+import ru.zarwlad.utrace.unitedDtos.mdlpDto.documentDto.codecheckerdto.HierarchyInfoDto;
 import ru.zarwlad.utrace.unitedDtos.mdlpDto.documentDto.multiPackDto.MultiPackDTO;
 import ru.zarwlad.utrace.unitedDtos.mdlpDto.documentDto.ticketDto.ResultDTO;
 
@@ -21,4 +22,7 @@ public class Documents {
 
     @JacksonXmlProperty(localName = "result")
     ResultDTO resultDTO;
+
+    @JacksonXmlProperty(localName = "hierarchy_info")
+    HierarchyInfoDto hierarchyInfoDto;
 }
