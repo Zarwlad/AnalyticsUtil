@@ -46,10 +46,16 @@ public class DownloadEventsWithDbService {
         Path fileWithIds = Paths.get(properties.getProperty("fileEventIds"));
         List<String> lines = null;
         List<String> n = null;
+
+        EventDao eventDao = new EventDao(DbManager.getSessionFactory());
+        List<String> uploaded = eventDao.readAllIdsFromEventsByClient().stream()
+                .map(x -> x.getId().toString()).collect(Collectors.toList());
+
         try {
             lines = Files.readAllLines(fileWithIds);
             n = lines.stream()
                     .map(x -> x.replaceAll("\"", ""))
+                    .filter(line -> !uploaded.contains(line))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());

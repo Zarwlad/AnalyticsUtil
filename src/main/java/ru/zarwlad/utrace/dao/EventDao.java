@@ -1,15 +1,18 @@
 package ru.zarwlad.utrace.dao;
 
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.model.Event;
+import ru.zarwlad.utrace.util.client.PropertiesConfig;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
@@ -84,8 +87,22 @@ public class EventDao extends AbstractDAO implements DAO<Event, UUID>{
                     "AND e.status NOT IN ('CANCELLED', 'DRAFT', 'CREATED', 'FILLED')" +
                     "AND es.event IS NULL " +
                     "AND est.status = 'FILLED'";
+
             Query query = session.createQuery(hql);
             query.setMaxResults(500);
+            return query.getResultList();
+        }
+    }
+
+    public List<Event> readAllIdsFromEventsByClient(){
+        try (Session session = sessionFactory.openSession()){
+            String client = PropertiesConfig.properties.getProperty("client");
+
+            String hql = "SELECT e FROM Event e " +
+                    "WHERE e.client = :client ";
+
+            Query query = session.createQuery(hql);
+            query.setParameter("client", client);
             return query.getResultList();
         }
     }

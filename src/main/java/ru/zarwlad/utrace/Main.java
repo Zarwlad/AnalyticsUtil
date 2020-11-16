@@ -28,41 +28,33 @@ public class Main {
             log.error(e.toString());
         }
 
-        PostJobTwin postJobTwin = new PostJobTwin();
-
-        Thread th = new Thread(postJobTwin);
-
-        th.start();
-
         log.info("Начинаю скачивать события");
-/*
-        List<String> f = new ArrayList<>();
-        f.add("&size=2000");
-        f.add("&sort=created,desc");
+//        List<String> f = new ArrayList<>();
+//        f.add("&size=2000");
+//        f.add("&sort=created,desc");
+//
+//        Properties properties = new Properties();
+//        Month targetMonth = null;
+//
+//        try {
+//            properties.load(new FileReader("src\\main\\resources\\application.properties"));
+//            targetMonth = Month.valueOf(properties.getProperty("targetMonth"));
+//        }
+//        catch (Exception e){
+//            log.error(e.toString());
+//        }
+//
+//        PageDtoOfBriefedBusinessEventDto eventsDto = UtraceClient.getPagedEventsByFilter(f);
+//        Month finalTargetMonth = targetMonth;
+//
+//        DownloadEventsWithDbService.downloadEventsByPageEventDto(
+//                eventsDto.getData().stream()
+//                .filter(x -> DateTimeUtil
+//                        .toZonedDateTime(x.getCreated())
+//                        .getMonth()
+//                        .equals(finalTargetMonth))
+//                .collect(Collectors.toList()));
 
-        Properties properties = new Properties();
-        Month targetMonth = null;
-
-        try {
-            properties.load(new FileReader("src\\main\\resources\\application.properties"));
-            targetMonth = Month.valueOf(properties.getProperty("targetMonth"));
-        }
-        catch (Exception e){
-            log.error(e.toString());
-        }
-
-        PageDtoOfBriefedBusinessEventDto eventsDto = UtraceClient.getPagedEventsByFilter(f);
-        Month finalTargetMonth = targetMonth;
-
-        DownloadEventsWithDbService.downloadEventsByPageEventDto(
-                eventsDto.getData().stream()
-                .filter(x -> DateTimeUtil
-                        .toZonedDateTime(x.getCreated())
-                        .getMonth()
-                        .equals(finalTargetMonth))
-                .collect(Collectors.toList()));
-
-*/
         DownloadEventsWithDbService.downloadEventsByFileIds();
 
         log.info("Рассчитываю статистикику по событиям");

@@ -20,7 +20,7 @@ class EventStatsDbCounter {
 
         List<Event> events = eventDao.read500NotCalculatedEvents();
 
-        while (!events.isEmpty()) {
+        while (true) {
             events.forEach(EventStatsDbCounter::createEventStat);
             events = eventDao.read500NotCalculatedEvents();
         }

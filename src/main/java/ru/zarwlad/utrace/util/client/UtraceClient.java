@@ -438,6 +438,7 @@ public class UtraceClient {
                 response.body().string());
         return objectMapper.readValue(response.body().string(), EventDto.class);
     }
+
     public static String postEventByIdReturnString(String id) throws IOException {
         String urlPath = properties.getProperty("host")
                 + "api/2.0/events/"
@@ -601,4 +602,36 @@ public class UtraceClient {
 
         return newLines.get(0);
     }
+
+    public static void validateEventById(String id) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/events/"
+                + id
+                + "/validate";
+
+        Request request = postRequestWithAuthGetType(urlPath, RequestBody.create(MediaType.parse("application/json"), ""));
+        Response response = okHttpClient.newCall(request).execute();
+        log.info("Thread: {}, eventId: {}, status: {}, body: {}",
+                Thread.currentThread().getName(),
+                id,
+                response.code(),
+                response.body().string());
+    }
+
+    public static void createFromDraftEventById(String id) throws IOException {
+        String urlPath = properties.getProperty("host")
+                + "api/2.0/events/"
+                + id
+                + "/create-from-draft";
+
+        Request request = putRequestWithAuthGetType(urlPath, RequestBody.create(MediaType.parse("application/json"), ""));
+        Response response = okHttpClient.newCall(request).execute();
+        log.info("Thread: {}, eventId: {}, status: {}, body: {}",
+                Thread.currentThread().getName(),
+                id,
+                response.code(),
+                response.body().string());
+    }
+
+
 }

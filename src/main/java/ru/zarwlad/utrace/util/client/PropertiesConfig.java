@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class PropertiesConfig {
-    private static Logger log = LoggerFactory.getLogger(PropertiesConfig.class);
+    static Logger log = LoggerFactory.getLogger(PropertiesConfig.class);
 
     public static Properties properties = new Properties();
     static {
