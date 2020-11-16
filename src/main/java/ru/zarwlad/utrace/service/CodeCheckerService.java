@@ -61,7 +61,7 @@ public class CodeCheckerService implements Runnable {
 
         files.forEach(x -> {
             HierarchyInfoDto info = readFileHierarchy(x);
-                log.info(info.getSsccDown().getSsccDown().getSscc());
+                log.info("Thread {}. Начинаю обработку кода {}", Thread.currentThread().getName(), info.getSsccDown().getSsccDown().getSscc());
                 saveHierarchyToEventLines(eventId, info);
         });
 

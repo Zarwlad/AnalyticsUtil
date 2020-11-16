@@ -51,7 +51,7 @@ public class CodeCheckerTwin {
 
         eventIds.forEach(x -> {
             CodeCheckerService codeCheckerService = new CodeCheckerService(x);
-            Thread thread = new Thread(codeCheckerService, "thread_" + x);
+            Thread thread = new Thread(codeCheckerService, "t-" + x);
             threads.add(thread);
             threads.forEach(t -> {
                 t.start();
