@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventDto;
 import ru.zarwlad.utrace.dao.EventDao;
 import ru.zarwlad.utrace.model.Event;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfBriefedBusinessEventDto;
 
 import java.io.File;
 import java.io.FileReader;
@@ -16,9 +17,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class DownloadEventsWithDbService {
     private static Logger log = LoggerFactory.getLogger(DownloadEventsWithDbService.class);
@@ -39,16 +42,36 @@ public class DownloadEventsWithDbService {
         }
     }
 
-    public static void downloadEventsByIds(){
+    public static void downloadEventsByFileIds(){
         Path fileWithIds = Paths.get(properties.getProperty("fileEventIds"));
         List<String> lines = null;
+        List<String> n = null;
+
+        EventDao eventDao = new EventDao(DbManager.getSessionFactory());
+        List<String> uploaded = eventDao.readAllIdsFromEventsByClient().stream()
+                .map(x -> x.getId().toString()).collect(Collectors.toList());
+
         try {
             lines = Files.readAllLines(fileWithIds);
-
+            n = lines.stream()
+                    .map(x -> x.replaceAll("\"", ""))
+                    .filter(line -> !uploaded.contains(line))
+                    .collect(Collectors.toList());
         } catch (IOException e) {
             log.error(e.getLocalizedMessage());
         }
+        downloadByList(n);
+    }
 
+    public static void downloadEventsByPageEventDto(List<EventDto> eventDtos){
+        downloadByList(eventDtos
+                .stream()
+                .map(EventDto::getId)
+                .collect(Collectors.toList())
+        );
+    }
+
+    private static void downloadByList (List<String> lines) {
         List<List<String>> batchedIds = new ArrayList<>();
 
         List<String> portion = new ArrayList<>();

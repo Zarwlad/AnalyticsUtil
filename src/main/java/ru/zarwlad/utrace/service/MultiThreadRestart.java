@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.zarwlad.util.client.UtraceClient;
+import ru.zarwlad.utrace.util.client.UtraceClient;
 
 import java.io.IOException;
 import java.util.List;

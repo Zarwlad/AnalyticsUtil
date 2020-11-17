@@ -1,7 +1,5 @@
 package ru.zarwlad.utrace.dao;
 
-import org.hibernate.SessionFactory;
-
 public interface DAO<Entity,Id> {
 
     void create(Entity entity);

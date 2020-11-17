@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS event_status(
     id uuid not null primary key,
     change_operation_date timestamp not null,
     event_id uuid not null,
+    status varchar not null,
     foreign key (event_id) references event(id)
 );
 

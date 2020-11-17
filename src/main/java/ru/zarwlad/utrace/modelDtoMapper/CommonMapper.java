@@ -1,9 +1,9 @@
 package ru.zarwlad.utrace.modelDtoMapper;
 
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.AuditRecordDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.EventDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.MessageDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.MessageHistoryDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.AuditRecordDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.EventDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.MessageDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.MessageHistoryDto;
 import ru.zarwlad.utrace.model.Event;
 import ru.zarwlad.utrace.model.EventStatus;
 import ru.zarwlad.utrace.model.Message;

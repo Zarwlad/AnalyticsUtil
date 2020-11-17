@@ -6,8 +6,8 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.zarwlad.utrace.data.AuthData;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.AuthDto;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.PostAuthDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.AuthDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.PostAuthDto;
 import ru.zarwlad.utrace.model.Auth;
 
 import java.io.*;
@@ -34,11 +34,19 @@ public class AuthService {
     }
 
     public static void Auth() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Введи логин");
-        String login = bufferedReader.readLine();
-        System.out.println("Введи пароль");
-        String password = bufferedReader.readLine();
+        String login;
+        String password;
+        if (properties.getProperty("usePropCredentials").equals("false")) {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Введи логин");
+            login = bufferedReader.readLine();
+            System.out.println("Введи пароль");
+            password = bufferedReader.readLine();
+        }
+        else {
+            login = properties.getProperty("utLogin");
+            password = properties.getProperty("utPass");
+        }
 
         PostAuthDto postAuthDto = new PostAuthDto(login, password);
 

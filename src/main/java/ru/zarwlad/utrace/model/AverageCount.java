@@ -1,7 +1,5 @@
 package ru.zarwlad.utrace.model;
 
-import ru.zarwlad.unitedDtos.utraceDto.Dto;
-
 import java.math.BigDecimal;
 
 public class AverageCount {

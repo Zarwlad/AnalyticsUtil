@@ -5,11 +5,11 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.zarwlad.unitedDtos.utraceDto.entityDtos.*;
-import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageDtoOfAuditRecordDto;
-import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageDtoOfBusinessEventMessageDto;
-import ru.zarwlad.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
-import ru.zarwlad.util.client.UtraceClient;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.entityDtos.*;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfAuditRecordDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageDtoOfBusinessEventMessageDto;
+import ru.zarwlad.utrace.unitedDtos.utraceDto.pagedDtos.PageMessageDto;
+import ru.zarwlad.utrace.util.client.UtraceClient;
 import ru.zarwlad.utrace.dao.EventDao;
 import ru.zarwlad.utrace.dao.EventStatusDao;
 import ru.zarwlad.utrace.dao.MessageDao;
@@ -19,14 +19,11 @@ import ru.zarwlad.utrace.model.EventStatus;
 import ru.zarwlad.utrace.model.Message;
 import ru.zarwlad.utrace.model.MessageHistory;
 import ru.zarwlad.utrace.modelDtoMapper.CommonMapper;
-import ru.zarwlad.utrace.modelDtoMapper.EventStatusMapper;
-import ru.zarwlad.utrace.modelDtoMapper.MessageHistoryMapper;
-import ru.zarwlad.utrace.modelDtoMapper.MessageModelMapper;
 
 import java.io.IOException;
 import java.util.*;
 
-import static ru.zarwlad.util.client.UtraceClient.*;
+import static ru.zarwlad.utrace.util.client.UtraceClient.*;
 
 @Getter
 @Setter

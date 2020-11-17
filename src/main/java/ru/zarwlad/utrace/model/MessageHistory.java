@@ -1,11 +1,9 @@
 package ru.zarwlad.utrace.model;
 
 import lombok.*;
-import ru.zarwlad.unitedDtos.utraceDto.Dto;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @javax.persistence.Entity
